@@ -1,0 +1,39 @@
+{
+  "name": "mapp-cloud",
+  "vendor": "vtexdemoemea",
+  "version": "0.0.1",
+  "title": "mapp-cloud",
+  "description": "Enable Mapp Intelligence tracking without touching a single line of code.",
+  "billingOptions": {
+    "termsURL": "https://compliance.vtex.com/gdpr/policies/vtex-privacy-policy",
+    "support": {
+      "url": "https://support.vtex.com/hc/requests"
+    },
+    "free": true,
+    "type": "free",
+    "availableCountries": [
+      "*"
+    ]
+  },
+  "builders": {
+    "react": "3.x",
+    "store": "0.x",
+    "pixel": "0.x",
+    "docs": "0.x"
+  },
+  "dependencies": {
+    "vtex.pixel-interfaces": "1.x"
+  },
+  "settingsSchema": {
+    "title": "Mapp Cloud Integration",
+    "type": "object",
+    "properties": {
+      "tiId": {
+        "title": "Tag Integartion ID",
+        "description": "Enter your Tag Integration ID",
+        "type": "string"
+      }
+    }
+  },
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
+}
