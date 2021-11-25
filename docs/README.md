@@ -1,6 +1,6 @@
-📢 Use this project, [contribute](https://github.com/vtex-apps/CHANGEME) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
+📢 Use this project, [contribute](https://github.com/vtex-apps/mapp-cloud) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
 
-# APP NAME
+# Mapp Cloud Integration
 
 <!-- DOCS-IGNORE:start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
@@ -8,37 +8,31 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- DOCS-IGNORE:end -->
 
-Under the app's name, you should explain the topic, giving a **brief description** of the **app's functionality** (what is it for?) in a store.
+Enable Mapp Intelligence tracking without touching a single line of code.  
+The Mapp Cloud app for Vtex creates the data layer used to feed the Mapp Cloud tracking products. It helps you to easily fuel the Mapp Intelligence customer insights dashboards with data, without requiring you to touch any code. Just get the extension, configure your Tag Integration ID, and enable the plugin.  
+Mapp Intelligence gives you access to more than 20 pre-configured dashboards to start analyzing user behavior right away and adjust your marketing accordingly.  
+Features:  
+- Adds the Mapp Cloud Tag Integration code to the Header of your website
+- Creates the standard data layer to start analyzing customer insights immediately
+- Enables customers to add the information needed to initialize tracking"
+- Initializes tracking
 
-Next, you can **add media** (either an image of a GIF) if possible, so that users can better understand how the app works in practice. 
-
-![Media Placeholder](https://user-images.githubusercontent.com/52087100/71204177-42ca4f80-227e-11ea-89e6-e92e65370c69.png)
 
 ## Configuration
 
-It is possible to install in your store either by using App Store or the VTEX IO Toolbelt.
-
 ### Using VTEX App Store
 
-1. Access the **Apps** section in your account's admin page and look for the Icommkt box;
+1. Access the **Apps** section in your account's admin page and look for the Mapp Cloud Integration box;
 2. Then, click on the **Install** button;
-3. You'll see a warning message about needing to enter the necessary configurations. Scroll down and type in your **NAME OF A SETTINGS FIELD** in the `NAME OF THE APP` field.
+3. You'll see a warning message about needing to enter the necessary configurations. Scroll down and type in your **Tag Integration ID** in the `tiId` field.
 4. Click on **Save**.
 
 ### Using VTEX IO Toolbelt
 
 1. [Install](https://vtex.io/docs/recipes/development/installing-an-app/) the `vtex.icommkt@0.x` app. You can confirm that the app has now been installed by running `vtex ls` again. 
 2. Access the **Apps** section in your account's admin page and look for the NAME OF THE APP box. Once you find it, click on the box.
-3. Fill in the `NAME OF THE APP` field with your **NAME OF THE SETTINGS FIELD**.
+3. Fill in the `tiId` field with your **Tag Integration ID**.
 4. Click on **Save**.
-
-<!-- Remember to also **showcase any necessary disclaimer** related to the app in this section, such as the different behavior it may display during its configuration. -->
-
-## Modus Operandi *(not mandatory)*
-
-There are scenarios in which an app can behave differently in a store, according to its configuration. It's crucial then to go through these **behavioral changes** in this section, allowing users to fully understand the **practical application** of the app in their store.
-
-If you feel compelled to give further details, such as the app's **relationship with others**, don't hesitate to use this section. 
 
 <!-- DOCS-IGNORE:start -->
 ## Contributors ✨

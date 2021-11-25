@@ -4,6 +4,7 @@ import type { PixelMessage } from './typings/events'
 const pageUpdate = () => {
   window.wts = window.wts || [];
   window.wts.push(["send", "pageupdate", true]);
+  resetTi();
 }
 
 const backup = () => {
@@ -42,10 +43,27 @@ const hasItem = (productQuantity: string) => {
   return false;
 }
 
+const lockedTiProps = ["customerId", "vtex", "backup"];
+
+const resetTi = () => {
+  if(window._ti) {
+    Object.keys(window._ti).forEach(prop =>{ 
+      if(!lockedTiProps.includes(prop)) {
+        window._ti[prop] = 'false'
+      }
+    });
+  }
+
+};
+
 export function handleEvents(e: PixelMessage) {
   switch (e.data.eventName) {
     case 'vtex:pageView': {
-      window._ti = { vtex: e.data };
+      if(window._ti) {
+        mergeVtexData(e);
+      } else {
+        window._ti = { vtex: e.data };
+      }
       window._ti.pageName = e.data.pageUrl;
       window._ti.currency = e.data.currency;
       if (e.data.routeId !== 'store.product' && e.data.routeId !== 'store.orderplaced' && e.data.routeId !== 'store.search') {
@@ -108,16 +126,8 @@ export function handleEvents(e: PixelMessage) {
       break;
     }
     case 'vtex:userData': {
-      const dl = JSON.stringify(window._ti);
-      window._ti = {};
+      window._ti = window._ti || {};
       window._ti.customerId = e.data.email;
-      window.wts = window.wts || [];
-      window.wts.push(['linkId', 'webtrekk_ignore']);
-      window.wts.push(["send", "pageupdate"]);
-      setTimeout(() => {
-        window.wts.push(['linkId', 'false']);
-        window._ti = JSON.parse(dl);
-      }, 500)
       break;
     }
     case 'vtex:orderPlaced': {

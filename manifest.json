@@ -1,7 +1,7 @@
 {
   "name": "mapp-cloud",
   "vendor": "vtexdemoemea",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "title": "mapp-cloud",
   "description": "Enable Mapp Intelligence tracking without touching a single line of code.",
   "billingOptions": {
