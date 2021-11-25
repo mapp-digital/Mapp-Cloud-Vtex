@@ -1,0 +1,6 @@
+{
+    "admin.app.mapp-cloud": {
+      "component": "admin",
+      "path": "/admin/app/mapp-cloud"
+    }
+  }
