@@ -7,7 +7,8 @@
   "billingOptions": {
     "termsURL": "https://compliance.vtex.com/gdpr/policies/vtex-privacy-policy",
     "support": {
-      "url": "https://support.vtex.com/hc/requests"
+      "email": "support@mapp.com",
+      "url": "https://mapp.com/tech-support/"
     },
     "free": true,
     "type": "free",
