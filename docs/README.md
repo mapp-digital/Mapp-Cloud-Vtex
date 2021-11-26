@@ -34,6 +34,12 @@ Features:
 3. Fill in the `tiId` field with your **Tag Integration ID**.
 4. Click on **Save**.
 
+### Mapping data in Mapp Cloud
+Once Mapp Cloud Integration is active on your Vtex store, you can map data from the global _ti datalayer variable as parameters to your Mapp Intelligence plugin in Tag Integration.
+The following data is available:
+
+
+
 <!-- DOCS-IGNORE:start -->
 ## Contributors ✨
 

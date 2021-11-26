@@ -1,3 +1,7 @@
 {
-    "mapp-cloud.navigation.label": "Mapp Cloud Integration"
+    "mapp-cloud.navigation.label": "Mapp Cloud Integration",
+    "admin/mapp-cloud.header": "Mapp Cloud Integration",
+    "admin/mapp-cloud.button": "Create account",
+    "admin/mapp-cloud.subtitle": "Subtitle Lorem ipsum dolor sit amet 1234",
+    "admin/mapp-cloud.text": "Text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada ut neque id pharetra. Suspendisse tortor eros, sagittis at molestie at, semper mollis urna. Sed porta ipsum ac vulputate ultrices. Mauris sed libero quis risus rutrum efficitur in nec justo."
 }
