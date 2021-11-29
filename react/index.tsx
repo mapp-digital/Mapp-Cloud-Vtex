@@ -43,7 +43,7 @@ const hasItem = (productQuantity: string) => {
   return false;
 }
 
-const lockedTiProps = ["customerId", "vtex", "backup"];
+const lockedTiProps = ["customerId", "vtex", "backup", "pageName", "emailOptIn", "eMailSubscription"];
 
 const resetTi = () => {
   if(window._ti) {
@@ -112,17 +112,17 @@ export function handleEvents(e: PixelMessage) {
         window.wts = window.wts || [];
         window.wts.push(['linkId', 'add-to-cart']);
         pageUpdate();
+        window.wts.push(['linkId', 'false']);
       }
       restore();
       break;
     }
     case 'vtex:newsletterSubscription': {
-      backup();
-      window._ti.event = "Newsletter Subscription";
-      window._ti.emailOptIn = e.data;
-      window._ti.eMailSubscription = e.data;
+      window.wts.push(['linkId', 'newsletter-subscription']);
+      window._ti.emailOptIn = "1";
+      window._ti.eMailSubscription = e.data.email;
+      window.wts.push(['linkId', 'false']);
       pageUpdate();
-      restore();
       break;
     }
     case 'vtex:userData': {
@@ -135,7 +135,7 @@ export function handleEvents(e: PixelMessage) {
       window._ti.shoppingCartStatus = "conf";
       window._ti.orderId = e.data.transactionId;
       window._ti.totalOrderValue = e.data.transactionTotal.toString();
-      window._ti.coupon = e.data.coupon;
+      window._ti.couponValue = e.data.transactionDiscounts.toString();
       productProps.forEach((productProp) => {
         window._ti[productProp] = "";
       });
