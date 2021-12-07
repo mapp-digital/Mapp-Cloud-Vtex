@@ -1,7 +1,7 @@
 {
    "name": "Mapp - Customer Insights",
    "headline": "Habilite Mapp Intelligence Customer Insights sin tocar una sola línea de código",
-   "overview": "Mapp Intelligence es una plataforma de Customer Insights que le permite aprovechar el poder de sus datos de primera mano.\\n\\nEn su núcleo hay un conjunto de cuadros de mando fáciles de entender que le permiten entender el customer journey para encontrar los caminos más rápidos hacia la conversión. Al utilizar los datos de transacciones anteriores, el comportamiento de navegación y el historial de contactos para analizar, puntuar y visualizar la información sobre sus clientes, puede proporcionar la predicción más precisa de lo que sus clientes van a hacer a continuación."
+   "overview": "Mapp Intelligence es una plataforma de Customer Insights que le permite aprovechar el poder de sus datos de primera mano.\\n\\nEn su núcleo hay un conjunto de cuadros de mando fáciles de entender que le permiten entender el customer journey para encontrar los caminos más rápidos hacia la conversión. Al utilizar los datos de transacciones anteriores, el comportamiento de navegación y el historial de contactos para analizar, puntuar y visualizar la información sobre sus clientes, puede proporcionar la predicción más precisa de lo que sus clientes van a hacer a continuación.",
    "features":[
       "Integración para sincronizar los datos de comportamiento y transacciones en el sitio web con Mapp Intelligence",
       "Más de 30 cuadros de mando pre-construidos que ofrecen información sobre el cliente y el negocio",

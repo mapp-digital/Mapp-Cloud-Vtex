@@ -1,7 +1,9 @@
 <script>
   (function(){
-    var tiId = '{{settings.tiId}}';
-    if(tiId) {
+    var tiId = `{{settings.tiId}}`;
+    if(!tiId) {
+      console.error("Mapp Cloud error - no Tag Integration Id provided. Please Go to My Apps -> Mapp Cloud -> Settings and enter your tiId.")
+         } else {
       window._tiConfig = window._tiConfig || {
       tiDomain: 'responder.wt-safetag.com',
       tiId,
