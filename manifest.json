@@ -6,15 +6,14 @@
   "description": "Enable Mapp Intelligence tracking without touching a single line of code.",
   "billingOptions": {
     "termsURL": "https://compliance.vtex.com/gdpr/policies/vtex-privacy-policy",
+    "setupRoute_deac": "/admin/mapp-cloud",
     "support": {
       "email": "support@mapp.com",
       "url": "https://mapp.com/tech-support/"
     },
     "free": true,
     "type": "free",
-    "availableCountries": [
-      "*"
-    ]
+    "availableCountries": ["*"]
   },
   "builders": {
     "react": "3.x",
@@ -22,11 +21,13 @@
     "pixel": "0.x",
     "docs": "0.x",
     "admin": "0.x",
-    "messages": "1.x"
+    "messages": "1.x",
+    "graphql": "1.x"
   },
   "dependencies": {
     "vtex.pixel-interfaces": "1.x",
-    "vtex.styleguide": "9.x"
+    "vtex.styleguide": "9.x",
+    "vtex.apps-graphql": "2.x"
   },
   "settingsSchema": {
     "title": "Mapp Cloud Integration",
@@ -35,6 +36,21 @@
       "tiId": {
         "title": "Tag Integration ID",
         "description": "Enter your Tag Integration ID",
+        "type": "string"
+      },
+      "tiResponder": {
+        "title": "Tag Integration responder domain",
+        "description": "Enter your responder domain",
+        "type": "string"
+      },
+      "acId": {
+        "title": "Acquire ID parameter",
+        "description": "Enter your Acquire ID parameter",
+        "type": "string"
+      },
+      "acM": {
+        "title": "Acquire M parameter",
+        "description": "Enter your Acquire M parameter",
         "type": "string"
       }
     }

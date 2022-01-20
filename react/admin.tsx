@@ -1,24 +1,215 @@
-import React, { FC } from 'react'
-import { FormattedMessage, useIntl } from 'react-intl';
-import { Layout, PageHeader, PageBlock, Button } from 'vtex.styleguide';
+import type { FC } from "react";
+import React, { useEffect, useState } from "react";
+import { FormattedMessage, useIntl, FormattedHTMLMessage } from "react-intl";
+import {
+  Layout,
+  PageHeader,
+  PageBlock,
+  Button,
+  Tabs,
+  Tab,
+  Input,
+  Textarea,
+  Divider,
+} from "vtex.styleguide";
+import { useMutation, useQuery } from "react-apollo";
+
+import settingsSchema from "./queries/settingsSchema.gql";
+import saveMappSettings from "./queries/saveSettings.gql";
 
 const Admin: FC = () => {
-    const intl = useIntl();
-    return (<Layout
-        pageHeader={
-            <PageHeader
-                title={intl.formatMessage({ id: "admin/mapp-cloud.header" })}
-                subtitle={intl.formatMessage({ id: "admin/mapp-cloud.subtitle" })}
-            >
-                <Button variation="primary">
-                    <FormattedMessage id="admin/mapp-cloud.button" />
-                </Button>
-            </PageHeader>
-        }>
-        <PageBlock>
-            <FormattedMessage id="admin/mapp-cloud.text" />
-        </PageBlock>
-    </Layout>)
-}
+  const [activeTab, setActiveTab] = useState(1);
+  const [config, setConfig] = useState<MappSettings>({
+    tiId: "",
+    tiResponder: "responder.wt-safetag.com",
+    acId: "",
+    acM: "",
+  });
+
+  const generateAcquireScript = (id: string, m: string) => {
+    if (id === "" || m === "") {
+      return "";
+    }
+
+    return `<script>(function(e){var t=document,n=t.createElement("script");n.async=!0,n.defer=!0,n.src=e,t.getElementsByTagName("head")[0].appendChild(n)})("https://c.flx1.com/${m}-${id}.js?id=${id}&m=${m}")</script>`;
+  };
+
+  const getAcquireParameter = (script: string) => {
+    const pattern = /\?id=(.+?)&m=(.+?)"/;
+    const parameter = pattern.exec(script);
+
+    if (parameter) {
+      return {
+        acId: parameter[1],
+        acM: parameter[2],
+      };
+    }
+
+    return {
+      acId: "",
+      acM: "",
+    };
+  };
+
+  const [saveSettingsMutation] = useMutation(saveMappSettings);
+  const saveSettings = async (settingsData: MappSettings) => {
+    const settings = JSON.stringify(settingsData);
+    const result = await saveSettingsMutation({
+      variables: { settings },
+    });
+  };
+
+  const { data: dataSettingsSchema } = useQuery(settingsSchema);
+
+  useEffect(() => {
+    const value = dataSettingsSchema?.appSettings?.message;
+
+    if (value) {
+      setConfig(JSON.parse(value));
+    }
+  }, [dataSettingsSchema]);
+
+  const intl = useIntl();
+
+  return (
+    <Layout
+      pageHeader={
+        <PageHeader
+          title={intl.formatMessage({ id: "admin/mapp-cloud.header" })}
+        >
+          <Button variation="primary" size="large">
+            <FormattedMessage id="admin/mapp-cloud.button" />
+          </Button>
+        </PageHeader>
+      }
+    >
+      <PageBlock>
+        <Tabs>
+          <Tab
+            label={intl.formatMessage({ id: "admin/mapp-cloud.tracking-tab" })}
+            active={activeTab === 1}
+            onClick={() => {
+              setActiveTab(1);
+            }}
+          >
+            <div className="pb6">
+              <h2>Mapp Intelligence</h2>
+              <p>
+                <FormattedHTMLMessage id="admin/mapp-cloud.intelligence-info" />
+              </p>
+              <div className="pv4">
+                <Input
+                  placeholder={intl.formatMessage({
+                    id: "admin/mapp-cloud.intelligence-trackid-placeholder",
+                  })}
+                  size="large"
+                  name="mapp-track-id"
+                  id="mapp-track-id"
+                  value={config.tiId}
+                  onChange={(e: { persist?: any; target: any }) => {
+                    e.persist();
+                    const { target } = e;
+
+                    if (target) {
+                      setConfig((oldConfig) => {
+                        return {
+                          ...oldConfig,
+                          tiId: e.target.value,
+                        };
+                      });
+                    }
+                  }}
+                  label={intl.formatMessage({
+                    id: "admin/mapp-cloud.intelligence-trackid-label",
+                  })}
+                />
+              </div>
+              <div className="pv4">
+                {" "}
+                <Input
+                  placeholder={intl.formatMessage({
+                    id: "admin/mapp-cloud.intelligence-responder-placeholder",
+                  })}
+                  size="large"
+                  name="mapp-responder-domain"
+                  id="mapp-responder-domain"
+                  value={config.tiResponder}
+                  label={intl.formatMessage({
+                    id: "admin/mapp-cloud.intelligence-responder-label",
+                  })}
+                  onChange={(e: { persist?: any; target: any }) => {
+                    e.persist();
+                    setConfig((oldConfig) => {
+                      return {
+                        ...oldConfig,
+                        tiResponder: e.target.value,
+                      };
+                    });
+                  }}
+                />
+              </div>
+            </div>
+            <Divider orientation="horizontal" />
+            <h2>Mapp Acquire</h2>
+            <p>
+              <FormattedHTMLMessage id="admin/mapp-cloud.acquire-info" />
+            </p>
+            <div className="pv4">
+              <Textarea
+                size="large"
+                label={intl.formatMessage({
+                  id: "admin/mapp-cloud.acquire-script-label",
+                })}
+                onChange={(e: { persist?: any; target: any }) => {
+                  e.persist();
+                  setConfig((oldConfig) => {
+                    return {
+                      ...oldConfig,
+                      ...getAcquireParameter(e.target.value),
+                    };
+                  });
+                }}
+                value={generateAcquireScript(config.acId, config.acM)}
+              />
+            </div>
+            <div style={{ float: "right" }}>
+              <Button
+                variation="primary"
+                size="small"
+                onClick={() => {
+                  saveSettings(config);
+                }}
+              >
+                <FormattedMessage id="admin/mapp-cloud.save" />
+              </Button>
+            </div>
+          </Tab>
+          <Tab
+            label={intl.formatMessage({ id: "admin/mapp-cloud.insights-tab" })}
+            active={activeTab === 2}
+            onClick={() => {
+              setActiveTab(2);
+            }}
+          >
+            <p>
+              <FormattedMessage id="admin/mapp-cloud.soon" />
+            </p>
+          </Tab>
+          <Tab
+            label={intl.formatMessage({ id: "admin/mapp-cloud.engage-tab" })}
+            active={activeTab === 3}
+            onClick={() => {
+              setActiveTab(3);
+            }}
+          >
+            <p>
+              <FormattedMessage id="admin/mapp-cloud.soon" />
+            </p>
+          </Tab>
+        </Tabs>
+      </PageBlock>
+    </Layout>
+  );
+};
 
 export default Admin;

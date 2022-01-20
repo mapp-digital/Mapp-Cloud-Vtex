@@ -3,3 +3,10 @@ interface Window extends Window {
   _ti: any;
   wts: any;
 }
+
+interface MappSettings {
+  tiId: string;
+  tiResponder: string;
+  acId: string;
+  acM: string;
+}

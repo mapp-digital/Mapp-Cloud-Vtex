@@ -1,0 +1,9 @@
+mutation saveMappSettings($settings: String) {
+  saveAppSettings(
+    app: "mapppartneruk.mapp-cloud"
+    version: "1.x"
+    settings: $settings
+  ) {
+    message
+  }
+}

@@ -1,7 +1,18 @@
 {
-    "mapp-cloud.navigation.label": "Mapp Cloud Integration",
-    "admin/mapp-cloud.header": "Mapp Cloud Integration",
-    "admin/mapp-cloud.button": "Create account",
-    "admin/mapp-cloud.subtitle": "Subtitle Lorem ipsum dolor sit amet 1234",
-    "admin/mapp-cloud.text": "Text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada ut neque id pharetra. Suspendisse tortor eros, sagittis at molestie at, semper mollis urna. Sed porta ipsum ac vulputate ultrices. Mauris sed libero quis risus rutrum efficitur in nec justo."
+  "mapp-cloud.navigation.label": "Mapp Cloud Integration",
+  "admin/mapp-cloud.header": "Mapp Cloud Integration",
+  "admin/mapp-cloud.button": "Get your 3-month free trial",
+  "admin/mapp-cloud.save": "Save",
+  "admin/mapp-cloud.tracking-tab": "Tracking Configuration",
+  "admin/mapp-cloud.insights-tab": "Insights",
+  "admin/mapp-cloud.engage-tab": "Engage",
+  "admin/mapp-cloud.intelligence-info": "To use this app you will need an active Mapp Intelligence account. Get in touch with our <a href=\"https://mapp.com/tech-support\">customer support</a> or sign up for your <a href=\"google.com\">three-month free trial</a>.",
+  "admin/mapp-cloud.intelligence-trackid-label": "Enter your Mapp Tag Integration ID",
+  "admin/mapp-cloud.intelligence-trackid-placeholder": "Add ID",
+  "admin/mapp-cloud.intelligence-responder-label": "Enter your responder domain (default: responder.wt-safetag.com)",
+  "admin/mapp-cloud.intelligence-responder-placeholder": "Add domain",
+  "admin/mapp-cloud.acquire-info": "You can add Mapp Acquire support to your Mapp Cloud app. Get in touch with our <a href=\"https://mapp.com/tech-support\">customer support</a> to create a Map Acquire account.",
+  "admin/mapp-cloud.acquire-script-label": "Paste your Mapp Acquire script",
+  "admin/mapp-cloud.acquire-script-placeholder": "Paste script",
+  "admin/mapp-cloud.soon": "Coming soon"
 }

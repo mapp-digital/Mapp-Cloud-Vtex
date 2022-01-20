@@ -1,0 +1,8 @@
+type Query {
+  settingsSchema: [String]
+}
+
+type Mutation {
+  saveMappSettings: [String]
+}
+
