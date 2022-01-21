@@ -11,13 +11,18 @@ import {
   Input,
   Textarea,
   Divider,
+  Spinner,
 } from "vtex.styleguide";
 import { useMutation, useQuery } from "react-apollo";
 
+import ConfigInputWrapper from "./components/configInputWrapper";
 import settingsSchema from "./queries/settingsSchema.gql";
 import saveMappSettings from "./queries/saveSettings.gql";
 
 const Admin: FC = () => {
+  const intl = useIntl();
+  const { data: dataSettingsSchema } = useQuery(settingsSchema);
+  const [saveSettingsMutation] = useMutation(saveMappSettings);
   const [activeTab, setActiveTab] = useState(1);
   const [config, setConfig] = useState<MappSettings>({
     tiId: "",
@@ -25,6 +30,9 @@ const Admin: FC = () => {
     acId: "",
     acM: "",
   });
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [configLoading, setConfigLoading] = useState(true);
 
   const generateAcquireScript = (id: string, m: string) => {
     if (id === "" || m === "") {
@@ -51,25 +59,42 @@ const Admin: FC = () => {
     };
   };
 
-  const [saveSettingsMutation] = useMutation(saveMappSettings);
   const saveSettings = async (settingsData: MappSettings) => {
+    setIsSaving(true);
     const settings = JSON.stringify(settingsData);
-    const result = await saveSettingsMutation({
+
+    await saveSettingsMutation({
       variables: { settings },
     });
+    setIsSaving(false);
   };
 
-  const { data: dataSettingsSchema } = useQuery(settingsSchema);
+  const saveButton = () => {
+    if (isSaving) {
+      return <Spinner />;
+    }
+
+    return (
+      <Button
+        variation="primary"
+        size="small"
+        onClick={() => {
+          saveSettings(config);
+        }}
+      >
+        <FormattedMessage id="admin/mapp-cloud.save" />
+      </Button>
+    );
+  };
 
   useEffect(() => {
     const value = dataSettingsSchema?.appSettings?.message;
 
     if (value) {
       setConfig(JSON.parse(value));
+      setConfigLoading(false);
     }
   }, [dataSettingsSchema]);
-
-  const intl = useIntl();
 
   return (
     <Layout
@@ -77,7 +102,13 @@ const Admin: FC = () => {
         <PageHeader
           title={intl.formatMessage({ id: "admin/mapp-cloud.header" })}
         >
-          <Button variation="primary" size="large">
+          <Button
+            variation="primary"
+            size="large"
+            onClick={() => {
+              window.open("https://portal.mapp.com/sign-up-wizard");
+            }}
+          >
             <FormattedMessage id="admin/mapp-cloud.button" />
           </Button>
         </PageHeader>
@@ -98,55 +129,58 @@ const Admin: FC = () => {
                 <FormattedHTMLMessage id="admin/mapp-cloud.intelligence-info" />
               </p>
               <div className="pv4">
-                <Input
-                  placeholder={intl.formatMessage({
-                    id: "admin/mapp-cloud.intelligence-trackid-placeholder",
-                  })}
-                  size="large"
-                  name="mapp-track-id"
-                  id="mapp-track-id"
-                  value={config.tiId}
-                  onChange={(e: { persist?: any; target: any }) => {
-                    e.persist();
-                    const { target } = e;
+                <ConfigInputWrapper isloading={configLoading}>
+                  <Input
+                    placeholder={intl.formatMessage({
+                      id: "admin/mapp-cloud.intelligence-trackid-placeholder",
+                    })}
+                    size="large"
+                    name="mapp-track-id"
+                    id="mapp-track-id"
+                    value={config.tiId}
+                    onChange={(e: { persist?: any; target: any }) => {
+                      e.persist();
+                      const { target } = e;
 
-                    if (target) {
+                      if (target) {
+                        setConfig((oldConfig) => {
+                          return {
+                            ...oldConfig,
+                            tiId: e.target.value,
+                          };
+                        });
+                      }
+                    }}
+                    label={intl.formatMessage({
+                      id: "admin/mapp-cloud.intelligence-trackid-label",
+                    })}
+                  />
+                </ConfigInputWrapper>
+              </div>
+              <div className="pv4">
+                <ConfigInputWrapper isloading={configLoading}>
+                  <Input
+                    placeholder={intl.formatMessage({
+                      id: "admin/mapp-cloud.intelligence-responder-placeholder",
+                    })}
+                    size="large"
+                    name="mapp-responder-domain"
+                    id="mapp-responder-domain"
+                    value={config.tiResponder}
+                    label={intl.formatMessage({
+                      id: "admin/mapp-cloud.intelligence-responder-label",
+                    })}
+                    onChange={(e: { persist?: any; target: any }) => {
+                      e.persist();
                       setConfig((oldConfig) => {
                         return {
                           ...oldConfig,
-                          tiId: e.target.value,
+                          tiResponder: e.target.value,
                         };
                       });
-                    }
-                  }}
-                  label={intl.formatMessage({
-                    id: "admin/mapp-cloud.intelligence-trackid-label",
-                  })}
-                />
-              </div>
-              <div className="pv4">
-                {" "}
-                <Input
-                  placeholder={intl.formatMessage({
-                    id: "admin/mapp-cloud.intelligence-responder-placeholder",
-                  })}
-                  size="large"
-                  name="mapp-responder-domain"
-                  id="mapp-responder-domain"
-                  value={config.tiResponder}
-                  label={intl.formatMessage({
-                    id: "admin/mapp-cloud.intelligence-responder-label",
-                  })}
-                  onChange={(e: { persist?: any; target: any }) => {
-                    e.persist();
-                    setConfig((oldConfig) => {
-                      return {
-                        ...oldConfig,
-                        tiResponder: e.target.value,
-                      };
-                    });
-                  }}
-                />
+                    }}
+                  />
+                </ConfigInputWrapper>
               </div>
             </div>
             <Divider orientation="horizontal" />
@@ -155,34 +189,26 @@ const Admin: FC = () => {
               <FormattedHTMLMessage id="admin/mapp-cloud.acquire-info" />
             </p>
             <div className="pv4">
-              <Textarea
-                size="large"
-                label={intl.formatMessage({
-                  id: "admin/mapp-cloud.acquire-script-label",
-                })}
-                onChange={(e: { persist?: any; target: any }) => {
-                  e.persist();
-                  setConfig((oldConfig) => {
-                    return {
-                      ...oldConfig,
-                      ...getAcquireParameter(e.target.value),
-                    };
-                  });
-                }}
-                value={generateAcquireScript(config.acId, config.acM)}
-              />
+              <ConfigInputWrapper isloading={configLoading}>
+                <Textarea
+                  size="large"
+                  label={intl.formatMessage({
+                    id: "admin/mapp-cloud.acquire-script-label",
+                  })}
+                  onChange={(e: { persist?: any; target: any }) => {
+                    e.persist();
+                    setConfig((oldConfig) => {
+                      return {
+                        ...oldConfig,
+                        ...getAcquireParameter(e.target.value),
+                      };
+                    });
+                  }}
+                  value={generateAcquireScript(config.acId, config.acM)}
+                />
+              </ConfigInputWrapper>
             </div>
-            <div style={{ float: "right" }}>
-              <Button
-                variation="primary"
-                size="small"
-                onClick={() => {
-                  saveSettings(config);
-                }}
-              >
-                <FormattedMessage id="admin/mapp-cloud.save" />
-              </Button>
-            </div>
+            <div style={{ float: "right" }}>{saveButton()}</div>
           </Tab>
           <Tab
             label={intl.formatMessage({ id: "admin/mapp-cloud.insights-tab" })}
@@ -192,7 +218,7 @@ const Admin: FC = () => {
             }}
           >
             <p>
-              <FormattedMessage id="admin/mapp-cloud.soon" />
+              <FormattedHTMLMessage id="admin/mapp-cloud.insights-info" />
             </p>
           </Tab>
           <Tab
@@ -203,7 +229,7 @@ const Admin: FC = () => {
             }}
           >
             <p>
-              <FormattedMessage id="admin/mapp-cloud.soon" />
+              <FormattedHTMLMessage id="admin/mapp-cloud.engage-info" />
             </p>
           </Tab>
         </Tabs>

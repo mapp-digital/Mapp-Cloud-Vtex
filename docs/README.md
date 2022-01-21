@@ -13,8 +13,8 @@ The Mapp Cloud app for Vtex creates the data layer used to feed the Mapp Cloud t
 Mapp Intelligence gives you access to more than 20 pre-configured dashboards to start analyzing user behavior right away and adjust your marketing accordingly.  
 Features:  
 - Adds the Mapp Cloud Tag Integration code to the Header of your website
-- Creates the standard data layer to start analyzing customer insights immediately
-- Enables customers to add the information needed to initialize tracking"
+- Adds the Mapp Acquire code to the Header of your website
+- Creates the standard data layer to start analyzing insights immediately
 - Initializes tracking
 
 
@@ -24,7 +24,7 @@ Features:
 
 1. Access the **Apps** section in your account's admin page and look for the Mapp Cloud Integration box;
 2. Then, click on the **Install** button;
-3. You'll see a warning message about needing to enter the necessary configurations. Scroll down and type in your **Tag Integration ID** in the `tiId` field.
+3. Under `Apps` you'll find the entry `Mapp Cloud Integration` - there you can enter your credentials (Tag Integration ID, Custom Responder Domain if available, Mapp Acquire Script);
 4. Click on **Save**.
 
 ### Using VTEX IO Toolbelt
@@ -56,6 +56,22 @@ The following data is available:
 | _ti['numberOfSearchResults']  | Page &#8594; Number of search results  |
 | _ti['internalSearch']  | Page &#8594; Internal search phrase |
 | _ti['eMailSubscription'] | Visitor &#8594; E-mail receiver ID |
+| _ti['vtex] | Original Vtex event data &#8594; Custom Plugin |
+
+### Subscribing to MappPageUpdate Event 
+Right before pageUpdate runs, a custom event called `MappPageUpdate` is dispatched, which includes the current _ti object as detail data.  
+To set it up in Tag Integration, create a new `Rule` with the following settings:
+- Event type: CUSTOM_EVENT
+- Eventname: MappPageUpdate
+- Element: window
+
+Now you can use the tracking data in your custom plugins.
+To try it out, create a new plugin with the following code:
+```javascript
+console.log("TI Plugin - Event log", ti_event, ti_element, ti_eventType, ti_eventCounter);
+```
+Add `head` as position and assign the `MappPageUpdateRule`.
+You can find the event data in `ti_event.detail`, and under `ti_event.detail.vtex` you can find all the data Vtex provides. Use this in conjunction with your TI custom plugin(s) to set up your individual tracking requirements.
 
 
 <!-- DOCS-IGNORE:start -->

@@ -1,11 +1,11 @@
 <script>
   (function(){
     var tiId = '{{settings.tiId}}';
-    var tiDomain = '{{settings.tiId}}' || 'responder.wt-safetag.com';
+    var tiDomain = '{{settings.tiResponder}}' || 'responder.wt-safetag.com';
     var acquireId = '{{settings.acId}}';
     var acquireM = '{{settings.acM}}';
     if(!tiId && !acquireM && !acquireId) {
-      console.error("Mapp Cloud error - no Tag Integration Id or Acquire script provided. Please go to " + location.href + "admin/mapp-cloud and enter your credentials");
+      console.error("Mapp Cloud error - no Tag Integration Id or Acquire script provided. Please go to " + location.href + "/admin/mapp-cloud and enter your credentials");
     } 
     if(tiId) {
       window._tiConfig = window._tiConfig || {

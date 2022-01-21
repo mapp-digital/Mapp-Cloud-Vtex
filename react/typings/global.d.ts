@@ -10,3 +10,9 @@ interface MappSettings {
   acId: string;
   acM: string;
 }
+
+interface MappSettingsProvider extends MappSettings {
+  saveSettings: (settings: MappSettings) => void;
+  configLoading: boolean;
+  isSaving: boolean;
+}
