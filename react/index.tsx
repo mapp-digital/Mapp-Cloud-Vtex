@@ -1,7 +1,19 @@
 import { canUseDOM } from 'vtex.render-runtime'
 import type { PixelMessage } from './typings/events'
 
+const resetTi = () => {
+  if(window._ti) {
+    Object.keys(window._ti).forEach(prop =>{ 
+      if(!lockedTiProps.includes(prop)) {
+        window._ti[prop] = 'false'
+      }
+    });
+  }
+};
+
 const pageUpdate = () => {
+  const event = new CustomEvent("MappPageUpdate", {detail: window._ti})
+  window.dispatchEvent(event);
   window.wts = window.wts || [];
   window.wts.push(["send", "pageupdate", true]);
   resetTi();
@@ -45,16 +57,6 @@ const hasItem = (productQuantity: string) => {
 
 const lockedTiProps = ["customerId", "vtex", "backup", "pageName", "emailOptIn", "eMailSubscription"];
 
-const resetTi = () => {
-  if(window._ti) {
-    Object.keys(window._ti).forEach(prop =>{ 
-      if(!lockedTiProps.includes(prop)) {
-        window._ti[prop] = 'false'
-      }
-    });
-  }
-
-};
 
 export function handleEvents(e: PixelMessage) {
   switch (e.data.eventName) {

@@ -1,20 +1,23 @@
 import type { FC } from "react";
 import React from "react";
+/* @ts-ignore */
 import { Spinner } from "vtex.styleguide";
+import Config from "../provider/ConfigProvider";
 
-const output = (loading: boolean, children: any) => {
+const output = (loading: boolean, children: React.ReactNode) => {
   if (loading) {
     return <Spinner />;
   }
-
   if (children) {
     return children;
   }
+  return null;
 };
 
-const ConfigInputWrapper: FC<{ isloading: boolean }> = (props) => {
+const ConfigInputWrapper: FC = (props) => {
+  const ctx = React.useContext(Config);
   return (
-    <React.Fragment>{output(props.isloading, props.children)}</React.Fragment>
+    <React.Fragment>{output(ctx.configLoading, props.children)}</React.Fragment>
   );
 };
 

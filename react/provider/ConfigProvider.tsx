@@ -5,13 +5,16 @@ import settingsSchema from "../queries/settingsSchema.gql";
 import saveMappSettings from "../queries/saveSettings.gql";
 
 const Config = React.createContext<MappSettingsProvider>({
-  tiId: "",
-  tiResponder: "",
-  acId: "",
-  acM: "",
-  saveSettings: (_settings) => {},
+  config: {
+    tiId: "",
+    tiResponder: "",
+    acId: "",
+    acM: "",
+  },
+  saveSettings: () => {},
   configLoading: true,
   isSaving: false,
+  setConfig: () => {}
 });
 
 export const ConfigProvider: React.FC = (props) => {
@@ -27,9 +30,9 @@ export const ConfigProvider: React.FC = (props) => {
   const [isSaving, setIsSaving] = useState(false);
   const [configLoading, setConfigLoading] = useState(true);
 
-  const saveSettings = async (settingsData: MappSettings) => {
+  const saveSettings = async () => {
     setIsSaving(true);
-    const settings = JSON.stringify(settingsData);
+    const settings = JSON.stringify(config);
 
     await saveSettingsMutation({
       variables: { settings },
@@ -39,7 +42,6 @@ export const ConfigProvider: React.FC = (props) => {
 
   useEffect(() => {
     const value = dataSettingsSchema?.appSettings?.message;
-
     if (value) {
       setConfig(JSON.parse(value));
       setConfigLoading(false);
@@ -49,16 +51,16 @@ export const ConfigProvider: React.FC = (props) => {
   return (
     <Config.Provider
       value={{
-        tiId: config.tiId,
-        tiResponder: config.tiResponder,
-        acId: config.acId,
-        acM: config.acM,
+        config,
         saveSettings,
         configLoading,
         isSaving,
+        setConfig
       }}
     >
       {props.children}
     </Config.Provider>
   );
 };
+
+export default Config;

@@ -11,8 +11,17 @@ interface MappSettings {
   acM: string;
 }
 
-interface MappSettingsProvider extends MappSettings {
-  saveSettings: (settings: MappSettings) => void;
+interface MappSettingsProvider {
+  config: MappSettings;
+  saveSettings: () => void;
+  setConfig: Dispatch<SetStateAction<MappSettings>>;
   configLoading: boolean;
   isSaving: boolean;
+}
+
+declare module '*.gql' {
+  import { DocumentNode } from 'graphql';
+
+  const value: DocumentNode;
+  export = value;
 }
