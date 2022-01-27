@@ -1,7 +1,7 @@
 {
   "name": "mapp-cloud",
   "vendor": "mapppartneruk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Mapp Cloud Integration",
   "description": "Enable Mapp Intelligence tracking without touching a single line of code.",
   "billingOptions": {
@@ -13,9 +13,7 @@
     },
     "free": true,
     "type": "free",
-    "availableCountries": [
-      "*"
-    ]
+    "availableCountries": ["*"]
   },
   "builders": {
     "react": "3.x",
