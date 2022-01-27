@@ -1,10 +1,10 @@
 import type { FC } from "react";
 import React, { useContext } from "react";
-import Config from "../provider/ConfigProvider";
 import { FormattedMessage, useIntl, FormattedHTMLMessage } from "react-intl";
-import ConfigInputWrapper from "./configInputWrapper";
-/* @ts-ignore */
 import { Input, Textarea, Divider, Spinner, Button } from "vtex.styleguide";
+
+import Config from "../provider/ConfigProvider";
+import ConfigInputWrapper from "./configInputWrapper";
 
 const generateAcquireScript = (id: string, m: string) => {
   if (id === "" || m === "") {
@@ -52,6 +52,7 @@ const saveButton = (ctx: MappSettingsProvider) => {
 const Settings: FC = () => {
   const ctx = useContext(Config);
   const intl = useIntl();
+
   return (
     <React.Fragment>
       <div className="pb6">
@@ -74,12 +75,7 @@ const Settings: FC = () => {
                 const { target } = e;
 
                 if (target) {
-                  ctx.setConfig((oldConfig: MappSettings) => {
-                    return {
-                      ...oldConfig,
-                      tiId: e.target.value,
-                    };
-                  });
+                  ctx.updateConfig({ tiId: e.target.value });
                 }
               }}
               label={intl.formatMessage({
@@ -103,12 +99,7 @@ const Settings: FC = () => {
               })}
               onChange={(e: { persist?: any; target: any }) => {
                 e.persist();
-                ctx.setConfig((oldConfig: MappSettings) => {
-                  return {
-                    ...oldConfig,
-                    tiResponder: e.target.value,
-                  };
-                });
+                ctx.updateConfig({ tiResponder: e.target.value });
               }}
             />
           </ConfigInputWrapper>

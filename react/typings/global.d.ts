@@ -11,16 +11,23 @@ interface MappSettings {
   acM: string;
 }
 
+type MappSettingProperty = "tiId" | "tiResponder" | "acId" | "acM";
+
+type MappSetting = {
+  [key: MappSettingProperty]: string;
+};
+
 interface MappSettingsProvider {
   config: MappSettings;
   saveSettings: () => void;
   setConfig: Dispatch<SetStateAction<MappSettings>>;
+  updateConfig: (MappSetting: MappSetting) => void;
   configLoading: boolean;
   isSaving: boolean;
 }
 
-declare module '*.gql' {
-  import { DocumentNode } from 'graphql';
+declare module "*.gql" {
+  import type { DocumentNode } from "graphql";
 
   const value: DocumentNode;
   export = value;

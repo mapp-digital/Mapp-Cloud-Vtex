@@ -14,7 +14,8 @@ const Config = React.createContext<MappSettingsProvider>({
   saveSettings: () => {},
   configLoading: true,
   isSaving: false,
-  setConfig: () => {}
+  setConfig: () => {},
+  updateConfig: () => {},
 });
 
 export const ConfigProvider: React.FC = (props) => {
@@ -40,8 +41,18 @@ export const ConfigProvider: React.FC = (props) => {
     setIsSaving(false);
   };
 
+  const updateConfig: MappSettingsProvider["updateConfig"] = (newValue) => {
+    setConfig((oldConfig: MappSettings) => {
+      return {
+        ...oldConfig,
+        ...newValue,
+      };
+    });
+  };
+
   useEffect(() => {
     const value = dataSettingsSchema?.appSettings?.message;
+
     if (value) {
       setConfig(JSON.parse(value));
       setConfigLoading(false);
@@ -55,7 +66,8 @@ export const ConfigProvider: React.FC = (props) => {
         saveSettings,
         configLoading,
         isSaving,
-        setConfig
+        setConfig,
+        updateConfig,
       }}
     >
       {props.children}
