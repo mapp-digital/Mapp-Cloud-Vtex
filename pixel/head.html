@@ -2,7 +2,7 @@
   (function(){
     var tiId = '{{settings.tiId}}';
     var tiDomain = '{{settings.tiResponder}}';
-    if (tiDomain === '') {
+    if (tiDomain === '' || tiDomain === '0') {
       tiDomain = 'responder.wt-safetag.com'
     }
     var acquireId = '{{settings.acId}}';
@@ -10,7 +10,7 @@
     if(!tiId && !acquireM && !acquireId) {
       console.error("Mapp Cloud error - no Tag Integration Id or Acquire script provided. Please go to " + location.href + "/admin/mapp-cloud and enter your credentials");
     } 
-    if(tiId) {
+    if(tiId && tiId.length > 1) {
       window._tiConfig = window._tiConfig || {
       tiDomain: tiDomain,
       tiId: tiId,
@@ -20,7 +20,7 @@
       new Date,c=b.getTime()+1E3*parseInt(a.wt_r);b.setTime(c);d.cookie="wt_r=1;path=/;expires="+b.toUTCString()}};c.onerror=function(){"undefined"!==typeof a.wt_mcp_hide&&"function"===typeof a.wt_mcp_hide.show&&(a.wt_mcp_hide.show(),a.wt_mcp_hide.show=function(){})};c.src="//"+g(f);e.parentNode.insertBefore(c,e)}})(window,document,"script",_tiConfig);
     }
 
-    if(acquireId && acquireM) {
+    if(acquireId && acquireM && acquireId !== '0' && acquireM !== '0') {
       var acquireLink = 'https://c.flx1.com/' + acquireM + '-' + acquireId + '.js?id=' + acquireId + '&m=' + acquireM;
       (function(e){var t=document,n=t.createElement("script");n.async=!0,n.defer=!0,n.src=e,t.getElementsByTagName("head")[0].appendChild(n)})(acquireLink);
     }

@@ -7,7 +7,7 @@ import Config from "../provider/ConfigProvider";
 import ConfigInputWrapper from "./configInputWrapper";
 
 const generateAcquireScript = (id: string, m: string) => {
-  if (id === "" || m === "") {
+  if (id === "" || m === "" || id === undefined || m === undefined) {
     return "";
   }
 

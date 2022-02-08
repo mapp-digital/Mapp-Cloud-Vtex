@@ -6,14 +6,16 @@
   "description": "Enable Mapp Intelligence tracking without touching a single line of code.",
   "billingOptions": {
     "termsURL": "https://compliance.vtex.com/gdpr/policies/vtex-privacy-policy",
-    "setupRoute_deac": "/admin/mapp-cloud",
+    "setupRoute": "/admin/mapp-cloud",
     "support": {
       "email": "support@mapp.com",
       "url": "https://mapp.com/tech-support/"
     },
     "free": true,
     "type": "free",
-    "availableCountries": ["*"]
+    "availableCountries": [
+      "*"
+    ]
   },
   "builders": {
     "react": "3.x",

@@ -4,13 +4,15 @@ import { useMutation, useQuery } from "react-apollo";
 import settingsSchema from "../queries/settingsSchema.gql";
 import saveMappSettings from "../queries/saveSettings.gql";
 
+const defaultConfigValues = {
+  tiId: "0",
+  tiResponder: "0",
+  acId: "0",
+  acM: "0",
+};
+
 const Config = React.createContext<MappSettingsProvider>({
-  config: {
-    tiId: "",
-    tiResponder: "",
-    acId: "",
-    acM: "",
-  },
+  config: defaultConfigValues,
   saveSettings: () => {},
   configLoading: true,
   isSaving: false,
@@ -33,10 +35,21 @@ export const ConfigProvider: React.FC = (props) => {
 
   const saveSettings = async () => {
     setIsSaving(true);
-    const settings = JSON.stringify(config);
-
+    const settings = {...config};
+    if(settings.acId === "") {
+      settings.acId = '0';
+    }
+    if(settings.acM === "") {
+      settings.acM = '0';
+    }
+    if(settings.tiId === "") {
+      settings.tiId = '0';
+    }
+    if(settings.tiResponder === "") {
+      settings.tiResponder = '0';
+    }
     await saveSettingsMutation({
-      variables: { settings },
+      variables: { settings: JSON.stringify(settings) },
     });
     setIsSaving(false);
   };
@@ -51,10 +64,22 @@ export const ConfigProvider: React.FC = (props) => {
   };
 
   useEffect(() => {
-    const value = dataSettingsSchema?.appSettings?.message;
-
-    if (value) {
-      setConfig(JSON.parse(value));
+    let settings = dataSettingsSchema?.appSettings?.message;
+    if(settings) {
+      settings = JSON.parse(settings);
+      if(settings.acId === "0") {
+        settings.acId = '';
+      }
+      if(settings.acM === "0") {
+        settings.acM = '';
+      }
+      if(settings.tiId === "0") {
+        settings.tiId = '';
+      }
+      if(settings.tiResponder === "0") {
+        settings.tiResponder = '';
+      }
+      setConfig(settings);
       setConfigLoading(false);
     }
   }, [dataSettingsSchema]);
