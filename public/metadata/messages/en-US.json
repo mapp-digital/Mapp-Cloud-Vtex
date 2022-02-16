@@ -11,7 +11,7 @@
       "Additional features include: AI predictions (lifetime value, likelihood to churn, likelihood to purchase), anomaly detection, forecasting, web personalization, & product recommendations"
    ],
    "additionalInformation":"To use this app you will need an active Mapp Intelligence account.\\n\\nTo sign-up for your FREE THREE-MONTH TRIAL, simply download this app and complete this form:  https://portal.mapp.com/version-test/sign-up-wizzard",
-   "websiteURL":"<https://mapp.com>",
+   "websiteURL":"https://mapp.com",
    "support":{
       "url":"https://mapp.com/tech-support"   
    }
