@@ -22,12 +22,16 @@
     "docs": "0.x",
     "admin": "0.x",
     "messages": "1.x",
-    "graphql": "1.x"
+    "graphql": "1.x",
+    "node": "6.x"
   },
   "dependencies": {
     "vtex.pixel-interfaces": "1.x",
     "vtex.styleguide": "9.x",
     "vtex.apps-graphql": "2.x"
+  },
+  "scripts": {
+    "prereleasy": "bash lint.sh"
   },
   "settingsSchema": {
     "title": "Mapp Cloud Integration",

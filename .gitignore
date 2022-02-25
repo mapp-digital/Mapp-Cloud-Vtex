@@ -1,2 +1,5 @@
 /react/node_modules
 node_modules
+/node/yarn.lock
+/node/yarn-error.log
+.DS_Store

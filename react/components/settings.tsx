@@ -1,39 +1,39 @@
-import type { FC } from "react";
-import React, { useContext } from "react";
-import { FormattedMessage, useIntl, FormattedHTMLMessage } from "react-intl";
-import { Input, Textarea, Divider, Spinner, Button } from "vtex.styleguide";
+import type { FC } from 'react'
+import React, { useContext } from 'react'
+import { FormattedMessage, useIntl, FormattedHTMLMessage } from 'react-intl'
+import { Input, Textarea, Divider, Spinner, Button } from 'vtex.styleguide'
 
-import Config from "../provider/ConfigProvider";
-import ConfigInputWrapper from "./configInputWrapper";
+import Config from '../provider/ConfigProvider'
+import ConfigInputWrapper from './configInputWrapper'
 
 const generateAcquireScript = (id: string, m: string) => {
-  if (id === "" || m === "" || id === undefined || m === undefined) {
-    return "";
+  if (id === '' || m === '' || id === undefined || m === undefined) {
+    return ''
   }
 
-  return `<script>(function(e){var t=document,n=t.createElement("script");n.async=!0,n.defer=!0,n.src=e,t.getElementsByTagName("head")[0].appendChild(n)})("https://c.flx1.com/${m}-${id}.js?id=${id}&m=${m}")</script>`;
-};
+  return `<script>(function(e){var t=document,n=t.createElement("script");n.async=!0,n.defer=!0,n.src=e,t.getElementsByTagName("head")[0].appendChild(n)})("https://c.flx1.com/${m}-${id}.js?id=${id}&m=${m}")</script>`
+}
 
 const getAcquireParameter = (script: string) => {
-  const pattern = /\?id=(.+?)&m=(.+?)"/;
-  const parameter = pattern.exec(script);
+  const pattern = /\?id=(.+?)&m=(.+?)"/
+  const parameter = pattern.exec(script)
 
   if (parameter) {
     return {
       acId: parameter[1],
       acM: parameter[2],
-    };
+    }
   }
 
   return {
-    acId: "",
-    acM: "",
-  };
-};
+    acId: '',
+    acM: '',
+  }
+}
 
 const saveButton = (ctx: MappSettingsProvider) => {
   if (ctx.isSaving) {
-    return <Spinner />;
+    return <Spinner />
   }
 
   return (
@@ -41,17 +41,17 @@ const saveButton = (ctx: MappSettingsProvider) => {
       variation="primary"
       size="small"
       onClick={() => {
-        ctx.saveSettings();
+        ctx.saveSettings()
       }}
     >
       <FormattedMessage id="admin/mapp-cloud.save" />
     </Button>
-  );
-};
+  )
+}
 
 const Settings: FC = () => {
-  const ctx = useContext(Config);
-  const intl = useIntl();
+  const ctx = useContext(Config)
+  const intl = useIntl()
 
   return (
     <React.Fragment>
@@ -64,22 +64,22 @@ const Settings: FC = () => {
           <ConfigInputWrapper>
             <Input
               placeholder={intl.formatMessage({
-                id: "admin/mapp-cloud.intelligence-trackid-placeholder",
+                id: 'admin/mapp-cloud.intelligence-trackid-placeholder',
               })}
               size="large"
               name="mapp-track-id"
               id="mapp-track-id"
               value={ctx.config.tiId}
               onChange={(e: { persist?: any; target: any }) => {
-                e.persist();
-                const { target } = e;
+                e.persist()
+                const { target } = e
 
                 if (target) {
-                  ctx.updateConfig({ tiId: e.target.value });
+                  ctx.updateConfig({ tiId: e.target.value })
                 }
               }}
               label={intl.formatMessage({
-                id: "admin/mapp-cloud.intelligence-trackid-label",
+                id: 'admin/mapp-cloud.intelligence-trackid-label',
               })}
             />
           </ConfigInputWrapper>
@@ -88,18 +88,18 @@ const Settings: FC = () => {
           <ConfigInputWrapper>
             <Input
               placeholder={intl.formatMessage({
-                id: "admin/mapp-cloud.intelligence-responder-placeholder",
+                id: 'admin/mapp-cloud.intelligence-responder-placeholder',
               })}
               size="large"
               name="mapp-responder-domain"
               id="mapp-responder-domain"
               value={ctx.config.tiResponder}
               label={intl.formatMessage({
-                id: "admin/mapp-cloud.intelligence-responder-label",
+                id: 'admin/mapp-cloud.intelligence-responder-label',
               })}
               onChange={(e: { persist?: any; target: any }) => {
-                e.persist();
-                ctx.updateConfig({ tiResponder: e.target.value });
+                e.persist()
+                ctx.updateConfig({ tiResponder: e.target.value })
               }}
             />
           </ConfigInputWrapper>
@@ -115,24 +115,24 @@ const Settings: FC = () => {
           <Textarea
             size="large"
             label={intl.formatMessage({
-              id: "admin/mapp-cloud.acquire-script-label",
+              id: 'admin/mapp-cloud.acquire-script-label',
             })}
             onChange={(e: { persist?: any; target: any }) => {
-              e.persist();
+              e.persist()
               ctx.setConfig((oldConfig: MappSettings) => {
                 return {
                   ...oldConfig,
                   ...getAcquireParameter(e.target.value),
-                };
-              });
+                }
+              })
             }}
             value={generateAcquireScript(ctx.config.acId, ctx.config.acM)}
           />
         </ConfigInputWrapper>
       </div>
-      <div style={{ float: "right" }}>{saveButton(ctx)}</div>
+      <div style={{ float: 'right' }}>{saveButton(ctx)}</div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default Settings;
+export default Settings
