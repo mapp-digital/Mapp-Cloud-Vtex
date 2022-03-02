@@ -67,7 +67,7 @@ export default class MappConnectAPI extends ExternalClient {
       }
 
       return toRet
-    } catch (err: any) {
+    } catch (err) {
       this.logger.error({
         msg: `MappConnectAPI: Error in POST Request!`,
         event,
@@ -92,12 +92,13 @@ export default class MappConnectAPI extends ExternalClient {
     const url = `${settings.url}${endpoint}`
 
     try {
+      // eslint-disable-next-line no-console
       const toRet = await this.http.getRaw(url, {
         headers: {
           "Content-Type": "application/json",
           "auth-token": token,
         },
-        metric: `get(${path})`,
+        metric: `get_${path}`,
       })
 
       if (toRet.status !== 200) {
@@ -117,7 +118,7 @@ export default class MappConnectAPI extends ExternalClient {
       }
 
       return toRet
-    } catch (err: any) {
+    } catch (err) {
       this.logger.error({
         msg: `MappConnectAPI: Error in POST Request!`,
         url,

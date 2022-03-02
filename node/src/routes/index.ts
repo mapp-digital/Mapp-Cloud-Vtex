@@ -4,7 +4,7 @@ export async function hcheck(ctx: Context) {
   const response = await ctx.clients.mappConnectAPI.ping()
 
   // eslint-disable-next-line no-console
-  console.log("Ping!", response)
+  console.log(response?.data)
 
   const settings = await getAppSettings(ctx)
 

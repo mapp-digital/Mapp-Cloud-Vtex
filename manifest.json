@@ -81,8 +81,8 @@
     {
       "name": "outbound-access",
       "attrs": {
-        "host": "charon-test.shortest-route.com",
-        "path": "/*"
+        "host": "*",
+        "path": "/api/v1/integration/"
       }
     },
     {

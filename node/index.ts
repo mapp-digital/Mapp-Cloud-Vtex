@@ -1,4 +1,4 @@
-import type {ClientsConfig, ServiceContext, RecorderState, EventContext} from "@vtex/api"
+import type {ClientsConfig, ServiceContext, RecorderState} from "@vtex/api"
 import {LRUCache, Service} from "@vtex/api"
 
 import events from "./src/events"
