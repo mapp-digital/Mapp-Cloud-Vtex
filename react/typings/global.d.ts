@@ -9,6 +9,9 @@ interface MappSettings {
   tiResponder: string
   acId: string
   acM: string
+  engageApiUrl: string
+  engageIntegrationId: string
+  engageSecret: string
 }
 
 type MappSettingProperty = 'tiId' | 'tiResponder' | 'acId' | 'acM'

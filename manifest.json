@@ -1,7 +1,7 @@
 {
   "name": "mapp-cloud",
   "vendor": "mapppartneruk",
-  "version": "1.1.4",
+  "version": "1.2.1",
   "title": "Mapp Cloud Integration",
   "description": "Enable Mapp Intelligence tracking without touching a single line of code.",
   "billingOptions": {
@@ -28,7 +28,10 @@
   "dependencies": {
     "vtex.pixel-interfaces": "1.x",
     "vtex.styleguide": "9.x",
-    "vtex.apps-graphql": "2.x"
+    "vtex.apps-graphql": "2.x",
+    "vtex.store": "2.x",
+    "vtex.orders-broadcast": "0.x",
+    "vtex.broadcaster": "0.x"
   },
   "scripts": {
     "prereleasy": "bash lint.sh"
@@ -56,8 +59,38 @@
         "title": "Acquire M parameter",
         "description": "Enter your Acquire M parameter",
         "type": "string"
+      },
+      "engageApiUrl": {
+        "title": "Acquire engageApiUrl parameter",
+        "description": "Enter your engageApiUrl parameter",
+        "type": "string"
+      },
+      "engageIntegrationId": {
+        "title": "Acquire engageIntegrationId parameter",
+        "description": "Enter your engageIntegrationId parameter",
+        "type": "string"
+      },
+      "engageSecret": {
+        "title": "Acquire engageSecret parameter",
+        "description": "Enter your engageSecret parameter",
+        "type": "string"
       }
     }
   },
+  "policies": [
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "charon-test.shortest-route.com",
+        "path": "/*"
+      }
+    },
+    {
+      "name": "colossus-fire-event"
+    },
+    {
+      "name": "colossus-write-logs"
+    }
+  ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }
