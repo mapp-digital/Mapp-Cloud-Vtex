@@ -37,7 +37,7 @@ export default class MappConnectAPI extends ExternalClient {
 
     const endpoint = `/api/v1/integration/${settings.integrationID}/event`
     const token = this.generateJwt(undefined, endpoint, undefined, settings.secret)
-    const url = `${settings.url}${endpoint}`
+    const url = `${settings.url}${endpoint}?subtype=${event}`
 
     try {
       const toRet = await this.http.postRaw(url, data, {
@@ -45,7 +45,7 @@ export default class MappConnectAPI extends ExternalClient {
           "Content-Type": "application/json",
           "auth-token": token,
         },
-        metric: `post(${event})`,
+        metric: `post_${event}`,
       })
 
       if (toRet.status !== 200) {
