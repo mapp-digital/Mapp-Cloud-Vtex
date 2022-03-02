@@ -1,9 +1,9 @@
-import type {ClientsConfig, ServiceContext, RecorderState} from "@vtex/api"
+import type {ClientsConfig, ServiceContext, RecorderState, EventContext} from "@vtex/api"
 import {LRUCache, Service} from "@vtex/api"
 
-import events from "./src/events/events"
-import Clients from "./src/clients/clients"
-import routes from "./src/routes/routes"
+import events from "./src/events"
+import Clients from "./src/clients"
+import routes from "./src/routes"
 
 declare global {
   // We declare a global Context type just to avoid re-writing ServiceContext<Clients, State> in every handler and resolver
