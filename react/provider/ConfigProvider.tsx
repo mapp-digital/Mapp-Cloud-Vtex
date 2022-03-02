@@ -9,6 +9,9 @@ const defaultConfigValues = {
   tiResponder: '0',
   acId: '0',
   acM: '0',
+  engageApiUrl: '',
+  engageIntegrationId: '',
+  engageSecret: '',
 }
 
 const Config = React.createContext<MappSettingsProvider>({
@@ -28,6 +31,9 @@ export const ConfigProvider: React.FC = props => {
     tiResponder: 'responder.wt-safetag.com',
     acId: '',
     acM: '',
+    engageApiUrl: '',
+    engageIntegrationId: '',
+    engageSecret: '',
   })
 
   const [isSaving, setIsSaving] = useState(false)

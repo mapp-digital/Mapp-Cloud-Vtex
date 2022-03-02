@@ -14,6 +14,7 @@ import {
 
 import { ConfigProvider } from './provider/ConfigProvider'
 import Settings from './components/settings'
+import EngageSettings from './components/engageSettings'
 
 const Admin: FC = () => {
   const intl = useIntl()
@@ -71,9 +72,7 @@ const Admin: FC = () => {
                 setActiveTab(3)
               }}
             >
-              <p>
-                <FormattedHTMLMessage id="admin/mapp-cloud.engage-info" />
-              </p>
+              <EngageSettings />
             </Tab>
           </Tabs>
         </PageBlock>

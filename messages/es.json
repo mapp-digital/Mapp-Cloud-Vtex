@@ -15,5 +15,11 @@
   "admin/mapp-cloud.acquire-script-label": "Pega aquí tu script de Mapp Acquire",
   "admin/mapp-cloud.acquire-script-placeholder": "Pegar script",
   "admin/mapp-cloud.engage-info": "Native Marketing Automation y CDP disponibles próximamente. Mientras tanto, te recomendamos que descubras todo lo que ofrece Mapp Engage <a href=\"https://mapp.com/cross-channel-engagement/\">here</a>.",
-  "admin/mapp-cloud.insights-info": "In-App Dashboards disponible próximamente. Mientras tanto, te recomendamos que descubras todo lo que ofrece Mapp Intelligence <a href=\"https://mapp.com/customer-intelligence-and-ai/\">here</a>."
+  "admin/mapp-cloud.insights-info": "In-App Dashboards disponible próximamente. Mientras tanto, te recomendamos que descubras todo lo que ofrece Mapp Intelligence <a href=\"https://mapp.com/customer-intelligence-and-ai/\">here</a>.",
+  "admin/mapp-cloud.engage-api-label": "Mapp Connect API base url",
+  "admin/mapp-cloud.engage-api-placeholder": "Add API url",
+  "admin/mapp-cloud.engage-integration-id-label": "Integration ID",
+  "admin/mapp-cloud.engage-integration-id-placeholder": "Add Integration ID",
+  "admin/mapp-cloud.engage-api-secret-label": "Integration Secret",
+  "admin/mapp-cloud.engage-api-secret-placeholder": "Add Secret"
 }
