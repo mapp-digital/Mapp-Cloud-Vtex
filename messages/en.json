@@ -6,14 +6,14 @@
   "admin/mapp-cloud.tracking-tab": "Tracking Configuration",
   "admin/mapp-cloud.insights-tab": "Insights",
   "admin/mapp-cloud.engage-tab": "Engage",
-  "admin/mapp-cloud.intelligence-info": "To use this app you will need an active Mapp Intelligence account. Get in touch with our <a href=\"https://mapp.com/contact-us\">customer support</a> or sign up for your <a href=\"https://portal.mapp.com/sign-up-wizard\">three-month free trial</a>.",
+  "admin/mapp-cloud.intelligence-info": "To use this app you will need an active Mapp Intelligence account. Get in touch with our <a href=\"https://mapp.com/contact-us\" target=\"_blank\">customer support</a> or sign up for your <a href=\"https://portal.mapp.com/sign-up-wizard\" target=\"_blank\">three-month free trial</a>.",
   "admin/mapp-cloud.intelligence-trackid-label": "Enter your Mapp Tag Integration ID",
   "admin/mapp-cloud.intelligence-trackid-placeholder": "Add ID",
   "admin/mapp-cloud.intelligence-responder-label": "Enter your responder domain (default: responder.wt-safetag.com)",
   "admin/mapp-cloud.intelligence-responder-placeholder": "Add domain",
-  "admin/mapp-cloud.acquire-info": "You can add Mapp Acquire support to your Mapp Cloud app. Get in touch with our <a href=\"https://mapp.com/contact-us\">customer support</a> to create a Mapp Acquire account.",
+  "admin/mapp-cloud.acquire-info": "You can add Mapp Acquire support to your Mapp Cloud app. Get in touch with our <a href=\"https://mapp.com/contact-us\" target=\"_blank\">customer support</a> to create a Mapp Acquire account.",
   "admin/mapp-cloud.acquire-script-label": "Paste your Mapp Acquire script",
   "admin/mapp-cloud.acquire-script-placeholder": "Paste script",
-  "admin/mapp-cloud.engage-info": "Native Marketing Automation and CDP is coming soon. In the meanwhile please explore what Mapp Engage has to offer <a href=\"https://mapp.com/cross-channel-engagement/\">here</a>.",
-  "admin/mapp-cloud.insights-info": "In-App Dashboards are coming soon. In the meanwhile please explore what Mapp Intelligence has to offer <a href=\"https://mapp.com/customer-intelligence-and-ai/\">here</a>."
+  "admin/mapp-cloud.engage-info": "Native Marketing Automation and CDP is coming soon. In the meanwhile please explore what Mapp Engage has to offer <a href=\"https://mapp.com/cross-channel-engagement/\" target=\"_blank\">here</a>.",
+  "admin/mapp-cloud.insights-info": "In-App Dashboards are coming soon. In the meanwhile please explore what Mapp Intelligence has to offer <a href=\"https://mapp.com/customer-intelligence-and-ai/\" target=\"_blank\">here</a>."
 }

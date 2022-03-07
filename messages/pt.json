@@ -6,14 +6,14 @@
   "admin/mapp-cloud.tracking-tab": "Tracking Configuration",
   "admin/mapp-cloud.insights-tab": "Insights",
   "admin/mapp-cloud.engage-tab": "Engage",
-  "admin/mapp-cloud.intelligence-info": "Para usar esta app, você precisa de uma conta ativa do Mapp Intelligence.Contacte o nosso serviço de<a href=\"https://mapp.com/contact-us\">suporte</a> o registre-se aqui para conseguir <a href=\"https://portal.mapp.com/sign-up-wizard\">os três primeiros meses grátis</a>.",
+  "admin/mapp-cloud.intelligence-info": "Para usar esta app, você precisa de uma conta ativa do Mapp Intelligence.Contacte o nosso serviço de<a href=\"https://mapp.com/contact-us\" target=\"_blank\">suporte</a> o registre-se aqui para conseguir <a href=\"https://portal.mapp.com/sign-up-wizard\" target=\"_blank\">os três primeiros meses grátis</a>.",
   "admin/mapp-cloud.intelligence-trackid-label": "Introduz aqui seu Mapp Tag Integration ID",
   "admin/mapp-cloud.intelligence-trackid-placeholder": "Adicione ID",
   "admin/mapp-cloud.intelligence-responder-label": "Introduz aqui seu responder domain (por omissão: responder.wt-safetag.com)",
   "admin/mapp-cloud.intelligence-responder-placeholder": "Adicione domain",
-  "admin/mapp-cloud.acquire-info": "Você pode adicionar Acquire support à sua conta de Mapp Cloud app. Contacta com nosso serviço de <a href=\"https://mapp.com/contact-us\">suporte</a> para criar uma conta de Map Acquire",
+  "admin/mapp-cloud.acquire-info": "Você pode adicionar Acquire support à sua conta de Mapp Cloud app. Contacta com nosso serviço de <a href=\"https://mapp.com/contact-us\" target=\"_blank\">suporte</a> para criar uma conta de Map Acquire",
   "admin/mapp-cloud.acquire-script-label": "Cole seu Mapp Acquire script",
   "admin/mapp-cloud.acquire-script-placeholder": "Colar script",
-  "admin/mapp-cloud.engage-info": "Native Marketing Automation e CDP estarão brevemente disponíveis. Entretanto, recomendamos que você explore as funcionalidades de Mapp Engage <a href=\"https://mapp.com/cross-channel-engagement/\">here</a>.",
-  "admin/mapp-cloud.insights-info": "In-App Dashboards estarão brevemente disponíveis. Entretanto, recomendamos que você explore as funcionalidades de Mapp Intelligence <a href=\"https://mapp.com/customer-intelligence-and-ai/\">here</a>."
+  "admin/mapp-cloud.engage-info": "Native Marketing Automation e CDP estarão brevemente disponíveis. Entretanto, recomendamos que você explore as funcionalidades de Mapp Engage <a href=\"https://mapp.com/cross-channel-engagement/\" target=\"_blank\">here</a>.",
+  "admin/mapp-cloud.insights-info": "In-App Dashboards estarão brevemente disponíveis. Entretanto, recomendamos que você explore as funcionalidades de Mapp Intelligence <a href=\"https://mapp.com/customer-intelligence-and-ai/\" target=\"_blank\">here</a>."
 }
