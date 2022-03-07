@@ -28,7 +28,9 @@
   "dependencies": {
     "vtex.pixel-interfaces": "1.x",
     "vtex.styleguide": "9.x",
-    "vtex.apps-graphql": "2.x"
+    "vtex.apps-graphql": "2.x",
+    "vtex.orders-broadcast": "0.x",
+    "vtex.broadcaster": "0.x"
   },
   "scripts": {
     "prereleasy": "bash lint.sh"

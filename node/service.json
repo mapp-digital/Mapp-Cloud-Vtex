@@ -10,5 +10,11 @@
       "path": "/_v/app/vtex-mapp-cloud/hcheck",
       "public": true
     }
+  },
+  "events": {
+    "orderStatusOnChange": {
+      "sender": "vtex.orders-broadcast",
+      "topics": ["order-created", "cancel", "invoiced"]
+    }
   }
 }
