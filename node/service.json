@@ -14,5 +14,11 @@
       "path": "/_v/app/vtex-mapp-cloud/userUpdate",
       "public": true
     }
+  },
+  "events": {
+    "orderStatusOnChange": {
+      "sender": "vtex.orders-broadcast",
+      "topics": ["order-created", "cancel", "invoiced"]
+    }
   }
 }
