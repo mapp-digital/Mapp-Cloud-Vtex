@@ -1,3 +1,5 @@
+import {getLogger, getUser} from "../utils/utils"
+
 const ORDER_STATUS = {
   canceled: "Canceled",
   invoiced: "Shipped",
@@ -41,11 +43,11 @@ const buildOrderData = (order: Order): OrderData => {
 export async function orderStatusOnChange(ctx: EventChangeContext, next: () => Promise<any>) {
   // add "mappConnectAPI" into clients
   const {
-    clients: {orders},
-    vtex: {logger},
+    clients: {orders, mappConnectAPI},
     body,
   } = ctx
 
+  const logger = getLogger(ctx.vtex.logger)
   const event = body.currentState
 
   // Log data
@@ -78,15 +80,18 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
   let orderData: OrderData
 
   // construct customer data ???
-  let customerData = {}
+  let customerData: User | undefined
 
   try {
+    order.clientProfileData.userProfileId
     orderData = buildOrderData(order)
-    // construct customer data ???
-    customerData = {
-      email: order.clientProfileData.email,
-      firstName: order.clientProfileData.firstName,
-      lastName: order.clientProfileData.lastName,
+
+    if (!order.clientProfileData.userProfileId) {
+      logger.error({
+        message: "orderStatusOnChange - Cannot find user!",
+      })
+    } else {
+      customerData = await getUser(ctx, order.clientProfileData.userProfileId)
     }
   } catch (error) {
     logger.error({
@@ -104,8 +109,8 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
     await mappConnectAPI.postEvent(event, orderData)
 
     // create customer ???
-    if (order.status === "on-order-completed") {
-      await mappConnectAPI.createCustomer(customerData)
+    if (order.status === "on-order-completed" && customerData) {
+      await mappConnectAPI.updateUser(customerData)
 
       logger.info({
         message: "orderStatusOnChange-createCustomer",

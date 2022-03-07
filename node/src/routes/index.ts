@@ -1,4 +1,4 @@
-import {getAppSettings, getUser, getLogger} from "../utils/utils"
+import {getUser, getLogger} from "../utils/utils"
 
 export async function userUpdate(ctx: Context, next: () => Promise<any>) {
   ctx.set("Cache-Control", "no-cache")
@@ -49,16 +49,6 @@ export async function hcheck(ctx: Context, next: () => Promise<any>) {
   ctx.set("Cache-Control", "no-cache")
   ctx.status = 200
   ctx.body = "ok"
-
-  // const response = await ctx.clients.mappConnectAPI.ping()
-
-  // // eslint-disable-next-line no-console
-  // console.log(response?.data)
-
-  const settings = await getAppSettings(ctx)
-
-  // eslint-disable-next-line no-console
-  console.log("SETTINGS =>", settings.engageApiUrl)
   await next()
 }
 
