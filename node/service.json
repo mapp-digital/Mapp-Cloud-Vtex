@@ -1,6 +1,6 @@
 {
   "memory": 512,
-  "ttl": 43200,
+  "ttl": 300,
   "timeout": 40,
   "minReplicas": 2,
   "maxReplicas": 4,
@@ -8,6 +8,10 @@
   "routes": {
     "hcheck": {
       "path": "/_v/app/vtex-mapp-cloud/hcheck",
+      "public": true
+    },
+    "userUpdate": {
+      "path": "/_v/app/vtex-mapp-cloud/userUpdate",
       "public": true
     }
   }

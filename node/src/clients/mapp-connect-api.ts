@@ -1,10 +1,11 @@
 // eslint-disable-next-line import/no-nodejs-modules
 import * as crypto from "crypto"
 
-import type {InstanceOptions, IOContext, IOResponse, Logger} from "@vtex/api"
+import type {InstanceOptions, IOContext, IOResponse} from "@vtex/api"
 import {ExternalClient} from "@vtex/api"
 
-import {getAppSettings} from "../utils/utils"
+import {getAppSettings, getLogger} from "../utils/utils"
+import type {MappLogger} from "../utils/logger"
 
 export interface MappConnectAPIConfig {
   url: string
@@ -14,14 +15,18 @@ export interface MappConnectAPIConfig {
 
 export default class MappConnectAPI extends ExternalClient {
   private appSettings?: AppSettings
-  private logger: Logger
+  private logger: MappLogger
 
   constructor(context: IOContext, options?: InstanceOptions) {
     super(``, context, {
       ...options,
       timeout: 10000,
     })
-    this.logger = context.logger
+    this.logger = getLogger(context.logger)
+  }
+
+  public updateUser(user: User): Promise<IOResponse<any> | undefined> {
+    return this.postEvent("user", user)
   }
 
   public ping(): Promise<IOResponse<any> | undefined> {
@@ -36,7 +41,7 @@ export default class MappConnectAPI extends ExternalClient {
     }
 
     const endpoint = `/api/v1/integration/${settings.integrationID}/event`
-    const token = this.generateJwt(undefined, endpoint, undefined, settings.secret)
+    const token = this.generateJwt(JSON.stringify(data), endpoint, `subtype=${event}`, settings.secret)
     const url = `${settings.url}${endpoint}?subtype=${event}`
 
     try {
@@ -54,7 +59,8 @@ export default class MappConnectAPI extends ExternalClient {
           event,
           url,
           data,
-          response: toRet,
+          status: toRet.status,
+          body: toRet.data,
         })
       } else {
         this.logger.debug({
@@ -62,7 +68,8 @@ export default class MappConnectAPI extends ExternalClient {
           event,
           url,
           data,
-          response: toRet,
+          status: toRet.status,
+          body: toRet.data,
         })
       }
 
@@ -106,14 +113,16 @@ export default class MappConnectAPI extends ExternalClient {
           msg: `MappConnectAPI: GET reques. Status is not 200!`,
           url,
           path,
-          response: toRet,
+          status: toRet.status,
+          body: toRet.data,
         })
       } else {
         this.logger.debug({
           msg: `MappConnectAPI: GET request`,
           url,
           path,
-          response: toRet,
+          status: toRet.status,
+          body: toRet.data,
         })
       }
 
