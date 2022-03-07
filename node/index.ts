@@ -3,6 +3,7 @@ import {LRUCache, Service} from "@vtex/api"
 
 import events from "./src/events"
 import Clients from "./src/clients"
+import routes from "./src/routes"
 
 // Create a LRU memory cache for the Status client.
 // The @vtex/api HttpClient respects Cache-Control headers and uses the provided cache.
@@ -49,4 +50,5 @@ const clients: ClientsConfig<Clients> = {
 export default new Service({
   clients,
   events,
+  routes,
 })
