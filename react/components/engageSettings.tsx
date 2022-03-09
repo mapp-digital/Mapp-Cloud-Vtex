@@ -1,32 +1,93 @@
 import type { FC } from 'react'
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { FormattedMessage, useIntl, FormattedHTMLMessage } from 'react-intl'
 import { Input, Spinner, Button } from 'vtex.styleguide'
 
 import Config from '../provider/ConfigProvider'
 import ConfigInputWrapper from './configInputWrapper'
 
-const saveButton = (ctx: MappSettingsProvider) => {
-  if (ctx.isSaving) {
-    return <Spinner />
-  }
-
-  return (
-    <Button
-      variation="primary"
-      size="small"
-      onClick={() => {
-        ctx.saveSettings()
-      }}
-    >
-      <FormattedMessage id="admin/mapp-cloud.save" />
-    </Button>
-  )
-}
-
 const EngageSettings: FC = () => {
   const ctx = useContext(Config)
   const intl = useIntl()
+  const [state, setState] = useState({
+    btnLoading: false,
+    invalidSettings: false,
+    initalRequestSent: false,
+  })
+
+  const settingsInfo = () => {
+    if (!state.initalRequestSent) {
+      return false
+    }
+
+    if (!state.invalidSettings) {
+      return (
+        <div
+          style={{ textAlign: 'center', width: '100%' }}
+          className="pa3 mt3 bg-success hover-bg-success active-bg-success c-on-success hover-c-on-success active-c-on-success dib mr3"
+        >
+          Mapp Engage is connected!
+        </div>
+      )
+    }
+
+    return (
+      <div
+        style={{ textAlign: 'center', width: '100%' }}
+        className="pa3 mt3 bg-danger hover-bg-danger active-bg-danger c-on-danger hover-c-on-danger active-c-on-danger dib mr3"
+      >
+        Mapp Engage failed to connect, some configuration is not correct!
+      </div>
+    )
+  }
+
+  const saveButton = (context: MappSettingsProvider) => {
+    if (context.isSaving || state.btnLoading) {
+      return <Spinner />
+    }
+
+    return (
+      <Button
+        variation="primary"
+        size="small"
+        isLoading={state.btnLoading}
+        onClick={async () => {
+          setState({
+            ...state,
+            btnLoading: true,
+          })
+
+          try {
+            await ctx.saveSettings()
+
+            const res = await fetch(
+              '/_v/app/vtex-mapp-cloud/checkMappConnectCredentials',
+              {
+                method: 'GET',
+                cache: 'no-cache',
+              }
+            )
+
+            const invalidSettings = res.status !== 200
+
+            setState({
+              ...state,
+              btnLoading: false,
+              invalidSettings,
+              initalRequestSent: true,
+            })
+          } catch (err) {
+            setState({
+              ...state,
+              btnLoading: false,
+            })
+          }
+        }}
+      >
+        <FormattedMessage id="admin/mapp-cloud.save" />
+      </Button>
+    )
+  }
 
   return (
     <React.Fragment>
@@ -96,7 +157,11 @@ const EngageSettings: FC = () => {
           </ConfigInputWrapper>
         </div>
       </div>
-      <div style={{ float: 'right' }}>{saveButton(ctx)}</div>
+      <div style={{ justifyContent: 'space-between' }} className="flex">
+        <div />
+        <div>{saveButton(ctx)}</div>
+      </div>
+      {settingsInfo()}
     </React.Fragment>
   )
 }

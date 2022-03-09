@@ -11,37 +11,41 @@ export class MappLogger {
     return MappLogger.instance
   }
 
-  constructor(private vtexLogger: Logger) {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (this.vtexLogger && this.vtexLogger.debug !== undefined) {
-      this.vtexLogger.debug("Logger created")
-    }
+  constructor(private vtexLogger: Logger) {}
+
+  public debug(message: string, format: any): void {
+    // eslint-disable-next-line no-console
+    console.log({
+      message,
+      ...format,
+    })
+    this.vtexLogger.debug(message)
   }
 
-  public debug(format: any): void {
+  public error(message: string, format: any): void {
     // eslint-disable-next-line no-console
-    console.log(format)
-  }
-
-  public error(format: any): void {
-    // eslint-disable-next-line no-console
-    console.log(format)
+    console.log({
+      message,
+      ...format,
+    })
     this.vtexLogger.error(format)
   }
 
-  public info(format: any): void {
+  public info(message: string, format: any): void {
     // eslint-disable-next-line no-console
-    console.log(format)
+    console.log({
+      message,
+      ...format,
+    })
+    this.vtexLogger.info(format)
   }
 
-  public log(format: any): void {
+  public warn(message: string, format: any): void {
     // eslint-disable-next-line no-console
-    console.log(format)
-  }
-
-  public warn(format: any): void {
-    // eslint-disable-next-line no-console
-    console.log(format)
-    this.vtexLogger.error(format)
+    console.log({
+      message,
+      ...format,
+    })
+    this.vtexLogger.warn(format)
   }
 }

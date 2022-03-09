@@ -13,6 +13,10 @@
     "userUpdate": {
       "path": "/_v/app/vtex-mapp-cloud/userUpdate",
       "public": true
+    },
+    "checkMappConnectCredentials": {
+      "path": "/_v/app/vtex-mapp-cloud/checkMappConnectCredentials",
+      "public": true
     }
   },
   "events": {
