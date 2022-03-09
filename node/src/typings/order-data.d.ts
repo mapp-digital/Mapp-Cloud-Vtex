@@ -22,17 +22,4 @@ interface ShippingAddress {
   country?: string
   state?: string
 }
-type OrderDataStatus =
-  | "NotSet"
-  | "Misc"
-  | "PreOrder"
-  | "BackOrder"
-  | "Pending"
-  | "Hold"
-  | "Processing"
-  | "Shipped"
-  | "Completed"
-  | "Returned"
-  | "Canceled"
-  | "Unknown"
-  | "Closed"
+type OrderDataStatus = "Created" | "Payment Accepted" | "Canceled" | "Shipped" | "Processing"
