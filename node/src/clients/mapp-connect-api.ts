@@ -25,8 +25,19 @@ export default class MappConnectAPI extends ExternalClient {
     this.logger = getLogger(context.logger)
   }
 
+  public updateOrder(order: OrderData): Promise<IOResponse<any> | undefined> {
+    return this.postEvent("order", order)
+  }
+
   public updateUser(user: User): Promise<IOResponse<any> | undefined> {
     return this.postEvent("user", user)
+  }
+
+  public deleteUser(user: User): Promise<IOResponse<any> | undefined> {
+    return this.postEvent("user", {
+      email: user.email,
+      delete: true,
+    })
   }
 
   public ping(): Promise<IOResponse<any> | undefined> {
@@ -54,8 +65,7 @@ export default class MappConnectAPI extends ExternalClient {
       })
 
       if (toRet.status !== 200) {
-        this.logger.warn({
-          msg: `MappConnectAPI: POST request. Status is not 200!`,
+        this.logger.warn(`MappConnectAPI[postEvent]: POST request. Status is not 200! Status: ${toRet.status}`, {
           event,
           url,
           data,
@@ -63,8 +73,7 @@ export default class MappConnectAPI extends ExternalClient {
           body: toRet.data,
         })
       } else {
-        this.logger.debug({
-          msg: `MappConnectAPI: POST request`,
+        this.logger.debug(`MappConnectAPI[postEvent]: POST request. Event: ${event}. Status: ${toRet.status}`, {
           event,
           url,
           data,
@@ -75,8 +84,7 @@ export default class MappConnectAPI extends ExternalClient {
 
       return toRet
     } catch (err) {
-      this.logger.error({
-        msg: `MappConnectAPI: Error in POST Request!`,
+      this.logger.error(`MappConnectAPI[postEvent]: Error in POST Request! Event: ${event}`, {
         event,
         url,
         err,
@@ -109,16 +117,14 @@ export default class MappConnectAPI extends ExternalClient {
       })
 
       if (toRet.status !== 200) {
-        this.logger.warn({
-          msg: `MappConnectAPI: GET reques. Status is not 200!`,
+        this.logger.warn(`MappConnectAPI[get]: GET reques. Status is not 200! Status: ${toRet.status}`, {
           url,
           path,
           status: toRet.status,
           body: toRet.data,
         })
       } else {
-        this.logger.debug({
-          msg: `MappConnectAPI: GET request`,
+        this.logger.debug(`MappConnectAPI[get]: GET request. Status: ${toRet.status}, Path: ${path}`, {
           url,
           path,
           status: toRet.status,
@@ -128,8 +134,7 @@ export default class MappConnectAPI extends ExternalClient {
 
       return toRet
     } catch (err) {
-      this.logger.error({
-        msg: `MappConnectAPI: Error in POST Request!`,
+      this.logger.error(`MappConnectAPI[get]: Error in POST Request! Path: ${path}`, {
         url,
         err,
         path,
@@ -151,8 +156,7 @@ export default class MappConnectAPI extends ExternalClient {
     } as MappConnectAPIConfig
 
     if (!settings.url || !settings.integrationID || !settings.secret) {
-      this.logger.error({
-        msg: `MappConnectAPI: Missing configuration!`,
+      this.logger.error(`MappConnectAPI[getConfig]: Missing configuration!`, {
         url: settings.url,
         integrationID: settings.integrationID,
         secretExist: settings.secret.length > 0,

@@ -53,11 +53,9 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
   } = ctx
 
   const logger = getLogger(ctx.vtex.logger)
-  const event = body.currentState
 
   // Log data
-  logger.info({
-    message: "orderStatusOnChange-eventReceived ",
+  logger.info("Orders[orderStatusChange]: event received", {
     data: ctx.body,
   })
 
@@ -71,9 +69,8 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
       return
     }
   } catch (error) {
-    logger.error({
+    logger.error(`Orders[orderStatusChange]: Exception in orders.getOrderData: ${error?.message}`, {
       error,
-      message: "orderStatusOnChange-getOrderError",
       data: ctx.body,
     })
 
@@ -91,16 +88,13 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
     orderData = buildOrderData(order)
 
     if (!order.clientProfileData.userProfileId) {
-      logger.error({
-        message: "orderStatusOnChange - Cannot find user!",
-      })
+      logger.error("Orders[orderStatusChange]: Cannot find userProfileID", {order})
     } else {
       customerData = await getUser(ctx, order.clientProfileData.userProfileId)
     }
   } catch (error) {
-    logger.error({
+    logger.error(`Orders[orderStatusChange]: Exception in buildOrderData or getUser: ${error?.message}`, {
       error,
-      message: "orderStatusOnChange-buildListrakOrderError",
       data: {order},
     })
 
@@ -110,19 +104,14 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
   // send order data to mapp
   try {
     // send post event to mapp api
-    await mappConnectAPI.postEvent(event, orderData)
+    await mappConnectAPI.updateOrder(orderData)
 
     // create customer
     if (order.status === "on-order-completed" && customerData) {
       await mappConnectAPI.updateUser(customerData)
-
-      logger.info({
-        message: "orderStatusOnChange-createCustomer",
-        data: {customerData},
-      })
     }
   } catch (error) {
-    logger.error({
+    logger.error(`Orders[orderStatusChange]: Exception in updateUser or postEvent: ${error?.message}`, {
       error,
       message: "orderStatusOnChange-createOrderError",
       data: {orderData, customerData},
