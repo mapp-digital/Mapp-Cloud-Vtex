@@ -1,12 +1,17 @@
+/* eslint-disable no-console */
 import {getLogger, getUser} from "../utils/utils"
 
 const ORDER_STATUS = {
+  order_created: "Created",
+  payment_approved: "Payment Accepted",
   canceled: "Canceled",
   invoiced: "Shipped",
 } as const
 
 const getOrderStatus = (order: Order) => {
-  const status = ORDER_STATUS[order.status as keyof typeof ORDER_STATUS]
+  const orderStatus = order.status.replace("-", "_")
+
+  const status = ORDER_STATUS[orderStatus as keyof typeof ORDER_STATUS]
 
   return status || "Processing"
 }
@@ -58,7 +63,6 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
 
   // call api to get order data
   try {
-    // todo set permission for workspace ( order hook works)
     order = await orders.getOrderData(body.orderId)
 
     if (!order || !order.status || !order.items) {
@@ -102,7 +106,7 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
     // send post event to mapp api
     await mappConnectAPI.updateOrder(orderData)
 
-    // create customer ???
+    // create customer
     if (order.status === "on-order-completed" && customerData) {
       await mappConnectAPI.updateUser(customerData)
     }
