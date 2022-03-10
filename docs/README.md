@@ -34,6 +34,41 @@ Features:
 3. Fill in the `tiId` field with your **Tag Integration ID**.
 4. Click on **Save**.
 
+### Mapp Engage configuration
+
+1. Access the **My Apps** section in your account's admin page and look for the Mapp Cloud Integration box;
+2. Find **Mapp Cloud Integration** app under installed apps and click on **Settings** page
+3. Navigate to **Engage** tab and fill form for your Mapp integration
+4. After pressing **Save** button you should get confirmation that everything is configured correctly
+5. In order to provide realtime client/user changes to MappEngage its necessary to configure triggers in Master Data (Check next section).
+
+### Mapp Engage configuration - Master Data Client triggers
+
+1. Go to  **{vtex-account}.ds.vtexcrm.com.br**
+2. Navigate to **Triggers** page
+3. Click on **Add new** button in top left corner and create new triggers
+
+Client insert trigger
+- Name: **client_insert_trigger**
+- Data Entity: **Cliente**
+- Trigger Rule: **Um registro for inserido** (When record is entered)
+- Navigate to **If positive** tab and set Action to **Send a HTTP request**
+- Set URL to: **{vtex-account}.myvtex.com/_v/app/vtex-mapp-cloud/userUpdate?userId={!userId}**
+
+Client update trigger
+- Name: **client_update_trigger**
+- Data Entity: **Cliente**
+- Trigger Rule: **Um registro for alterado** (When record is changed)
+- Navigate to **If positive** tab and set Action to **Send a HTTP request**
+- Set URL to: **{vtex-account}.myvtex.com/_v/app/vtex-mapp-cloud/userUpdate?userId={!userId}**
+
+Client remove trigger
+- Name: **client_remove_trigger**
+- Data Entity: **Cliente**
+- Trigger Rule: **Um registro for removido** (When record is changed)
+- Navigate to **If positive** tab and set Action to **Send a HTTP request**
+- Set URL to: **{vtex-account}.myvtex.com/_v/app/vtex-mapp-cloud/userUpdate?userId={!userId}&t=1&remove=true**
+
 ### Mapping data in Mapp Cloud
 Once Mapp Cloud Integration is active on your Vtex store, you can map data from the global _ti datalayer variable as parameters to your Mapp Intelligence plugin in Tag Integration.
 The following data is available:  
