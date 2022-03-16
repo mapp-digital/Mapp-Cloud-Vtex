@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {getAppId, getLogger, getUser} from "../utils/utils"
 
 const ORDER_STATUS = {
