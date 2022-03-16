@@ -2,51 +2,53 @@
 import {getAppId, getLogger, getUser} from "../utils/utils"
 
 const ORDER_STATUS = {
-  order_created: "Created",
-  payment_approved: "Payment Accepted",
-  canceled: "Canceled",
-  invoiced: "Shipped",
+  on_order_completed: "Created",
+  cancel: "Canceled",
 } as const
 
 const getOrderStatus = (order: Order) => {
-  const orderStatus = order.status.replace("-", "_")
+  const orderStatus = order.status.replace(/-/g, "_")
 
   const status = ORDER_STATUS[orderStatus as keyof typeof ORDER_STATUS]
 
   return status || "Processing"
 }
 
-const getOrderTotal = (id: string, order: Order) => {
-  const itemsTotal: any = order.totals.find(total => total.id === id)
-
-  return itemsTotal ? itemsTotal.value / 100 : 0
-}
-
 const buildOrderData = (order: Order): OrderData => {
-  const shippingAddress: ShippingAddress = {
-    zipCode: order.shippingData.address.postalCode,
-    address1: order.shippingData.address.street,
-    city: order.shippingData.address.city,
-    country: order.shippingData.address.country,
-    state: order.shippingData.address.state,
-  }
+  const items: OrderItem[] = order.items.map(item => {
+    let data
+
+    if (order.status === "cancel") {
+      data = {
+        price: item.price / 100,
+        sku: item.sellerSku,
+        productQuantity: item.quantity,
+        returnedQuantity: item.quantity,
+        name: item.name,
+      }
+    } else {
+      data = {
+        price: item.price / 100,
+        qty_ordered: item.quantity,
+        sku: item.sellerSku,
+        name: item.name,
+      }
+    }
+
+    return data
+  })
 
   return {
-    couponCode: order.marketingData?.coupon ?? "",
-    customerNumber: order.clientProfileData.userProfileId ?? "",
-    dateEntered: order.creationDate,
     email: order.clientProfileData.email,
-    orderNumber: order.sequence,
-    orderTotal: order.value / 100,
-    shipDate: order.invoicedDate ?? "",
-    shippingAddress,
-    shippingTotal: getOrderTotal("Shipping", order),
+    orderId: order.sequence,
+    items,
+    currency: order.storePreferencesData.currencyCode,
+    timestamp: order.creationDate,
     status: getOrderStatus(order),
   }
 }
 
 export async function orderStatusOnChange(ctx: EventChangeContext, next: () => Promise<any>) {
-  // add "mappConnectAPI" into clients
   const {
     clients: {orders, mappConnectAPI},
     body,
@@ -65,6 +67,8 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
   try {
     order = await orders.getOrderData(body.orderId)
 
+    // order.status replaced with event current state because order status and event current state doesn't match
+    order.status = body.currentState
     if (!order || !order.status || !order.items) {
       return
     }
@@ -80,7 +84,7 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
   // construct order data
   let orderData: OrderData
 
-  // construct customer data ???
+  // construct customer data
   let customerData: User | undefined
 
   try {

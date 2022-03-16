@@ -1,25 +1,20 @@
 interface OrderData {
-  couponCode?: string
-  customerNumber?: string
-  dateEntered?: string
-  email?: string
-  orderNumber: string
-  orderTotal?: number
-  shipDate?: string
-  shippingAddress?: ShippingAddress
-  shippingTotal?: number
-  status?: OrderDataStatus
+  email: string
+  messageId?: string
+  items: OrderItem[]
+  group?: number
+  orderId: string
+  timestamp: string
+  currency: string
+  status?: string
 }
-interface ShippingAddress {
-  firstName?: string
-  lastName?: string
-  phone?: string
-  zipCode?: string
-  address1: string
-  address2?: string
-  address3?: string
-  city?: string
-  country?: string
-  state?: string
+interface OrderItem {
+  sku: string | null
+  name: string
+  price: number
+  qty_ordered?: number
+  productQuantity?: number
+  returnedQuantity?: number
 }
-type OrderDataStatus = "Created" | "Payment Accepted" | "Canceled" | "Shipped" | "Processing"
+
+type OrderDataStatus = "Created" | "Canceled" | "Processing"
