@@ -1,4 +1,4 @@
-import {getUser, getLogger} from "../utils/utils"
+import {getUser, getLogger, getAppSettings} from "../utils/utils"
 
 export async function checkMappConnectCredentials(ctx: Context, next: () => Promise<any>) {
   ctx.set("Cache-Control", "no-cache")
@@ -23,6 +23,7 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
   ctx.body = "ok"
 
   const logger = getLogger(ctx.vtex.logger)
+
   // eslint-disable-next-line no-console
   const {userId, remove} = ctx.query
   const {mappConnectAPI} = ctx.clients
@@ -56,7 +57,32 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
   if (remove === "true") {
     await mappConnectAPI.deleteUser(user)
   } else {
-    await mappConnectAPI.updateUser(user)
+    await mappConnectAPI.updateUser(user, await getAppSettings(ctx))
+  }
+
+  await next()
+}
+
+export async function groups(ctx: Context, next: () => Promise<any>) {
+  const logger = getLogger(ctx.vtex.logger)
+
+  ctx.set("Cache-Control", "no-cache")
+  ctx.status = 200
+
+  try {
+    const response = await ctx.clients.mappConnectAPI.group()
+
+    if (response?.status !== 200) {
+      throw new Error("Status code not 200")
+    }
+
+    ctx.body = response?.data
+  } catch (err) {
+    logger.error("Routes[groups]: Error was trown while fetching data!", {
+      err,
+    })
+    ctx.status = 500
+    ctx.body = "Internal error"
   }
 
   await next()
@@ -72,5 +98,6 @@ export async function hcheck(ctx: Context, next: () => Promise<any>) {
 export default {
   hcheck,
   userUpdate,
+  groups,
   checkMappConnectCredentials,
 }

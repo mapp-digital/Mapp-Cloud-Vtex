@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import {getLogger, getUser} from "../utils/utils"
+import {getAppId, getLogger, getUser} from "../utils/utils"
 
 const ORDER_STATUS = {
   order_created: "Created",
@@ -108,7 +108,12 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
 
     // create customer
     if (order.status === "on-order-completed" && customerData) {
-      await mappConnectAPI.updateUser(customerData)
+      const appId = getAppId()
+
+      await mappConnectAPI.updateUser(
+        customerData,
+        await (ctx.clients.apps.getAppSettings(appId) as Promise<AppSettings>),
+      )
     }
   } catch (error) {
     logger.error(`Orders[orderStatusChange]: Exception in updateUser or postEvent: ${error?.message}`, {

@@ -29,8 +29,25 @@ export default class MappConnectAPI extends ExternalClient {
     return this.postEvent("order", order)
   }
 
-  public updateUser(user: User): Promise<IOResponse<any> | undefined> {
-    return this.postEvent("user", user)
+  public updateUser(user: User, appSettings: AppSettings): Promise<IOResponse<any> | undefined> {
+    const data: any = {
+      ...user,
+      group: user.isNewsletterOptIn ? appSettings.subscribersGroupID : appSettings.customerGroupID,
+    }
+
+    if (data.group === "0" || !data.group || data.group.length === 0) {
+      throw new Error("No groups configured!")
+    }
+
+    if (user.isNewsletterOptIn) {
+      if (appSettings.newsletterDoubleOptIn.toLowerCase() === "on") {
+        data.doubleOptIn = "true"
+      }
+    } else {
+      data.unsubscribe = "true"
+    }
+
+    return this.postEvent("user", data)
   }
 
   public deleteUser(user: User): Promise<IOResponse<any> | undefined> {
@@ -38,6 +55,10 @@ export default class MappConnectAPI extends ExternalClient {
       email: user.email,
       delete: true,
     })
+  }
+
+  public group(): Promise<IOResponse<any> | undefined> {
+    return this.get("group")
   }
 
   public ping(): Promise<IOResponse<any> | undefined> {
@@ -134,7 +155,7 @@ export default class MappConnectAPI extends ExternalClient {
 
       return toRet
     } catch (err) {
-      this.logger.error(`MappConnectAPI[get]: Error in POST Request! Path: ${path}`, {
+      this.logger.error(`MappConnectAPI[get]: Error in GET Request! Path: ${path}`, {
         url,
         err,
         path,
