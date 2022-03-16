@@ -50,11 +50,15 @@ export default class MappConnectAPI extends ExternalClient {
     return this.postEvent("user", data)
   }
 
-  public deleteUser(user: User): Promise<IOResponse<any> | undefined> {
+  public deleteUser(email: string): Promise<IOResponse<any> | undefined> {
     return this.postEvent("user", {
-      email: user.email,
+      email,
       delete: true,
     })
+  }
+
+  public messages(): Promise<IOResponse<any> | undefined> {
+    return this.get("message")
   }
 
   public group(): Promise<IOResponse<any> | undefined> {

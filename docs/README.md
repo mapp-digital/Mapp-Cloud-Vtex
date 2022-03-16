@@ -67,7 +67,7 @@ Client remove trigger
 - Data Entity: **Cliente**
 - Trigger Rule: **Um registro for removido** (When record is changed)
 - Navigate to **If positive** tab and set Action to **Send a HTTP request**
-- Set URL to: **{vtex-account}.myvtex.com/_v/app/vtex-mapp-cloud/userUpdate?userId={!userId}&t=1&remove=true**
+- Set URL to: **{vtex-account}.myvtex.com/_v/app/vtex-mapp-cloud/userUpdate?userId={!userId}&remove=true&email={!email}**
 
 ### Mapping data in Mapp Cloud
 Once Mapp Cloud Integration is active on your Vtex store, you can map data from the global _ti datalayer variable as parameters to your Mapp Intelligence plugin in Tag Integration.
