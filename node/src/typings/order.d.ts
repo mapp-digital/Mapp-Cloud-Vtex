@@ -4,7 +4,7 @@ interface Order {
   creationDate: string
   value: number
   totals: Total[]
-  items: []
+  items: VtexOrderItem[]
   status: string
   statusDescription: string
   sequence: string
@@ -16,8 +16,11 @@ interface Order {
   marketingData?: MarketingData | null
   shippingData: ShippingData
   checkedInPickupPointId: number
+  storePreferencesData: StorePreferencesData
 }
-
+interface StorePreferencesData {
+  currencyCode: string
+}
 interface ClientProfileData {
   email: string
   firstName: string
@@ -40,4 +43,12 @@ interface Total {
   id: string
   name: string
   value: string
+}
+interface VtexOrderItem {
+  quantity: number
+  id: string
+  productId: string | null
+  price: number
+  name: string
+  sellerSku: string
 }
