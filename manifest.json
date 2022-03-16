@@ -74,6 +74,21 @@
         "title": "Acquire engageSecret parameter",
         "description": "Enter your engageSecret parameter",
         "type": "string"
+      },
+      "customerGroupID": {
+        "title": "Acquire customer group id parameter",
+        "description": "Enter your customer group ID parameter",
+        "type": "string"
+      },
+      "subscribersGroupID": {
+        "title": "Acquire subscriber group id parameter",
+        "description": "Enter your subscribers group id parameter",
+        "type": "string"
+      },
+      "newsletterDoubleOptIn": {
+        "title": "Acquire newsletterDoubleOptIn parameter",
+        "description": "Enter your newsletterDoubleOptIn parameter",
+        "type": "string"
       }
     }
   },

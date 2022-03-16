@@ -12,6 +12,9 @@ const defaultConfigValues = {
   engageApiUrl: '',
   engageIntegrationId: '',
   engageSecret: '',
+  customerGroupID: '0',
+  subscribersGroupID: '0',
+  newsletterDoubleOptIn: 'Off',
 }
 
 const Config = React.createContext<MappSettingsProvider>({
@@ -34,6 +37,9 @@ export const ConfigProvider: React.FC = props => {
     engageApiUrl: '',
     engageIntegrationId: '',
     engageSecret: '',
+    customerGroupID: '0',
+    subscribersGroupID: '0',
+    newsletterDoubleOptIn: 'Off',
   })
 
   const [isSaving, setIsSaving] = useState(false)
