@@ -2,7 +2,7 @@ interface OrderData {
   email: string
   messageId?: string
   items: OrderItem[]
-  group?: number
+  group?: string
   orderId: string
   timestamp: string
   currency: string

@@ -17,6 +17,7 @@ interface Order {
   shippingData: ShippingData
   checkedInPickupPointId: number
   storePreferencesData: StorePreferencesData
+  orderGroup: string
 }
 interface StorePreferencesData {
   currencyCode: string

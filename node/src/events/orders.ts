@@ -41,6 +41,7 @@ const buildOrderData = (order: Order): OrderData => {
     email: order.clientProfileData.email,
     orderId: order.sequence,
     items,
+    group: order.orderGroup,
     currency: order.storePreferencesData.currencyCode,
     timestamp: order.creationDate,
     status: getOrderStatus(order),
