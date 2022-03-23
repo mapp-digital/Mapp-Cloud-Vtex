@@ -21,6 +21,10 @@
     "checkMappConnectCredentials": {
       "path": "/_v/app/vtex-mapp-cloud/checkMappConnectCredentials",
       "public": true
+    },
+    "mappMessages": {
+      "path": "/_v/app/vtex-mapp-cloud/mappMessages",
+      "public": true
     }
   },
   "events": {

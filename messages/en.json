@@ -26,5 +26,7 @@
   "admin/mapp-cloud.engage-api-secret-helptext": "Integration Secret generated in Mapp Engage.",
   "admin/mapp-cloud.engage-customers-group-label": "Customers group",
   "admin/mapp-cloud.engage-subscribers-group-label": "Subscribers group",
-  "admin/mapp-cloud.engage-newsletter-doubleop-label": "Newsletter double opt in"
+  "admin/mapp-cloud.engage-newsletter-doubleop-label": "Newsletter double opt in",
+  "admin/mapp-cloud.engage-message-order-created-label": "Order created message",
+  "admin/mapp-cloud.engage-message-order-canceled-label": "Order canceled message"
 }

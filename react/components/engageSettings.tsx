@@ -14,6 +14,10 @@ interface EngageSettingsState {
     value: string
     label: any
   }>
+  mappMessages: Array<{
+    value: string
+    label: any
+  }>
 }
 
 const EngageSettings: FC = () => {
@@ -24,6 +28,7 @@ const EngageSettings: FC = () => {
     invalidSettings: false,
     initalRequestSent: false,
     groups: [],
+    mappMessages: [],
   })
 
   const getGroups = async () => {
@@ -46,10 +51,40 @@ const EngageSettings: FC = () => {
         }
       })
 
-      setState({
-        ...state,
+      setState(previousState => ({
+        ...previousState,
         groups,
+      }))
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err)
+    }
+  }
+
+  const getMappMessages = async () => {
+    try {
+      const res = await fetch('/_v/app/vtex-mapp-cloud/mappMessages', {
+        method: 'GET',
+        cache: 'no-cache',
       })
+
+      const body = await res.json()
+
+      if (res.status !== 200) {
+        throw new Error('Response for messages not 200')
+      }
+
+      const mappMessages = Object.keys(body).map(key => {
+        return {
+          value: key,
+          label: body[key],
+        }
+      })
+
+      setState(previousState => ({
+        ...previousState,
+        mappMessages,
+      }))
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err)
@@ -115,6 +150,10 @@ const EngageSettings: FC = () => {
               await getGroups()
             }
 
+            if (!invalidSettings && state.mappMessages.length === 0) {
+              await getMappMessages()
+            }
+
             setState({
               ...state,
               btnLoading: false,
@@ -141,6 +180,7 @@ const EngageSettings: FC = () => {
 
   useEffect(() => {
     getGroups()
+    getMappMessages()
   }, [])
 
   return (
@@ -268,6 +308,44 @@ const EngageSettings: FC = () => {
               onChange={(e: { persist?: any; target: any }) => {
                 e.persist()
                 ctx.updateConfig({ subscribersGroupID: e.target.value })
+              }}
+            />
+          </ConfigInputWrapper>
+        </div>
+      </div>
+      <Divider orientation="horizontal" />
+      <h2>Mapp Engage Messages</h2>
+      <div className="pv4">
+        <div className="pv4">
+          <ConfigInputWrapper>
+            <Dropdown
+              label={intl.formatMessage({
+                id: 'admin/mapp-cloud.engage-message-order-created-label',
+              })}
+              disabled={state.mappMessages.length === 0}
+              options={state.mappMessages}
+              size="large"
+              value={ctx.config.messageOrderCreatedID}
+              onChange={(e: { persist?: any; target: any }) => {
+                e.persist()
+                ctx.updateConfig({ messageOrderCreatedID: e.target.value })
+              }}
+            />
+          </ConfigInputWrapper>
+        </div>
+        <div className="pv4">
+          <ConfigInputWrapper>
+            <Dropdown
+              label={intl.formatMessage({
+                id: 'admin/mapp-cloud.engage-message-order-canceled-label',
+              })}
+              disabled={state.mappMessages.length === 0}
+              options={state.mappMessages}
+              size="large"
+              value={ctx.config.messageOrderCanceledID}
+              onChange={(e: { persist?: any; target: any }) => {
+                e.persist()
+                ctx.updateConfig({ messageOrderCanceledID: e.target.value })
               }}
             />
           </ConfigInputWrapper>

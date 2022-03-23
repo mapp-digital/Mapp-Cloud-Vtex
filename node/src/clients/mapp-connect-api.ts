@@ -26,13 +26,21 @@ export default class MappConnectAPI extends ExternalClient {
   }
 
   public updateOrder(order: OrderData): Promise<IOResponse<any> | undefined> {
-    return this.postEvent("order", order)
+    const data: any = {
+      ...order,
+      type: "Import",
+      subtype: "transaction",
+    }
+
+    return this.postEvent("order", data)
   }
 
   public updateUser(user: User, appSettings: AppSettings): Promise<IOResponse<any> | undefined> {
     const data: any = {
       ...user,
       group: user.isNewsletterOptIn ? appSettings.subscribersGroupID : appSettings.customerGroupID,
+      type: "Import",
+      subtype: "user",
     }
 
     if (data.group === "0" || !data.group || data.group.length === 0) {

@@ -5,4 +5,6 @@ interface AppSettings {
   customerGroupID: string
   subscribersGroupID: string
   newsletterDoubleOptIn: string
+  messageOrderCreatedID: string
+  messageOrderCanceledID: string
 }

@@ -14,7 +14,7 @@ const getOrderStatus = (order: Order) => {
   return status || "Processing"
 }
 
-const buildOrderData = (order: Order): OrderData => {
+const buildOrderData = (order: Order, appSettings: AppSettings): OrderData => {
   const items: OrderItem[] = order.items.map(item => {
     let data
 
@@ -22,7 +22,7 @@ const buildOrderData = (order: Order): OrderData => {
       data = {
         price: item.price / 100,
         sku: item.sellerSku,
-        productQuantity: item.quantity,
+        productQuantity: 0,
         returnedQuantity: item.quantity,
         name: item.name,
       }
@@ -30,6 +30,7 @@ const buildOrderData = (order: Order): OrderData => {
       data = {
         price: item.price / 100,
         qty_ordered: item.quantity,
+        productQuantity: item.quantity,
         sku: item.sellerSku,
         name: item.name,
       }
@@ -38,7 +39,9 @@ const buildOrderData = (order: Order): OrderData => {
     return data
   })
 
-  return {
+  const messageId = order.status === "cancel" ? appSettings.messageOrderCanceledID : appSettings.messageOrderCreatedID
+
+  const toRet: any = {
     email: order.clientProfileData.email,
     orderId: order.sequence,
     items,
@@ -46,6 +49,12 @@ const buildOrderData = (order: Order): OrderData => {
     timestamp: order.creationDate,
     status: getOrderStatus(order),
   }
+
+  if (messageId && messageId !== "0" && messageId.length > 0) {
+    toRet.messageId = messageId
+  }
+
+  return toRet
 }
 
 export async function orderStatusOnChange(ctx: EventChangeContext, next: () => Promise<any>) {
@@ -87,9 +96,15 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
   // construct customer data
   let customerData: User | undefined
 
+  const appId = getAppId()
+  const appSettings = (await ctx.clients.apps.getAppSettings(appId)) as AppSettings
+
   try {
-    order.clientProfileData.userProfileId
-    orderData = buildOrderData(order)
+    orderData = buildOrderData(order, appSettings)
+
+    if (!orderData.messageId) {
+      throw new Error("Missing MessageID for order type!")
+    }
 
     if (!order.clientProfileData.userProfileId) {
       logger.error("Orders[orderStatusChange]: Cannot find userProfileID", {order})
@@ -112,12 +127,7 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
 
     // create customer
     if (order.status === "on-order-completed" && customerData) {
-      const appId = getAppId()
-
-      await mappConnectAPI.updateUser(
-        customerData,
-        await (ctx.clients.apps.getAppSettings(appId) as Promise<AppSettings>),
-      )
+      await mappConnectAPI.updateUser(customerData, appSettings)
     }
   } catch (error) {
     logger.error(`Orders[orderStatusChange]: Exception in updateUser or postEvent: ${error?.message}`, {

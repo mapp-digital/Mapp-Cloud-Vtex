@@ -89,6 +89,16 @@
         "title": "Acquire newsletterDoubleOptIn parameter",
         "description": "Enter your newsletterDoubleOptIn parameter",
         "type": "string"
+      },
+      "messageOrderCreatedID": {
+        "title": "Acquire messageOrderCreatedID parameter",
+        "description": "Enter your messageOrderCreatedID parameter",
+        "type": "string"
+      },
+      "messageOrderCanceledID": {
+        "title": "Acquire messageOrderCanceledID parameter",
+        "description": "Enter your messageOrderCanceledID parameter",
+        "type": "string"
       }
     }
   },

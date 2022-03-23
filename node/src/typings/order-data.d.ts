@@ -3,6 +3,7 @@ interface OrderData {
   messageId?: string
   items: OrderItem[]
   group?: number
+  messageId?: string
   orderId: string
   timestamp: string
   currency: string
