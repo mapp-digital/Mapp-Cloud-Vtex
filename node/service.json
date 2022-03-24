@@ -25,6 +25,10 @@
     "mappMessages": {
       "path": "/_v/app/vtex-mapp-cloud/mappMessages",
       "public": true
+    },
+    "getProducts": {
+      "path": "/_v/app/vtex-mapp-cloud/getProducts",
+      "public": true
     }
   },
   "events": {
