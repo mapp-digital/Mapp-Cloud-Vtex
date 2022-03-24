@@ -1,18 +1,18 @@
 {
-   "name": "Mapp - Customer Insights",
-   "headline": "Habilite o Mapp Intelligence Customer Insights sem tocar em uma única linha de código",
-   "overview": "Mapp Intelligence é uma plataforma de Customer Insights que permite a você aproveitar o poder de seus dados de primeira viagem.\\n\\nEm seu núcleo está um conjunto de painéis de controle fáceis de entender que permitem a você entender a viagem do cliente para encontrar os caminhos mais rápidos para a conversão. Ao utilizar dados de transações anteriores, comportamento de navegação e histórico de contatos para analisar, pontuar e visualizar insights sobre seus clientes, pode fornecer a previsão mais precisa do que seus clientes vão fazer a seguir",
-   "features":[
-      "Integração para sincronizar o comportamento no local e os dados de transações com a Inteligência do Mapa",
-      "Mais de 30 painéis de controle pré-construídos que oferecem ao cliente e aos negócios",
-      "Análise de marketing em profundidade",
-      "Construído para marqueteiros",
-      "Simples de implantar",
-      "As características adicionais incluem: Previsões de IA (valor de vida útil, probabilidade de rotatividade, probabilidade de compra), detecção de anomalias, previsão, personalização da web, & recomendações de produtos"
-   ],
-   "additionalInformation": "Para usar este aplicativo você precisará de uma conta ativa da Mapp Intelligence.\\n\\nPara se inscrever para seu TRIAL GRATUITO DE TRÊS MESES, basta baixar este aplicativo e preencher este formulário: https://portal.mapp.com/version-test/sign-up-wizzard",
-   "websiteURL":"https://mapp.com",
-   "support":{
-      "url": "https://mapp.com/tech-support"
-   }
+  "name": "Mapp - Customer Insights",
+  "headline": "Habilite o Mapp Intelligence Customer Insights sem tocar em uma única linha de código",
+  "overview": "Mapp Intelligence é uma plataforma de Customer Insights que permite a você aproveitar o poder de seus dados de primeira viagem.\\\\n\\\\nEm seu núcleo está um conjunto de painéis de controle fáceis de entender que permitem a você entender a viagem do cliente para encontrar os caminhos mais rápidos para a conversão. Ao utilizar dados de transações anteriores, comportamento de navegação e histórico de contatos para analisar, pontuar e visualizar insights sobre seus clientes, pode fornecer a previsão mais precisa do que seus clientes vão fazer a seguir",
+  "features": [
+    "Integração para sincronizar o comportamento no local e os dados de transações com a Inteligência do Mapa",
+    "Mais de 30 painéis de controle pré-construídos que oferecem ao cliente e aos negócios",
+    "Análise de marketing em profundidade",
+    "Construído para marqueteiros",
+    "Simples de implantar",
+    "As características adicionais incluem: Previsões de IA (valor de vida útil, probabilidade de rotatividade, probabilidade de compra), detecção de anomalias, previsão, personalização da web, & recomendações de produtos"
+  ],
+  "additionalInformation": "Para usar este aplicativo você precisará de uma conta ativa da Mapp Intelligence.\\\\n\\\\nPara se inscrever para seu TRIAL GRATUITO DE TRÊS MESES, basta baixar este aplicativo e preencher este formulário: https://portal.mapp.com/version-test/sign-up-wizard",
+  "websiteURL": "https://mapp.com",
+  "support": {
+    "url": "https://mapp.com/tech-support"
+  }
 }
