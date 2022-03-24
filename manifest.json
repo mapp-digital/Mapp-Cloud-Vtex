@@ -132,6 +132,13 @@
       "name": "outbound-access",
       "attrs": {
         "host": "api.vtex.com",
+        "path": "/{{account}}/pricing/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
         "path": "/api/dataentities/*"
       }
     }
