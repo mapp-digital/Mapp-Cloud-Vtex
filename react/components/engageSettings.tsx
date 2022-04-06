@@ -274,17 +274,6 @@ const EngageSettings: FC = () => {
             />
           </ConfigInputWrapper>
         </div>
-        <div className="pv4">
-          <ConfigInputWrapper>
-            <Button
-              variation="primary"
-              size="small"
-              href="/_v/app/vtex-mapp-cloud/getProducts"
-            >
-              Download Products
-            </Button>
-          </ConfigInputWrapper>
-        </div>
       </div>
       <Divider orientation="horizontal" />
       <h2>Mapp Engage Group Configuration</h2>

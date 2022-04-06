@@ -6,6 +6,8 @@ import {ExternalClient} from "@vtex/api"
 
 import {getAppSettings, getLogger} from "../utils/utils"
 import type {MappLogger} from "../utils/logger"
+import type {OrderData, ProductData} from "../typings/mapp-connect"
+import type {User} from "../typings/vtex"
 
 export interface MappConnectAPIConfig {
   url: string
@@ -25,22 +27,18 @@ export default class MappConnectAPI extends ExternalClient {
     this.logger = getLogger(context.logger)
   }
 
-  public updateOrder(order: OrderData): Promise<IOResponse<any> | undefined> {
-    const data: any = {
-      ...order,
-      type: "Import",
-      subtype: "transaction",
-    }
+  public updateProduct(product: ProductData): Promise<IOResponse<any> | undefined> {
+    return this.postEvent("product", product)
+  }
 
-    return this.postEvent("order", data)
+  public updateOrder(order: OrderData): Promise<IOResponse<any> | undefined> {
+    return this.postEvent("order", order)
   }
 
   public updateUser(user: User, appSettings: AppSettings): Promise<IOResponse<any> | undefined> {
     const data: any = {
       ...user,
       group: user.isNewsletterOptIn ? appSettings.subscribersGroupID : appSettings.customerGroupID,
-      type: "Import",
-      subtype: "user",
     }
 
     if (data.group === "0" || !data.group || data.group.length === 0) {
@@ -65,19 +63,19 @@ export default class MappConnectAPI extends ExternalClient {
     })
   }
 
-  public messages(): Promise<IOResponse<any> | undefined> {
+  public getMessages(): Promise<IOResponse<any> | undefined> {
     return this.get("message")
   }
 
-  public group(): Promise<IOResponse<any> | undefined> {
+  public getGroups(): Promise<IOResponse<any> | undefined> {
     return this.get("group")
   }
 
-  public ping(): Promise<IOResponse<any> | undefined> {
+  public getPing(): Promise<IOResponse<any> | undefined> {
     return this.get("ping")
   }
 
-  public async postEvent(event: string, data?: any): Promise<IOResponse<any> | undefined> {
+  private async postEvent(event: string, data?: any): Promise<IOResponse<any> | undefined> {
     const settings = await this.getConfig(this.context)
 
     if (!settings) {
@@ -101,7 +99,7 @@ export default class MappConnectAPI extends ExternalClient {
         this.logger.warn(`MappConnectAPI[postEvent]: POST request. Status is not 200! Status: ${toRet.status}`, {
           event,
           url,
-          data,
+          data: JSON.stringify(data),
           status: toRet.status,
           body: toRet.data,
         })
@@ -109,7 +107,7 @@ export default class MappConnectAPI extends ExternalClient {
         this.logger.debug(`MappConnectAPI[postEvent]: POST request. Event: ${event}. Status: ${toRet.status}`, {
           event,
           url,
-          data,
+          data: JSON.stringify(data),
           status: toRet.status,
           body: toRet.data,
         })
@@ -121,14 +119,14 @@ export default class MappConnectAPI extends ExternalClient {
         event,
         url,
         err,
-        data,
+        data: JSON.stringify(data),
       })
     }
 
     return undefined
   }
 
-  public async get(path: string): Promise<IOResponse<any> | undefined> {
+  private async get(path: string): Promise<IOResponse<any> | undefined> {
     const settings = await this.getConfig(this.context)
 
     if (!settings) {

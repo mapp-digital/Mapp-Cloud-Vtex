@@ -1,6 +1,7 @@
 import type {IOContext, Logger} from "@vtex/api"
 import {Apps} from "@vtex/api"
 
+import type {User} from "../typings/vtex"
 import {MappLogger} from "./logger"
 
 export const getLogger = (vtexLogger: Logger): MappLogger => {

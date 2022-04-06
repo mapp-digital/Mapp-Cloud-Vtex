@@ -1,3 +1,16 @@
+export interface ProductData {
+  productSKU: string
+  productName: string
+  productPrice: number
+  stockTotal: number
+  productURL: string
+  imageURL: string
+  zoomImageURL: string
+  brand: string
+  category: string
+  description: string
+}
+
 interface OrderData {
   email: string
   messageId?: string
@@ -8,6 +21,7 @@ interface OrderData {
   timestamp: string
   currency: string
   status?: string
+  userId: string | null
 }
 interface OrderItem {
   sku: string | null

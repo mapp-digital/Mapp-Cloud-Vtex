@@ -1,11 +1,11 @@
-import type {MappConnectCatalogItem} from "../typings/mapp-connect-catalog"
+import {ProductData} from "../typings/mapp-connect"
 import {getUser, getLogger, getAppSettings} from "../utils/utils"
 
 export async function checkMappConnectCredentials(ctx: Context, next: () => Promise<any>) {
   ctx.set("Cache-Control", "no-cache")
 
   const {mappConnectAPI} = ctx.clients
-  const response = await mappConnectAPI.ping()
+  const response = await mappConnectAPI.getPing()
 
   if (response && response.status === 200) {
     ctx.status = 200
@@ -83,7 +83,7 @@ export async function mappMessages(ctx: Context, next: () => Promise<any>) {
   ctx.status = 200
 
   try {
-    const response = await ctx.clients.mappConnectAPI.messages()
+    const response = await ctx.clients.mappConnectAPI.getMessages()
 
     if (response?.status !== 200) {
       throw new Error("Status code not 200")
@@ -108,7 +108,7 @@ export async function groups(ctx: Context, next: () => Promise<any>) {
   ctx.status = 200
 
   try {
-    const response = await ctx.clients.mappConnectAPI.group()
+    const response = await ctx.clients.mappConnectAPI.getGroups()
 
     if (response?.status !== 200) {
       throw new Error("Status code not 200")
@@ -122,99 +122,6 @@ export async function groups(ctx: Context, next: () => Promise<any>) {
     ctx.status = 500
     ctx.body = "Internal error"
   }
-
-  await next()
-}
-
-// const sftpConnection = async (): Promise<void> => {
-//   try {
-//     const client = new Client()
-
-//     await client.connect({
-//       host: "ftp.scenarios.ec-demo.net",
-//       username: "pambuk",
-//       password: "5SWVec-Bu-zT",
-//       debug: (info: string) => {
-//         // eslint-disable-next-line no-console
-//         console.log(info)
-//       },
-//     })
-
-//     const files = await client.cwd()
-
-//     // eslint-disable-next-line no-console
-//     console.log(files)
-//   } catch (err) {
-//     // eslint-disable-next-line no-console
-//     console.log("err", err)
-//   }
-// }
-
-export async function getProducts(ctx: Context, next: () => Promise<any>) {
-  const logger = getLogger(ctx.vtex.logger)
-
-  ctx.set("Cache-Control", "no-cache")
-  ctx.status = 200
-
-  const response = await ctx.clients.catalog.getAllSKU()
-
-  const productsRequests = response.map(skuID => {
-    return ctx.clients.catalog.getAllProductDetails(skuID.toString(), ctx)
-  })
-
-  const products = await Promise.all(productsRequests)
-
-  const data = products
-    .map(elm => {
-      if (!elm) {
-        return undefined
-      }
-
-      let stockTotal = 0
-
-      elm.inventory.balance.forEach(warehouse => {
-        stockTotal += warehouse.totalQuantity - warehouse.reservedQuantity
-      })
-
-      return {
-        productSKU: elm.sku.Id.toString(),
-        productName: elm.product.Name,
-        productPrice: elm.price?.basePrice || 0,
-        stockTotal,
-        productURL: `https://${ctx.URL.hostname}${elm.sku.DetailUrl}`,
-        imageURL: elm.sku.ImageUrl,
-        zoomImageURL: elm.sku.ImageUrl,
-        brand: elm.sku.BrandName,
-        category: Object.values(elm.sku.ProductCategories).join(", "),
-        description: elm.product.Description || elm.product.DescriptionShort,
-      } as MappConnectCatalogItem
-    })
-    .filter(elm => elm !== undefined) as MappConnectCatalogItem[]
-
-  const csvKeys =
-    data.length > 0
-      ? Object.keys(data[0])
-      : [
-          "productSKU",
-          "productName",
-          "productPrice",
-          "stockTotal",
-          "productURL",
-          "imageURL",
-          "zoomImageURL",
-          "brand",
-          "category",
-          "description",
-        ]
-
-  logger.info("produts", data)
-  ctx.attachment("vtex_products.csv")
-  ctx.body = `${csvKeys.join(",")}\r\n${data.map(elm => Object.values(elm).join(",")).join("\r\n")}`
-
-  // await sftpConnection()
-
-  // const res = await ctx.clients.mappConnectAPI.messages()
-  // ctx.body = res?.data
 
   await next()
 }
@@ -233,5 +140,4 @@ export default {
   groups,
   checkMappConnectCredentials,
   mappMessages,
-  getProducts,
 }
