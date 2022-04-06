@@ -89,6 +89,16 @@
         "title": "Acquire newsletterDoubleOptIn parameter",
         "description": "Enter your newsletterDoubleOptIn parameter",
         "type": "string"
+      },
+      "messageOrderCreatedID": {
+        "title": "Acquire messageOrderCreatedID parameter",
+        "description": "Enter your messageOrderCreatedID parameter",
+        "type": "string"
+      },
+      "messageOrderCanceledID": {
+        "title": "Acquire messageOrderCanceledID parameter",
+        "description": "Enter your messageOrderCanceledID parameter",
+        "type": "string"
       }
     }
   },
@@ -117,6 +127,13 @@
     },
     {
       "name": "colossus-write-logs"
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
+        "path": "/{{account}}/pricing/*"
+      }
     },
     {
       "name": "outbound-access",

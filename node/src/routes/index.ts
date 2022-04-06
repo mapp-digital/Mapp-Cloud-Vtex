@@ -1,10 +1,11 @@
+import {ProductData} from "../typings/mapp-connect"
 import {getUser, getLogger, getAppSettings} from "../utils/utils"
 
 export async function checkMappConnectCredentials(ctx: Context, next: () => Promise<any>) {
   ctx.set("Cache-Control", "no-cache")
 
   const {mappConnectAPI} = ctx.clients
-  const response = await mappConnectAPI.ping()
+  const response = await mappConnectAPI.getPing()
 
   if (response && response.status === 200) {
     ctx.status = 200
@@ -75,6 +76,31 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
   await next()
 }
 
+export async function mappMessages(ctx: Context, next: () => Promise<any>) {
+  const logger = getLogger(ctx.vtex.logger)
+
+  ctx.set("Cache-Control", "no-cache")
+  ctx.status = 200
+
+  try {
+    const response = await ctx.clients.mappConnectAPI.getMessages()
+
+    if (response?.status !== 200) {
+      throw new Error("Status code not 200")
+    }
+
+    ctx.body = response?.data
+  } catch (err) {
+    logger.error("Routes[groups]: Error was trown while fetching data!", {
+      err,
+    })
+    ctx.status = 500
+    ctx.body = "Internal error"
+  }
+
+  await next()
+}
+
 export async function groups(ctx: Context, next: () => Promise<any>) {
   const logger = getLogger(ctx.vtex.logger)
 
@@ -82,7 +108,7 @@ export async function groups(ctx: Context, next: () => Promise<any>) {
   ctx.status = 200
 
   try {
-    const response = await ctx.clients.mappConnectAPI.group()
+    const response = await ctx.clients.mappConnectAPI.getGroups()
 
     if (response?.status !== 200) {
       throw new Error("Status code not 200")
@@ -105,9 +131,6 @@ export async function hcheck(ctx: Context, next: () => Promise<any>) {
   ctx.status = 200
   ctx.body = "ok"
 
-  // const res = await ctx.clients.mappConnectAPI.messages()
-  // ctx.body = res?.data
-
   await next()
 }
 
@@ -116,4 +139,5 @@ export default {
   userUpdate,
   groups,
   checkMappConnectCredentials,
+  mappMessages,
 }
