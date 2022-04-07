@@ -6,8 +6,10 @@ import type {Order} from "../typings/vtex"
 import {getAppId, getLogger} from "../utils/utils"
 
 const ORDER_STATUS = {
-  on_order_completed: "Created",
-  cancel: "Canceled",
+  order_created: "Created",
+  canceled: "Canceled",
+  payment_approved: "Payment approved",
+  invoiced: "Invoiced",
 } as const
 
 export default class OrdersClient extends ExternalClient {
@@ -36,10 +38,6 @@ export default class OrdersClient extends ExternalClient {
 
       const orderData = await this.buildOrderData(order, ctx)
 
-      if (!orderData.messageId) {
-        throw new Error("Missing MessageID for order type!")
-      }
-
       return orderData
     } catch (error) {
       logger.error(`Orders[orderStatusChange]: Exception in orders.getOrderData: ${error?.message}`, {
@@ -51,11 +49,34 @@ export default class OrdersClient extends ExternalClient {
     }
   }
 
+  private async getMessageID(ctx: EventChangeContext, orderStatus: string) {
+    const appId = getAppId()
+    const appSettings = (await ctx.clients.apps.getAppSettings(appId)) as AppSettings
+
+    if (orderStatus === "order-created") {
+      return appSettings.messageOrderCreatedID
+    }
+
+    if (orderStatus === "canceled") {
+      return appSettings.messageOrderCreatedID
+    }
+
+    if (orderStatus === "payment-approved") {
+      return appSettings.messageOrderCreatedID
+    }
+
+    if (orderStatus === "invoiced") {
+      return appSettings.messageOrderCreatedID
+    }
+
+    return undefined
+  }
+
   private async buildOrderData(order: Order, ctx: EventChangeContext): Promise<OrderData> {
     const items: OrderItem[] = order.items.map(item => {
       let data
 
-      if (order.status === "cancel") {
+      if (order.status === "canceled") {
         data = {
           price: item.price / 100,
           sku: item.sellerSku,
@@ -76,10 +97,6 @@ export default class OrdersClient extends ExternalClient {
       return data
     })
 
-    const appId = getAppId()
-    const appSettings = (await ctx.clients.apps.getAppSettings(appId)) as AppSettings
-    const messageId = order.status === "cancel" ? appSettings.messageOrderCanceledID : appSettings.messageOrderCreatedID
-
     const toRet: OrderData = {
       userId: order.clientProfileData.userProfileId,
       email: order.clientProfileData.email,
@@ -89,6 +106,8 @@ export default class OrdersClient extends ExternalClient {
       timestamp: order.creationDate,
       status: this.getOrderStatus(order),
     }
+
+    const messageId = await this.getMessageID(ctx, order.status)
 
     if (messageId && messageId !== "0" && messageId.length > 0) {
       toRet.messageId = messageId

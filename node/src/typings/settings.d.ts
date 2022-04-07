@@ -7,4 +7,6 @@ interface AppSettings {
   newsletterDoubleOptIn: string
   messageOrderCreatedID: string
   messageOrderCanceledID: string
+  messageOrderPaymentApprovedID: string
+  messageOrderInvoicedID: string
 }

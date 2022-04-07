@@ -30,7 +30,7 @@
   "events": {
     "orderStatusOnChange": {
       "sender": "vtex.orders-broadcast",
-      "topics": ["on-order-completed", "cancel"]
+      "topics": ["order-created", "canceled", "payment-approved", "invoiced"]
     },
     "skuChange": {
       "keys": ["broadcaster.notification"]

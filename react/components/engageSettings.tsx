@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import React, { useEffect, useState, useContext } from 'react'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedHTMLMessage, FormattedMessage, useIntl } from 'react-intl'
 import { Input, Spinner, Button, Divider, Dropdown } from 'vtex.styleguide'
 
 import Config from '../provider/ConfigProvider'
@@ -74,11 +74,20 @@ const EngageSettings: FC = () => {
         throw new Error('Response for messages not 200')
       }
 
+      if (!body || body.length <= 0) {
+        return
+      }
+
       const mappMessages = Object.keys(body).map(key => {
         return {
           value: key,
           label: body[key],
         }
+      })
+
+      mappMessages.unshift({
+        value: '0',
+        label: 'Disabled',
       })
 
       setState(previousState => ({
@@ -315,6 +324,9 @@ const EngageSettings: FC = () => {
       </div>
       <Divider orientation="horizontal" />
       <h2>Mapp Engage Messages</h2>
+      <p>
+        <FormattedHTMLMessage id="admin/mapp-cloud.engage-message-info" />
+      </p>
       <div className="pv4">
         <div className="pv4">
           <ConfigInputWrapper>
@@ -325,7 +337,11 @@ const EngageSettings: FC = () => {
               disabled={state.mappMessages.length === 0}
               options={state.mappMessages}
               size="large"
-              value={ctx.config.messageOrderCreatedID}
+              value={
+                ctx.config.messageOrderCreatedID
+                  ? ctx.config.messageOrderCreatedID
+                  : '0'
+              }
               onChange={(e: { persist?: any; target: any }) => {
                 e.persist()
                 ctx.updateConfig({ messageOrderCreatedID: e.target.value })
@@ -342,10 +358,58 @@ const EngageSettings: FC = () => {
               disabled={state.mappMessages.length === 0}
               options={state.mappMessages}
               size="large"
-              value={ctx.config.messageOrderCanceledID}
+              value={
+                ctx.config.messageOrderCanceledID
+                  ? ctx.config.messageOrderCanceledID
+                  : '0'
+              }
               onChange={(e: { persist?: any; target: any }) => {
                 e.persist()
                 ctx.updateConfig({ messageOrderCanceledID: e.target.value })
+              }}
+            />
+          </ConfigInputWrapper>
+        </div>
+        <div className="pv4">
+          <ConfigInputWrapper>
+            <Dropdown
+              label={intl.formatMessage({
+                id: 'admin/mapp-cloud.engage-message-order-approved-label',
+              })}
+              disabled={state.mappMessages.length === 0}
+              options={state.mappMessages}
+              size="large"
+              value={
+                ctx.config.messageOrderPaymentApprovedID
+                  ? ctx.config.messageOrderPaymentApprovedID
+                  : '0'
+              }
+              onChange={(e: { persist?: any; target: any }) => {
+                e.persist()
+                ctx.updateConfig({
+                  messageOrderPaymentApprovedID: e.target.value,
+                })
+              }}
+            />
+          </ConfigInputWrapper>
+        </div>
+        <div className="pv4">
+          <ConfigInputWrapper>
+            <Dropdown
+              label={intl.formatMessage({
+                id: 'admin/mapp-cloud.engage-message-order-invoiced-label',
+              })}
+              disabled={state.mappMessages.length === 0}
+              options={state.mappMessages}
+              size="large"
+              value={
+                ctx.config.messageOrderInvoicedID
+                  ? ctx.config.messageOrderInvoicedID
+                  : '0'
+              }
+              onChange={(e: { persist?: any; target: any }) => {
+                e.persist()
+                ctx.updateConfig({ messageOrderInvoicedID: e.target.value })
               }}
             />
           </ConfigInputWrapper>

@@ -99,6 +99,16 @@
         "title": "Acquire messageOrderCanceledID parameter",
         "description": "Enter your messageOrderCanceledID parameter",
         "type": "string"
+      },
+      "messageOrderPaymentApprovedID": {
+        "title": "Acquire messageOrderPaymentApprovedID parameter",
+        "description": "Enter your messageOrderPaymentApprovedID parameter",
+        "type": "string"
+      },
+      "messageOrderInvoicedID": {
+        "title": "Acquire messageOrderInvoicedID parameter",
+        "description": "Enter your messageOrderInvoicedID parameter",
+        "type": "string"
       }
     }
   },

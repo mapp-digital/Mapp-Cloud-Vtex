@@ -43,6 +43,13 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
 
   const logger = getLogger(ctx.vtex.logger)
 
+  // If its canceled event, but its not fulfilment, ignore it
+  if (body.currentState === "canceled" && body.domain !== "Fulfillment") {
+    await next()
+
+    return
+  }
+
   // Log data
   logger.info("Events[orderStatusChange]: event received", {
     data: ctx.body,

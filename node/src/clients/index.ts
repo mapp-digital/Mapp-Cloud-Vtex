@@ -1,6 +1,6 @@
 import {IOClients} from "@vtex/api"
 
-import {CatalogClient} from "./catolog"
+import {CatalogClient} from "./catalog"
 import MappConnectAPI from "./mapp-connect-api"
 import OrdersClient from "./orders"
 import PricingClient from "./pricing"

@@ -1,4 +1,4 @@
-import {ProductData} from "../typings/mapp-connect"
+import type {ProductData} from "../typings/mapp-connect"
 import {getUser, getLogger, getAppSettings} from "../utils/utils"
 
 export async function checkMappConnectCredentials(ctx: Context, next: () => Promise<any>) {
@@ -131,6 +131,38 @@ export async function hcheck(ctx: Context, next: () => Promise<any>) {
   ctx.status = 200
   ctx.body = "ok"
 
+  const logger = getLogger(ctx.vtex.logger)
+
+  logger.info("Events[SKUChange] -> Request received", {
+    body: ctx.body,
+  })
+
+  const skuID = 1
+
+  if (!skuID) {
+    logger.error(`Events[SKUChange] -> Missing IdSKU from request body`, {
+      body: ctx.body,
+    })
+
+    await next()
+
+    return
+  }
+
+  const product = await ctx.clients.catalog.getProduct(skuID, ctx)
+
+  if (!product) {
+    logger.error(`Events[SKUChange] -> Cannot find product`, {
+      skuID,
+      host: ctx.vtex.host,
+    })
+
+    await next()
+
+    return
+  }
+
+  await ctx.clients.mappConnectAPI.updateProduct(product as ProductData)
   await next()
 }
 

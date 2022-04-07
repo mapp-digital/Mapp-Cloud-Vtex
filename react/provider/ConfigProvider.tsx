@@ -17,6 +17,8 @@ const defaultConfigValues = {
   newsletterDoubleOptIn: 'Off',
   messageOrderCreatedID: '0',
   messageOrderCanceledID: '0',
+  messageOrderPaymentApprovedID: '0',
+  messageOrderInvoicedID: '0',
 }
 
 const Config = React.createContext<MappSettingsProvider>({
@@ -44,6 +46,8 @@ export const ConfigProvider: React.FC = props => {
     newsletterDoubleOptIn: 'Off',
     messageOrderCreatedID: '0',
     messageOrderCanceledID: '0',
+    messageOrderPaymentApprovedID: '0',
+    messageOrderInvoicedID: '0',
   })
 
   const [isSaving, setIsSaving] = useState(false)

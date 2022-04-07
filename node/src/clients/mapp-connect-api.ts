@@ -32,7 +32,7 @@ export default class MappConnectAPI extends ExternalClient {
   }
 
   public updateOrder(order: OrderData): Promise<IOResponse<any> | undefined> {
-    return this.postEvent("order", order)
+    return this.postEvent("transaction", order)
   }
 
   public updateUser(user: User, appSettings: AppSettings): Promise<IOResponse<any> | undefined> {

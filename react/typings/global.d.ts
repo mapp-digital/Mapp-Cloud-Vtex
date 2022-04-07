@@ -17,6 +17,8 @@ interface MappSettings {
   newsletterDoubleOptIn: string
   messageOrderCreatedID: string
   messageOrderCanceledID: string
+  messageOrderPaymentApprovedID: string
+  messageOrderInvoicedID: string
 }
 
 type MappSettingProperty = 'tiId' | 'tiResponder' | 'acId' | 'acM'
