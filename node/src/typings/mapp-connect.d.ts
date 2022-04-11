@@ -21,7 +21,16 @@ interface OrderData {
   timestamp: string
   currency: string
   status?: string
-  userId: string | null
+  discountTotal?: number
+  taxTotal?: number
+  shippingTotal?: number
+  shippingAddress?: string
+  shippingEstimate?: string
+  orderItemsTotal?: number
+  orderTotal?: number
+  orderStatusLink?: string
+  billingAddress?: string
+  paymentInfo?: string
 }
 interface OrderItem {
   sku: string | null
@@ -30,6 +39,10 @@ interface OrderItem {
   qty_ordered?: number
   productQuantity?: number
   returnedQuantity?: number
+  base_image?: string
+  url_path?: string
+  category?: string
+  brand?: string
 }
 
 type OrderDataStatus = "Created" | "Canceled" | "Processing"

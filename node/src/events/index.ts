@@ -7,6 +7,14 @@ import {getAppId, getLogger, getUser} from "../utils/utils"
 export async function skuChange(ctx: EventContext<Clients>): Promise<void> {
   const logger = getLogger(ctx.vtex.logger)
 
+  if (!ctx.vtex.host) {
+    const info = await ctx.clients.tenant.info()
+
+    if (info?.bindings.length > 0 && info?.bindings[0].canonicalBaseAddress) {
+      ctx.vtex.host = info?.bindings[0].canonicalBaseAddress
+    }
+  }
+
   logger.info("Events[SKUChange] -> Request received", {
     body: ctx.body,
   })
@@ -43,6 +51,14 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
 
   const logger = getLogger(ctx.vtex.logger)
 
+  if (!ctx.vtex.host) {
+    const info = await ctx.clients.tenant.info()
+
+    if (info?.bindings.length > 0 && info?.bindings[0].canonicalBaseAddress) {
+      ctx.vtex.host = info?.bindings[0].canonicalBaseAddress
+    }
+  }
+
   // If its canceled event, but its not fulfilment, ignore it
   if (body.currentState === "canceled" && body.domain !== "Fulfillment") {
     await next()
@@ -67,7 +83,9 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
     return
   }
 
-  const order = await orders.getOrder(orderId, body.currentState, ctx)
+  const orderInfo = await orders.getOrderInfo(orderId, body.currentState, ctx)
+  const order = orderInfo?.order
+  const userId = orderInfo?.userId
 
   if (!order) {
     logger.warn("Events[orderStatusChange]: Order not found!", {
@@ -80,20 +98,10 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
     return
   }
 
-  try {
-    await mappConnectAPI.updateOrder(order)
-  } catch (err) {
-    logger.warn("Events[orderStatusChange]: Failed to update order!", {
-      order,
-      dat: ctx.body,
-      orderId,
-      err,
-    })
-  }
-
-  if (order.status === "on-order-completed" && order.userId) {
+  // Create user first
+  if (order.status === "Created" && userId) {
     try {
-      const user = await getUser(ctx, order.userId)
+      const user = await getUser(ctx, userId)
 
       if (!user) {
         logger.warn("Events[orderStatusChange]: Cannot find user for order!", {
@@ -118,6 +126,17 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
         err,
       })
     }
+  }
+
+  try {
+    await mappConnectAPI.updateOrder(order)
+  } catch (err) {
+    logger.warn("Events[orderStatusChange]: Failed to update order!", {
+      order,
+      dat: ctx.body,
+      orderId,
+      err,
+    })
   }
 
   await next()

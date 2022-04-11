@@ -102,6 +102,7 @@ interface Order {
   shippingData: ShippingData
   checkedInPickupPointId: number
   storePreferencesData: StorePreferencesData
+  paymentData: any
 }
 interface StorePreferencesData {
   currencyCode: string
@@ -129,6 +130,15 @@ interface Total {
   name: string
   value: string
 }
+
+interface VtexCategory {
+  name: string | null
+}
+interface VtexAdditionalInfo {
+  brandName: string | null
+  categories: VtexCategory[]
+}
+
 interface VtexOrderItem {
   quantity: number
   id: string
@@ -136,4 +146,7 @@ interface VtexOrderItem {
   price: number
   name: string
   sellerSku: string
+  imageUrl: string | null
+  detailUrl: string
+  additionalInfo: VtexAdditionalInfo | null
 }

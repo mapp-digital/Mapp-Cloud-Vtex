@@ -50,7 +50,7 @@ export default class MappConnectAPI extends ExternalClient {
         data.doubleOptIn = "true"
       }
     } else {
-      data.unsubscribe = "true"
+      // data.unsubscribe = "true"
     }
 
     return this.postEvent("user", data)

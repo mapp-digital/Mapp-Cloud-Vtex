@@ -5,6 +5,11 @@ import type {OrderData, OrderItem} from "../typings/mapp-connect"
 import type {Order} from "../typings/vtex"
 import {getAppId, getLogger} from "../utils/utils"
 
+export interface OrderInfo {
+  order: OrderData
+  userId?: string
+}
+
 const ORDER_STATUS = {
   order_created: "Created",
   canceled: "Canceled",
@@ -20,11 +25,11 @@ export default class OrdersClient extends ExternalClient {
     })
   }
 
-  public async getOrder(
+  public async getOrderInfo(
     orderId: string,
     currentState: string,
     ctx: EventChangeContext,
-  ): Promise<OrderData | undefined> {
+  ): Promise<OrderInfo | undefined> {
     const logger = getLogger(ctx.vtex.logger)
 
     try {
@@ -58,62 +63,159 @@ export default class OrdersClient extends ExternalClient {
     }
 
     if (orderStatus === "canceled") {
-      return appSettings.messageOrderCreatedID
+      return appSettings.messageOrderCanceledID
     }
 
     if (orderStatus === "payment-approved") {
-      return appSettings.messageOrderCreatedID
+      return appSettings.messageOrderPaymentApprovedID
     }
 
     if (orderStatus === "invoiced") {
-      return appSettings.messageOrderCreatedID
+      return appSettings.messageOrderInvoicedID
     }
 
     return undefined
   }
 
-  private async buildOrderData(order: Order, ctx: EventChangeContext): Promise<OrderData> {
+  private async buildOrderData(order: Order, ctx: EventChangeContext): Promise<OrderInfo> {
     const items: OrderItem[] = order.items.map(item => {
-      let data
+      const data = {
+        price: item.price / 100,
+        sku: item.sellerSku,
+        productQuantity: 0,
+        name: item.name,
+      } as OrderItem
+
+      if (item.imageUrl) {
+        data.base_image = item.imageUrl
+      }
+
+      if (item.detailUrl) {
+        data.url_path = `https://${ctx.vtex.host}${item.detailUrl.substring(1)}`
+      }
+
+      if (item.additionalInfo?.brandName) {
+        data.brand = item.additionalInfo.brandName
+      }
+
+      if (item.additionalInfo?.categories) {
+        data.category = item.additionalInfo.categories.map(category => category.name).join(", ")
+      }
 
       if (order.status === "canceled") {
-        data = {
-          price: item.price / 100,
-          sku: item.sellerSku,
-          productQuantity: 0,
-          returnedQuantity: item.quantity,
-          name: item.name,
-        }
+        data.returnedQuantity = item.quantity
       } else {
-        data = {
-          price: item.price / 100,
-          qty_ordered: item.quantity,
-          productQuantity: item.quantity,
-          sku: item.sellerSku,
-          name: item.name,
-        }
+        data.qty_ordered = item.quantity
+        data.productQuantity = item.quantity
       }
 
       return data
     })
 
-    const toRet: OrderData = {
-      userId: order.clientProfileData.userProfileId,
+    const orderData: OrderData = {
       email: order.clientProfileData.email,
-      orderId: order.sequence,
+      orderId: order.orderId,
       items,
       currency: order.storePreferencesData.currencyCode,
       timestamp: order.creationDate,
       status: this.getOrderStatus(order),
+      discountTotal: this.getTotals("Discounts", order),
+      taxTotal: this.getTotals("Tax", order),
+      shippingTotal: this.getTotals("Shipping", order),
+      shippingAddress: this.getShippingAddress(order),
+      shippingEstimate: this.getEstimate(order),
+      orderItemsTotal: order.items.reduce((previous, current) => {
+        return previous + current.quantity
+      }, 0),
+      orderTotal: order.value / 100,
+      orderStatusLink: `https://${ctx.vtex.host}account#/orders/${order.orderId}`,
+      billingAddress: this.getBillingAddress(order),
+      paymentInfo: this.getPaymentInfo(order),
     }
 
     const messageId = await this.getMessageID(ctx, order.status)
 
     if (messageId && messageId !== "0" && messageId.length > 0) {
-      toRet.messageId = messageId
+      orderData.messageId = messageId
     }
 
-    return toRet
+    return {
+      order: orderData,
+      userId: order.clientProfileData.userProfileId ?? undefined,
+    }
+  }
+
+  private getPaymentInfo(order: Order): string | undefined {
+    try {
+      if (order.paymentData.transactions[0].payments[0].paymentSystemName) {
+        return order.paymentData.transactions[0].payments[0].paymentSystemName
+      }
+
+      return undefined
+      // eslint-disable-next-line no-empty
+    } catch (_err) {}
+
+    return undefined
+  }
+
+  private getBillingAddress(order: Order): string | undefined {
+    try {
+      if (order.paymentData.transactions[0].payments[0].billingAddress) {
+        return order.paymentData.transactions[0].payments[0].billingAddress
+      }
+
+      return undefined
+      // eslint-disable-next-line no-empty
+    } catch (_err) {}
+
+    return undefined
+  }
+
+  private getEstimate(order: Order): string | undefined {
+    if (!order.shippingData?.logisticsInfo || order.shippingData.logisticsInfo.length === 0) {
+      return undefined
+    }
+
+    return order.shippingData.logisticsInfo[0]?.shippingEstimate
+      ? order.shippingData.logisticsInfo[0]?.shippingEstimate
+      : undefined
+  }
+
+  private getShippingAddress(order: Order): string {
+    const addressInfo = order.shippingData?.address
+    const infoToAdd: string[] = []
+
+    if (addressInfo?.receiverName) {
+      infoToAdd.push(addressInfo?.receiverName)
+    }
+
+    if (addressInfo?.street) {
+      if (addressInfo?.number) {
+        infoToAdd.push(`${addressInfo?.street}, ${addressInfo?.number}`)
+      } else {
+        infoToAdd.push(addressInfo?.street)
+      }
+    }
+
+    if (addressInfo?.city) {
+      if (addressInfo?.state) {
+        infoToAdd.push(`${addressInfo?.city} - ${addressInfo?.state}`)
+      } else {
+        infoToAdd.push(addressInfo?.city)
+      }
+    }
+
+    if (addressInfo?.postalCode) {
+      infoToAdd.push(`ZIP code ${addressInfo?.postalCode}`)
+    }
+
+    return infoToAdd.length === 0 ? "" : infoToAdd.join("</br>")
+  }
+
+  private getTotals(totalName: string, order: Order): number {
+    const total = order.totals.find(elm => elm.id === totalName)
+
+    return total ? Number(total.value) / 100 : 0
   }
 
   private getOrderStatus(order: Order) {
