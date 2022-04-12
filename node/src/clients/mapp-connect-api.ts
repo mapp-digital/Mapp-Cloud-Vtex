@@ -181,7 +181,7 @@ export default class MappConnectAPI extends ExternalClient {
     }
 
     const settings = {
-      url: this.appSettings.engageApiUrl.replace("http://", "https://"),
+      url: this.appSettings.engageApiUrl ? this.appSettings.engageApiUrl.replace("http://", "https://") : undefined,
       integrationID: this.appSettings.engageIntegrationId,
       secret: this.appSettings.engageSecret,
     } as MappConnectAPIConfig
@@ -190,7 +190,7 @@ export default class MappConnectAPI extends ExternalClient {
       this.logger.error(`MappConnectAPI[getConfig]: Missing configuration!`, {
         url: settings.url,
         integrationID: settings.integrationID,
-        secretExist: settings.secret.length > 0,
+        secret: settings.secret,
       })
 
       return undefined

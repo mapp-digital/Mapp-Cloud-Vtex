@@ -188,8 +188,14 @@ const EngageSettings: FC = () => {
   ]
 
   useEffect(() => {
-    getGroups()
-    getMappMessages()
+    if (
+      ctx.config.engageApiUrl &&
+      ctx.config.engageSecret &&
+      ctx.config.engageIntegrationId
+    ) {
+      getGroups()
+      getMappMessages()
+    }
   }, [])
 
   return (

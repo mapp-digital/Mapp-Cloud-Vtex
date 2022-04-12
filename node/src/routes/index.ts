@@ -137,7 +137,7 @@ export async function hcheck(ctx: Context, next: () => Promise<any>) {
     body: ctx.body,
   })
 
-  const skuID = 1
+  const {skuID} = ctx.query
 
   if (!skuID) {
     logger.error(`Events[SKUChange] -> Missing IdSKU from request body`, {
@@ -149,7 +149,7 @@ export async function hcheck(ctx: Context, next: () => Promise<any>) {
     return
   }
 
-  const product = await ctx.clients.catalog.getProduct(skuID, ctx)
+  const product = await ctx.clients.catalog.getProduct(Number(skuID as string), ctx)
 
   if (!product) {
     logger.error(`Events[SKUChange] -> Cannot find product`, {
