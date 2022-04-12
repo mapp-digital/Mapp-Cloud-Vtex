@@ -1,18 +1,18 @@
 {
-   "name":"Mapp - Customer Insights",
-   "headline":"Enable Mapp Intelligence Customer Insights without touching a single line of code.",
-   "overview":"Mapp Intelligence is a Customer Insights platform that allows you to harness the power of your first-party data.\\n\\nAt its core is a set of easy-to-understand dashboards that enable you to understand the customer journey to find the quickest paths to conversion. By using previous transaction data, browsing behavior, and contact history to analyze, score, and visualize insights about your customers it can provide the most accurate prediction of what your customers are going to do next.",
-   "features":[
-      "Integration to synchronize on-site behavior and transaction data to Mapp Intelligence",
-      "Over 30 pre-built dashboards offering Customer & Business Insights",
-      "In-depth marketing analytics",
-      "Built for marketers",
-      "Simple To deploy",
-      "Additional features include: AI predictions (lifetime value, likelihood to churn, likelihood to purchase), anomaly detection, forecasting, web personalization, & product recommendations"
-   ],
-   "additionalInformation":"To use this app you will need an active Mapp Intelligence account.\\n\\nTo sign-up for your FREE THREE-MONTH TRIAL, simply download this app and complete this form:  https://portal.mapp.com/version-test/sign-up-wizzard",
-   "websiteURL":"https://mapp.com",
-   "support":{
-      "url":"https://mapp.com/tech-support"   
-   }
+  "name": "Mapp - Customer Insights",
+  "headline": "Enable Mapp Intelligence Customer Insights without touching a single line of code.",
+  "overview": "Mapp Intelligence is a Customer Insights platform that allows you to harness the power of your first-party data.\\\\n\\\\nAt its core is a set of easy-to-understand dashboards that enable you to understand the customer journey to find the quickest paths to conversion. By using previous transaction data, browsing behavior, and contact history to analyze, score, and visualize insights about your customers it can provide the most accurate prediction of what your customers are going to do next.",
+  "features": [
+    "Integration to synchronize on-site behavior and transaction data to Mapp Intelligence",
+    "Over 30 pre-built dashboards offering Customer & Business Insights",
+    "In-depth marketing analytics",
+    "Built for marketers",
+    "Simple To deploy",
+    "Additional features include: AI predictions (lifetime value, likelihood to churn, likelihood to purchase), anomaly detection, forecasting, web personalization, & product recommendations"
+  ],
+  "additionalInformation": "To use this app you will need an active Mapp Intelligence account.\\\\n\\\\nTo sign-up for your FREE THREE-MONTH TRIAL, simply download this app and complete this form:  https://portal.mapp.com/sign-up-wizard",
+  "websiteURL": "https://mapp.com",
+  "support": {
+    "url": "https://mapp.com/tech-support"
+  }
 }

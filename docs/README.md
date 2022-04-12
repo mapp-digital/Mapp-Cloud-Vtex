@@ -75,23 +75,23 @@ The following data is available:
 
 |Datalayer Variable     |Suggested mapping      |
 |---|---|
-|_ti['pageName']        |   Page &#8594; Page Name            |
-|_ti['emailOptIn']      |   Visitor &#8594; E-mail-Opt-in   |
-|_ti['customerId']      |   Visitor &#8594; Customer ID         |
-|_ti['productId']       |   Product &#8594; Product name or ID          |
-|_ti['shoppingCartStatus']   | Product &#8594; Shopping cart status   |
-|_ti['productCost']   | Product &#8594; Product costs  |
-|_ti['currency']   |  Product &#8594; Currency |
-| _ti['productName']  | Product &#8594; Currency  |
-| _ti['productCategory']  | Product &#8594; Categories   |
-| _ti['productQuantity']  | Product &#8594; Product quantity  |
-| _ti['totalOrderValue']  | Product &#8594; Total order value  |
-| _ti['orderId']  | Product &#8594; Order ID  |
-| _ti['couponValue']  |Product &#8594; Predefined &#8594; Voucher value    |
-| _ti['numberOfSearchResults']  | Page &#8594; Number of search results  |
-| _ti['internalSearch']  | Page &#8594; Internal search phrase |
-| _ti['eMailSubscription'] | Visitor &#8594; E-mail receiver ID |
-| _ti['vtex] | Original Vtex event data &#8594; Custom Plugin |
+|_ti.pageName        |   Page &#8594; Page Name            |
+|_ti.emailOptIn      |   Visitor &#8594; E-mail-Opt-in   |
+|_ti.customerId      |   Visitor &#8594; Customer ID         |
+|_ti.productId       |   Product &#8594; Product name or ID          |
+|_ti.shoppingCartStatus   | Product &#8594; Shopping cart status   |
+|_ti.productCost   | Product &#8594; Product costs  |
+|_ti.currency   |  Product &#8594; Currency |
+| _ti.productName  | Product &#8594; Currency  |
+| _ti.productCategory  | Product &#8594; Categories   |
+| _ti.productQuantity  | Product &#8594; Product quantity  |
+| _ti.totalOrderValue  | Product &#8594; Total order value  |
+| _ti.orderId  | Product &#8594; Order ID  |
+| _ti.couponValue  |Product &#8594; Predefined &#8594; Voucher value    |
+| _ti.numberOfSearchResults  | Page &#8594; Number of search results  |
+| _ti.internalSearch  | Page &#8594; Internal search phrase |
+| _ti.eMailSubscription | Visitor &#8594; E-mail receiver ID |
+| _ti.vtex | Original Vtex event data &#8594; Custom Plugin |
 
 ### Subscribing to MappPageUpdate Event 
 Right before pageUpdate runs, a custom event called `MappPageUpdate` is dispatched, which includes the current _ti object as detail data.  
