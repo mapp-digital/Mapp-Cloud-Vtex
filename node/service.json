@@ -25,6 +25,10 @@
     "mappMessages": {
       "path": "/_v/app/vtex-mapp-cloud/mappMessages",
       "public": true
+    },
+    "userCreate": {
+      "path": "/_v/app/vtex-mapp-cloud/userCreate",
+      "public": true
     }
   },
   "events": {

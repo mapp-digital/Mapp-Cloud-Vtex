@@ -38,19 +38,21 @@ export default class MappConnectAPI extends ExternalClient {
   public updateUser(user: User, appSettings: AppSettings): Promise<IOResponse<any> | undefined> {
     const data: any = {
       ...user,
-      group: user.isNewsletterOptIn ? appSettings.subscribersGroupID : appSettings.customerGroupID,
+      group: user.isSubscriber ? appSettings.subscribersGroupID : appSettings.customerGroupID,
     }
 
     if (data.group === "0" || !data.group || data.group.length === 0) {
       throw new Error("No groups configured!")
     }
 
-    if (user.isNewsletterOptIn) {
+    if (user.isSubscriber) {
       if (appSettings.newsletterDoubleOptIn.toLowerCase() === "on") {
         data.doubleOptIn = "true"
       }
-    } else {
-      // data.unsubscribe = "true"
+    }
+
+    if (user.isSubscriber && !user.isNewsletterOptIn) {
+      data.unsubscribe = "true"
     }
 
     return this.postEvent("user", data)

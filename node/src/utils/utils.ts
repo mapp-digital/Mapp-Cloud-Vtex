@@ -27,6 +27,20 @@ export const getAppSettings = (ctx: Context | IOContext): Promise<AppSettings> =
   return apps.getAppSettings(app) as Promise<AppSettings>
 }
 
+export const updateisSubscriberCLDoc = async (ctx: Context, id: string, isSubscriber: boolean): Promise<void> => {
+  const {
+    clients: {masterdata},
+  } = ctx
+
+  await masterdata.updatePartialDocument({
+    dataEntity: "CL",
+    id,
+    fields: {
+      isSubscriber,
+    },
+  })
+}
+
 export const getUser = async (ctx: Context | EventChangeContext, userId: string): Promise<User | undefined> => {
   if (!userId) {
     return undefined
@@ -61,6 +75,7 @@ export const getUser = async (ctx: Context | EventChangeContext, userId: string)
       "documentType",
       "gender",
       "birthDateMonth",
+      "isSubscriber",
     ],
     pagination: {
       page: 1,

@@ -16,6 +16,7 @@ interface User {
   corporateName?: string
   gender?: string
   birthDateMonth?: string
+  isSubscriber: boolean
 }
 
 export interface VtexProductData {
