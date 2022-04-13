@@ -76,7 +76,7 @@ Client insert trigger
 - Data Entity: **Cliente**
 - Trigger Rule: **Um registro for inserido** (When record is entered)
 - Navigate to **If positive** tab and set Action to **Send a HTTP request**
-- Set URL to: **{vtex-account}.myvtex.com/\_v/app/vtex-mapp-cloud/userUpdate?userId={!userId}**
+- Set URL to: **{vtex-account}.myvtex.com/\_v/app/vtex-mapp-cloud/userCreate?userId={!userId}**
 
 Client update trigger
 
