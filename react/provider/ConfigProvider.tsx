@@ -9,9 +9,9 @@ const defaultConfigValues = {
   tiResponder: '0',
   acId: '0',
   acM: '0',
-  engageApiUrl: '',
-  engageIntegrationId: '',
-  engageSecret: '',
+  engageApiUrl: '0',
+  engageIntegrationId: '0',
+  engageSecret: '0',
   customerGroupID: '0',
   subscribersGroupID: '0',
   newsletterDoubleOptIn: 'Off',
@@ -71,6 +71,46 @@ export const ConfigProvider: React.FC = props => {
 
     if (settings.tiResponder === '') {
       settings.tiResponder = '0'
+    }
+
+    if (settings.engageApiUrl === '') {
+      settings.engageApiUrl = '0'
+    }
+
+    if (settings.engageIntegrationId === '') {
+      settings.engageIntegrationId = '0'
+    }
+
+    if (settings.engageSecret === '') {
+      settings.engageSecret = '0'
+    }
+
+    if (settings.customerGroupID === '') {
+      settings.customerGroupID = '0'
+    }
+
+    if (settings.subscribersGroupID === '') {
+      settings.subscribersGroupID = '0'
+    }
+
+    if (settings.newsletterDoubleOptIn === '') {
+      settings.newsletterDoubleOptIn = 'Off'
+    }
+
+    if (settings.messageOrderCreatedID === '') {
+      settings.messageOrderCreatedID = '0'
+    }
+
+    if (settings.messageOrderCanceledID === '') {
+      settings.messageOrderCanceledID = '0'
+    }
+
+    if (settings.messageOrderPaymentApprovedID === '') {
+      settings.messageOrderPaymentApprovedID = '0'
+    }
+
+    if (settings.messageOrderInvoicedID === '') {
+      settings.messageOrderInvoicedID = '0'
     }
 
     await saveSettingsMutation({

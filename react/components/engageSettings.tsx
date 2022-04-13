@@ -51,14 +51,13 @@ const EngageSettings: FC = () => {
         }
       })
 
-      setState(previousState => ({
-        ...previousState,
-        groups,
-      }))
+      return groups
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err)
     }
+
+    return []
   }
 
   const getMappMessages = async () => {
@@ -75,7 +74,7 @@ const EngageSettings: FC = () => {
       }
 
       if (!body || body.length <= 0) {
-        return
+        return []
       }
 
       const mappMessages = Object.keys(body).map(key => {
@@ -90,14 +89,13 @@ const EngageSettings: FC = () => {
         label: 'Disabled',
       })
 
-      setState(previousState => ({
-        ...previousState,
-        mappMessages,
-      }))
+      return mappMessages
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err)
     }
+
+    return []
   }
 
   const settingsInfo = () => {
@@ -154,26 +152,37 @@ const EngageSettings: FC = () => {
             )
 
             const invalidSettings = res.status !== 200
+            let groups: Array<{
+              value: string
+              label: any
+            }> = []
+
+            let mappMessages: Array<{
+              value: string
+              label: any
+            }> = []
 
             if (!invalidSettings && state.groups.length === 0) {
-              await getGroups()
+              groups = await getGroups()
             }
 
             if (!invalidSettings && state.mappMessages.length === 0) {
-              await getMappMessages()
+              mappMessages = await getMappMessages()
             }
 
-            setState({
-              ...state,
+            setState(previousState => ({
+              ...previousState,
               btnLoading: false,
               invalidSettings,
               initalRequestSent: true,
-            })
+              mappMessages,
+              groups,
+            }))
           } catch (err) {
-            setState({
-              ...state,
+            setState(previousState => ({
+              ...previousState,
               btnLoading: false,
-            })
+            }))
           }
         }}
       >
@@ -193,8 +202,16 @@ const EngageSettings: FC = () => {
       ctx.config.engageSecret &&
       ctx.config.engageIntegrationId
     ) {
-      getGroups()
-      getMappMessages()
+      ;(async () => {
+        const groups = await getGroups()
+        const mappMessages = await getMappMessages()
+
+        setState(previousState => ({
+          ...previousState,
+          groups,
+          mappMessages,
+        }))
+      })()
     }
   }, [])
 
@@ -211,7 +228,9 @@ const EngageSettings: FC = () => {
               size="large"
               name="mapp-api-url"
               id="mapp-api-url"
-              value={ctx.config.engageApiUrl}
+              value={
+                ctx.config.engageApiUrl !== '0' ? ctx.config.engageApiUrl : ''
+              }
               label={intl.formatMessage({
                 id: 'admin/mapp-cloud.engage-api-label',
               })}
@@ -234,7 +253,11 @@ const EngageSettings: FC = () => {
               helpText={intl.formatMessage({
                 id: 'admin/mapp-cloud.engage-integration-id-helptext',
               })}
-              value={ctx.config.engageIntegrationId}
+              value={
+                ctx.config.engageIntegrationId !== '0'
+                  ? ctx.config.engageIntegrationId
+                  : ''
+              }
               label={intl.formatMessage({
                 id: 'admin/mapp-cloud.engage-integration-id-label',
               })}
@@ -257,7 +280,9 @@ const EngageSettings: FC = () => {
               helpText={intl.formatMessage({
                 id: 'admin/mapp-cloud.engage-api-secret-helptext',
               })}
-              value={ctx.config.engageSecret}
+              value={
+                ctx.config.engageSecret !== '0' ? ctx.config.engageSecret : ''
+              }
               type="password"
               label={intl.formatMessage({
                 id: 'admin/mapp-cloud.engage-api-secret-label',
