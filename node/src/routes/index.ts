@@ -42,8 +42,13 @@ export async function userCreate(ctx: Context, next: () => Promise<any>) {
 
   const user = await getUser(ctx, userId as string)
 
-  if (!user) {
-    logger.warn("Routes[userCreate]: Failed to find user with provided userID!", {
+  if (!user || !Object.keys(user).includes("isSubscriber")) {
+    const msg =
+      user && !Object.keys(user).includes("isSubscriber")
+        ? "Routes[userCreate]: Missing isSubscriber field!"
+        : "Routes[userCreate]: Failed to find user with provided userID!"
+
+    logger.warn(msg, {
       userId,
       url: ctx.URL,
       query: ctx.query,
@@ -118,8 +123,13 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
 
   const user = await getUser(ctx, userId as string)
 
-  if (!user) {
-    logger.warn("Routes[updateUser]: Failed to find user with provided userID!", {
+  if (!user || !Object.keys(user).includes("isSubscriber")) {
+    const msg =
+      user && !Object.keys(user).includes("isSubscriber")
+        ? "Routes[userCreate]: Missing isSubscriber field!"
+        : "Routes[userCreate]: Failed to find user with provided userID!"
+
+    logger.warn(msg, {
       userId,
       url: ctx.URL,
       query: ctx.query,
