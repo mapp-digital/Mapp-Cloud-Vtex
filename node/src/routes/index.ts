@@ -1,21 +1,39 @@
 import type {ProductData} from "../typings/mapp-connect"
-import {getUser, getLogger, getAppSettings, updateisSubscriberCLDoc} from "../utils/utils"
+import userSubscriberSchema from "../utils/user-subscriber.schema"
+import {getUser, getLogger, getAppSettings, updateMappUserSubscriberDoc, getUserSubscriberDocForUserId} from "../utils/utils"
 
 export async function checkMappConnectCredentials(ctx: Context, next: () => Promise<any>) {
   ctx.set("Cache-Control", "no-cache")
+  ctx.status = 200
+  ctx.body = 'ok'
 
-  const {mappConnectAPI} = ctx.clients
+  const logger = getLogger(ctx.vtex.logger);
+
+  const {mappConnectAPI, masterdata} = ctx.clients
   const response = await mappConnectAPI.getPing()
 
-  if (response && response.status === 200) {
-    ctx.status = 200
-    ctx.body = "ok"
-  } else {
+  if (!response || response.status !== 200) {
     ctx.status = 500
     ctx.body = "invalid configuration"
+    await next();
+
+    return
   }
 
-  await next()
+  try{
+    await masterdata.createOrUpdateSchema(userSubscriberSchema)
+    logger.info('Schema updated', {})
+  }catch(err){
+    if(err.response.status !== 304){
+      logger.error(`Failed to generate or update schema! ${err?.message}`, {
+        err
+      })
+      ctx.status = 500
+      ctx.body = "invalid configuration"
+    }
+  }
+
+  await next();
 }
 
 export async function userCreate(ctx: Context, next: () => Promise<any>) {
@@ -42,13 +60,9 @@ export async function userCreate(ctx: Context, next: () => Promise<any>) {
 
   const user = await getUser(ctx, userId as string)
 
-  if (!user || !Object.keys(user).includes("isSubscriber")) {
-    const msg =
-      user && !Object.keys(user).includes("isSubscriber")
-        ? "Routes[userCreate]: Missing isSubscriber field!"
-        : "Routes[userCreate]: Failed to find user with provided userID!"
+  if (!user) {
 
-    logger.warn(msg, {
+    logger.warn("Routes[userCreate]: Failed to find user with provided userID!", {
       userId,
       url: ctx.URL,
       query: ctx.query,
@@ -60,7 +74,7 @@ export async function userCreate(ctx: Context, next: () => Promise<any>) {
   }
 
   try {
-    await updateisSubscriberCLDoc(ctx, user.id, user.isNewsletterOptIn)
+    await updateMappUserSubscriberDoc(ctx, user.mappUserSubDocId, user.isNewsletterOptIn)
   } catch (err) {
     logger.error(`Routes[userCreate]: Failed to update CL doc! ${err?.message}`, {
       userId,
@@ -94,7 +108,7 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
 
   // eslint-disable-next-line no-console
   const {userId, remove, email} = ctx.query
-  const {mappConnectAPI} = ctx.clients
+  const {mappConnectAPI, masterdata} = ctx.clients
 
   if (!userId) {
     logger.warn("Routes[updateUser]: usedId was not provided!", {
@@ -118,20 +132,28 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
       })
     }
 
+    try{
+      const userSubDoc = await getUserSubscriberDocForUserId(ctx,userId as string);
+      if(userSubDoc){
+        await masterdata.deleteDocument({
+          dataEntity: 'MappUserSubscriber',
+          id: userSubDoc.id
+        })
+      }
+    }catch(err){
+      logger.info(`Error removing MappUserSubscriber doc. ${err?.message}`, {
+        err
+      })
+    }
+
     await next()
 
     return
   }
 
   const user = await getUser(ctx, userId as string)
-
-  if (!user || !Object.keys(user).includes("isSubscriber")) {
-    const msg =
-      user && !Object.keys(user).includes("isSubscriber")
-        ? "Routes[userCreate]: Missing isSubscriber field!"
-        : "Routes[userCreate]: Failed to find user with provided userID!"
-
-    logger.warn(msg, {
+  if (!user) {
+    logger.warn("Routes[userCreate]: Failed to find user with provided userID!", {
       userId,
       url: ctx.URL,
       query: ctx.query,
@@ -144,17 +166,15 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
 
   // If we need to subscribe him it will trigger update event once again
   if(!user.isSubscriber && user.isNewsletterOptIn){
-    await updateisSubscriberCLDoc(ctx, user.id, true)
-    await next()
-
-    return
+    await updateMappUserSubscriberDoc(ctx, user.mappUserSubDocId, true)
+    user.isSubscriber = true;
   }
 
   await mappConnectAPI.updateUser(user, await getAppSettings(ctx),user.isSubscriber)
 
   // If we need to unsubscribe him it will trigger update event once again
   if(user.isSubscriber && !user.isNewsletterOptIn){
-    await updateisSubscriberCLDoc(ctx, user.id, false)
+    await updateMappUserSubscriberDoc(ctx, user.mappUserSubDocId, false)
   }
 
   await next()

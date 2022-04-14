@@ -1,3 +1,9 @@
+interface MappUserSubscriberDoc{
+  id: string,
+  userId: string,
+  isSubscriber: boolean
+}
+
 interface User {
   id: string
   userId: string
@@ -17,6 +23,7 @@ interface User {
   gender?: string
   birthDateMonth?: string
   isSubscriber: boolean
+  mappUserSubDocId: string
 }
 
 export interface VtexProductData {
