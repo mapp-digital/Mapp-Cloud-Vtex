@@ -117,7 +117,7 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
       const appId = getAppId()
       const appSettings = (await ctx.clients.apps.getAppSettings(appId)) as AppSettings
 
-      await mappConnectAPI.updateUser(user, appSettings)
+      await mappConnectAPI.updateUser(user, appSettings, false)
     } catch (err) {
       logger.warn("Events[orderStatusChange]: Failed to update user!", {
         order,

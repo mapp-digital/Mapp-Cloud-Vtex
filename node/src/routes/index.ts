@@ -74,10 +74,12 @@ export async function userCreate(ctx: Context, next: () => Promise<any>) {
     return
   }
 
-  // If its not subscriber, than update will not be triggered, so we have to manually update user
-  if (!user.isNewsletterOptIn) {
-    user.isSubscriber = user.isNewsletterOptIn
-    await mappConnectAPI.updateUser(user, await getAppSettings(ctx))
+  // Add him to regular group in both cases
+  await mappConnectAPI.updateUser(user, await getAppSettings(ctx),false)
+
+  // If its subscriber, add him to subscription group as well
+  if(user.isNewsletterOptIn){
+    await mappConnectAPI.updateUser(user, await getAppSettings(ctx),true)
   }
 
   await next()
@@ -140,7 +142,20 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
     return
   }
 
-  await mappConnectAPI.updateUser(user, await getAppSettings(ctx))
+  // If we need to subscribe him it will trigger update event once again
+  if(!user.isSubscriber && user.isNewsletterOptIn){
+    await updateisSubscriberCLDoc(ctx, user.id, true)
+    await next()
+
+    return
+  }
+
+  await mappConnectAPI.updateUser(user, await getAppSettings(ctx),user.isSubscriber)
+
+  // If we need to unsubscribe him it will trigger update event once again
+  if(user.isSubscriber && !user.isNewsletterOptIn){
+    await updateisSubscriberCLDoc(ctx, user.id, false)
+  }
 
   await next()
 }
