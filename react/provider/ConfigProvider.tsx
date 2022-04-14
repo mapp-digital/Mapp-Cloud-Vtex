@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { useMutation, useQuery } from "react-apollo";
+import React, { useState, useEffect } from 'react'
+import { useMutation, useQuery } from 'react-apollo'
 
-import settingsSchema from "../queries/settingsSchema.gql";
-import saveMappSettings from "../queries/saveSettings.gql";
+import settingsSchema from '../queries/settingsSchema.gql'
+import saveMappSettings from '../queries/saveSettings.gql'
 
 const defaultConfigValues = {
-  tiId: "0",
-  tiResponder: "0",
-  acId: "0",
-  acM: "0",
-};
+  tiId: '0',
+  tiResponder: '0',
+  acId: '0',
+  acM: '0',
+  engageApiUrl: '0',
+  engageIntegrationId: '0',
+  engageSecret: '0',
+  customerGroupID: '0',
+  subscribersGroupID: '0',
+  newsletterDoubleOptIn: 'Off',
+  messageOrderCreatedID: '0',
+  messageOrderCanceledID: '0',
+  messageOrderPaymentApprovedID: '0',
+  messageOrderInvoicedID: '0',
+}
 
 const Config = React.createContext<MappSettingsProvider>({
   config: defaultConfigValues,
@@ -18,71 +28,133 @@ const Config = React.createContext<MappSettingsProvider>({
   isSaving: false,
   setConfig: () => {},
   updateConfig: () => {},
-});
+})
 
-export const ConfigProvider: React.FC = (props) => {
-  const { data: dataSettingsSchema } = useQuery(settingsSchema);
-  const [saveSettingsMutation] = useMutation(saveMappSettings);
+export const ConfigProvider: React.FC = props => {
+  const { data: dataSettingsSchema } = useQuery(settingsSchema)
+  const [saveSettingsMutation] = useMutation(saveMappSettings)
   const [config, setConfig] = useState<MappSettings>({
-    tiId: "",
-    tiResponder: "responder.wt-safetag.com",
-    acId: "",
-    acM: "",
-  });
+    tiId: '',
+    tiResponder: 'responder.wt-safetag.com',
+    acId: '',
+    acM: '',
+    engageApiUrl: '',
+    engageIntegrationId: '',
+    engageSecret: '',
+    customerGroupID: '0',
+    subscribersGroupID: '0',
+    newsletterDoubleOptIn: 'Off',
+    messageOrderCreatedID: '0',
+    messageOrderCanceledID: '0',
+    messageOrderPaymentApprovedID: '0',
+    messageOrderInvoicedID: '0',
+  })
 
-  const [isSaving, setIsSaving] = useState(false);
-  const [configLoading, setConfigLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false)
+  const [configLoading, setConfigLoading] = useState(true)
 
   const saveSettings = async () => {
-    setIsSaving(true);
-    const settings = {...config};
-    if(settings.acId === "") {
-      settings.acId = '0';
+    setIsSaving(true)
+    const settings = { ...config }
+
+    if (settings.acId === '') {
+      settings.acId = '0'
     }
-    if(settings.acM === "") {
-      settings.acM = '0';
+
+    if (settings.acM === '') {
+      settings.acM = '0'
     }
-    if(settings.tiId === "") {
-      settings.tiId = '0';
+
+    if (settings.tiId === '') {
+      settings.tiId = '0'
     }
-    if(settings.tiResponder === "") {
-      settings.tiResponder = '0';
+
+    if (settings.tiResponder === '') {
+      settings.tiResponder = '0'
     }
+
+    if (settings.engageApiUrl === '') {
+      settings.engageApiUrl = '0'
+    }
+
+    if (settings.engageIntegrationId === '') {
+      settings.engageIntegrationId = '0'
+    }
+
+    if (settings.engageSecret === '') {
+      settings.engageSecret = '0'
+    }
+
+    if (settings.customerGroupID === '') {
+      settings.customerGroupID = '0'
+    }
+
+    if (settings.subscribersGroupID === '') {
+      settings.subscribersGroupID = '0'
+    }
+
+    if (settings.newsletterDoubleOptIn === '') {
+      settings.newsletterDoubleOptIn = 'Off'
+    }
+
+    if (settings.messageOrderCreatedID === '') {
+      settings.messageOrderCreatedID = '0'
+    }
+
+    if (settings.messageOrderCanceledID === '') {
+      settings.messageOrderCanceledID = '0'
+    }
+
+    if (settings.messageOrderPaymentApprovedID === '') {
+      settings.messageOrderPaymentApprovedID = '0'
+    }
+
+    if (settings.messageOrderInvoicedID === '') {
+      settings.messageOrderInvoicedID = '0'
+    }
+
     await saveSettingsMutation({
       variables: { settings: JSON.stringify(settings) },
-    });
-    setIsSaving(false);
-  };
+    })
+    setIsSaving(false)
+  }
 
-  const updateConfig: MappSettingsProvider["updateConfig"] = (newValue) => {
+  const updateConfig: MappSettingsProvider['updateConfig'] = newValue => {
     setConfig((oldConfig: MappSettings) => {
       return {
         ...oldConfig,
         ...newValue,
-      };
-    });
-  };
+      }
+    })
+  }
 
   useEffect(() => {
-    let settings = dataSettingsSchema?.appSettings?.message;
-    if(settings) {
-      settings = JSON.parse(settings);
-      if(settings.acId === "0") {
-        settings.acId = '';
-      }
-      if(settings.acM === "0") {
-        settings.acM = '';
-      }
-      if(settings.tiId === "0") {
-        settings.tiId = '';
-      }
-      if(settings.tiResponder === "0") {
-        settings.tiResponder = '';
-      }
-      setConfig(settings);
-      setConfigLoading(false);
+    let settings = dataSettingsSchema?.appSettings?.message
+
+    if (!settings) {
+      return
     }
-  }, [dataSettingsSchema]);
+
+    settings = JSON.parse(settings)
+    if (settings.acId === '0') {
+      settings.acId = ''
+    }
+
+    if (settings.acM === '0') {
+      settings.acM = ''
+    }
+
+    if (settings.tiId === '0') {
+      settings.tiId = ''
+    }
+
+    if (settings.tiResponder === '0') {
+      settings.tiResponder = ''
+    }
+
+    setConfig(settings)
+    setConfigLoading(false)
+  }, [dataSettingsSchema])
 
   return (
     <Config.Provider
@@ -97,7 +169,7 @@ export const ConfigProvider: React.FC = (props) => {
     >
       {props.children}
     </Config.Provider>
-  );
-};
+  )
+}
 
-export default Config;
+export default Config

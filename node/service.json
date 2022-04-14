@@ -1,0 +1,43 @@
+{
+  "memory": 512,
+  "ttl": 300,
+  "timeout": 40,
+  "minReplicas": 2,
+  "maxReplicas": 4,
+  "workers": 1,
+  "routes": {
+    "hcheck": {
+      "path": "/_v/app/vtex-mapp-cloud/hcheck",
+      "public": true
+    },
+    "groups": {
+      "path": "/_v/app/vtex-mapp-cloud/groups",
+      "public": true
+    },
+    "userUpdate": {
+      "path": "/_v/app/vtex-mapp-cloud/userUpdate",
+      "public": true
+    },
+    "checkMappConnectCredentials": {
+      "path": "/_v/app/vtex-mapp-cloud/checkMappConnectCredentials",
+      "public": true
+    },
+    "mappMessages": {
+      "path": "/_v/app/vtex-mapp-cloud/mappMessages",
+      "public": true
+    },
+    "userCreate": {
+      "path": "/_v/app/vtex-mapp-cloud/userCreate",
+      "public": true
+    }
+  },
+  "events": {
+    "orderStatusOnChange": {
+      "sender": "vtex.orders-broadcast",
+      "topics": ["order-created", "canceled", "payment-approved", "invoiced"]
+    },
+    "skuChange": {
+      "keys": ["broadcaster.notification"]
+    }
+  }
+}

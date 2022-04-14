@@ -1,7 +1,7 @@
 {
   "name": "mapp-cloud",
   "vendor": "mapppartneruk",
-  "version": "1.1.6",
+  "version": "1.2.1",
   "title": "Mapp Cloud Integration",
   "description": "Enable Mapp Intelligence tracking without touching a single line of code.",
   "billingOptions": {
@@ -22,12 +22,19 @@
     "docs": "0.x",
     "admin": "0.x",
     "messages": "1.x",
-    "graphql": "1.x"
+    "graphql": "1.x",
+    "node": "6.x"
   },
   "dependencies": {
     "vtex.pixel-interfaces": "1.x",
     "vtex.styleguide": "9.x",
-    "vtex.apps-graphql": "2.x"
+    "vtex.apps-graphql": "2.x",
+    "vtex.store": "2.x",
+    "vtex.orders-broadcast": "0.x",
+    "vtex.broadcaster": "0.x"
+  },
+  "scripts": {
+    "prereleasy": "bash lint.sh"
   },
   "settingsSchema": {
     "title": "Mapp Cloud Integration",
@@ -52,8 +59,99 @@
         "title": "Acquire M parameter",
         "description": "Enter your Acquire M parameter",
         "type": "string"
+      },
+      "engageApiUrl": {
+        "title": "Acquire engageApiUrl parameter",
+        "description": "Enter your engageApiUrl parameter",
+        "type": "string"
+      },
+      "engageIntegrationId": {
+        "title": "Acquire engageIntegrationId parameter",
+        "description": "Enter your engageIntegrationId parameter",
+        "type": "string"
+      },
+      "engageSecret": {
+        "title": "Acquire engageSecret parameter",
+        "description": "Enter your engageSecret parameter",
+        "type": "string"
+      },
+      "customerGroupID": {
+        "title": "Acquire customer group id parameter",
+        "description": "Enter your customer group ID parameter",
+        "type": "string"
+      },
+      "subscribersGroupID": {
+        "title": "Acquire subscriber group id parameter",
+        "description": "Enter your subscribers group id parameter",
+        "type": "string"
+      },
+      "newsletterDoubleOptIn": {
+        "title": "Acquire newsletterDoubleOptIn parameter",
+        "description": "Enter your newsletterDoubleOptIn parameter",
+        "type": "string"
+      },
+      "messageOrderCreatedID": {
+        "title": "Acquire messageOrderCreatedID parameter",
+        "description": "Enter your messageOrderCreatedID parameter",
+        "type": "string"
+      },
+      "messageOrderCanceledID": {
+        "title": "Acquire messageOrderCanceledID parameter",
+        "description": "Enter your messageOrderCanceledID parameter",
+        "type": "string"
+      },
+      "messageOrderPaymentApprovedID": {
+        "title": "Acquire messageOrderPaymentApprovedID parameter",
+        "description": "Enter your messageOrderPaymentApprovedID parameter",
+        "type": "string"
+      },
+      "messageOrderInvoicedID": {
+        "title": "Acquire messageOrderInvoicedID parameter",
+        "description": "Enter your messageOrderInvoicedID parameter",
+        "type": "string"
       }
     }
   },
+  "policies": [
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "*",
+        "path": "/api/v1/integration/"
+      }
+    },
+    {
+      "name": "LogisticsAdmin"
+    },
+    {
+      "name": "POWER_USER_DS"
+    },
+    {
+      "name": "ADMIN_DS"
+    },
+    {
+      "name": "OMSViewer"
+    },
+    {
+      "name": "colossus-fire-event"
+    },
+    {
+      "name": "colossus-write-logs"
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
+        "path": "/{{account}}/pricing/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
+        "path": "/api/dataentities/*"
+      }
+    }
+  ],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }

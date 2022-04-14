@@ -1,34 +1,44 @@
 interface Window extends Window {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _ti: any;
-  wts: any;
+  _ti: any
+  wts: any
 }
 
 interface MappSettings {
-  tiId: string;
-  tiResponder: string;
-  acId: string;
-  acM: string;
+  tiId: string
+  tiResponder: string
+  acId: string
+  acM: string
+  engageApiUrl: string
+  engageIntegrationId: string
+  engageSecret: string
+  customerGroupID: string
+  subscribersGroupID: string
+  newsletterDoubleOptIn: string
+  messageOrderCreatedID: string
+  messageOrderCanceledID: string
+  messageOrderPaymentApprovedID: string
+  messageOrderInvoicedID: string
 }
 
-type MappSettingProperty = "tiId" | "tiResponder" | "acId" | "acM";
+type MappSettingProperty = 'tiId' | 'tiResponder' | 'acId' | 'acM'
 
 type MappSetting = {
-  [key: MappSettingProperty]: string;
-};
-
-interface MappSettingsProvider {
-  config: MappSettings;
-  saveSettings: () => void;
-  setConfig: Dispatch<SetStateAction<MappSettings>>;
-  updateConfig: (MappSetting: MappSetting) => void;
-  configLoading: boolean;
-  isSaving: boolean;
+  [key: MappSettingProperty]: string
 }
 
-declare module "*.gql" {
-  import type { DocumentNode } from "graphql";
+interface MappSettingsProvider {
+  config: MappSettings
+  saveSettings: () => void
+  setConfig: Dispatch<SetStateAction<MappSettings>>
+  updateConfig: (MappSetting: MappSetting) => void
+  configLoading: boolean
+  isSaving: boolean
+}
 
-  const value: DocumentNode;
-  export = value;
+declare module '*.gql' {
+  import type { DocumentNode } from 'graphql'
+
+  const value: DocumentNode
+  export = value
 }
