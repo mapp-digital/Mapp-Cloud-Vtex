@@ -12,13 +12,12 @@
     "@vtex/api": "6.45.10",
     "@vtex/test-tools": "^3.4.3",
     "@vtex/tsconfig": "^0.6.0",
-    "tslint": "^5.14.0",
-    "tslint-config-vtex": "^2.1.0",
+    "eslint": "^6.8.0",
     "prettier": "^2.5.1",
     "typescript": "3.9.7"
   },
   "scripts": {
-    "lint": "tsc --noEmit --pretty && tslint -c tslint.json --fix './**/*.ts'"
+    "lint": "eslint --ext js,jsx,ts,tsx ."
   },
   "version": "0.2.0"
 }
