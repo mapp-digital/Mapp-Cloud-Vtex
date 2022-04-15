@@ -46,26 +46,6 @@ Features:
 
 ### Mapp Engage configuration - Master Data Client triggers
 
-First we have to add additional field on CL DataEntity
-
-1. Go to **{vtex-account}.ds.vtexcrm.com.br**
-2. Navigate to **Data Entities** page
-3. Press to **edit icon** next to CL (Cliente) row
-4. Press on **new field** button and set this values (you have to press gear icon next to new field to see all settings)
-
-   - Name: isSubscriber
-   - Display Name: User is subscriber or not
-   - is nullable?: true/checked
-   - is searchable?: true/checked
-   - is filterable?: true/checked
-
-5. Press **Save** button at the bottom of the page
-6. Navigate back to **Data Entities** page
-7. Press **Publish** (save/disc icon) on CL (Cliente) row
-8. Popup should appear. Press Ok (Make sure you're editing Cliente-CL entity)
-
-Now we have to setup some triggers
-
 1. Go to **{vtex-account}.ds.vtexcrm.com.br**
 2. Navigate to **Triggers** page
 3. Click on **Add new** button in top left corner and create new triggers

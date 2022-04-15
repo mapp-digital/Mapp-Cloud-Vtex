@@ -35,23 +35,34 @@ export default class MappConnectAPI extends ExternalClient {
     return this.postEvent("transaction", order)
   }
 
-  public updateUser(user: User, appSettings: AppSettings): Promise<IOResponse<any> | undefined> {
-    const data: any = {
-      ...user,
-      group: user.isSubscriber ? appSettings.subscribersGroupID : appSettings.customerGroupID,
+  public updateUser(user: User, appSettings: AppSettings, isSubscriber: boolean): Promise<IOResponse<any> | undefined> {
+    const fieldsToIgnore = ['isSubscriber','isNewsletterOptIn','id','userId'];
+
+    const dataToSend: {[key: string]: any} = {};
+    Object.keys(user).forEach((elm) => {
+      if(!fieldsToIgnore.includes(elm)){
+        dataToSend[elm] = (user as any)[elm];
+      }
+    })
+
+    dataToSend['id'] = user.userId
+
+    const data: {[key: string]: any} = {
+      ...dataToSend,
+      group: isSubscriber ? appSettings.subscribersGroupID : appSettings.customerGroupID,
     }
 
     if (data.group === "0" || !data.group || data.group.length === 0) {
       throw new Error("No groups configured!")
     }
 
-    if (user.isSubscriber) {
+    if (isSubscriber) {
       if (appSettings.newsletterDoubleOptIn.toLowerCase() === "on") {
         data.doubleOptIn = "true"
       }
     }
 
-    if (user.isSubscriber && !user.isNewsletterOptIn) {
+    if (isSubscriber && !user.isNewsletterOptIn) {
       data.unsubscribe = "true"
     }
 
