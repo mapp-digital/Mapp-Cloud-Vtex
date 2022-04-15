@@ -40,7 +40,9 @@ export const ConfigProvider: React.FC = props => {
   const saveSettings = async () => {
     setIsSaving(true)
     await saveSettingsMutation({
-      variables: { settings: JSON.stringify({...defaultConfigValues, ...config }) },
+      variables: {
+        settings: JSON.stringify({ ...defaultConfigValues, ...config }),
+      },
     })
     setIsSaving(false)
   }
@@ -56,16 +58,19 @@ export const ConfigProvider: React.FC = props => {
 
   useEffect(() => {
     let settings = dataSettingsSchema?.appSettings?.message
+
     if (!settings) {
       return
     }
 
     settings = JSON.parse(settings)
     const tiAndAcProps = ['acId', 'acM', 'tiId', 'tiResponder']
+
     tiAndAcProps.forEach(prop => {
+      // eslint-disable-next-line no-prototype-builtins
       if (settings[prop] === '0' || !settings.hasOwnProperty(prop)) {
-        settings[prop] === '';
-      } 
+        settings[prop] === ''
+      }
     })
     setConfig(settings)
     setConfigLoading(false)

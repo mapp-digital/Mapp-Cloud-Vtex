@@ -36,16 +36,17 @@ export default class MappConnectAPI extends ExternalClient {
   }
 
   public updateUser(user: User, appSettings: AppSettings, isSubscriber: boolean): Promise<IOResponse<any> | undefined> {
-    const fieldsToIgnore = ['isSubscriber','isNewsletterOptIn','id','userId'];
+    const fieldsToIgnore = ["isSubscriber", "isNewsletterOptIn", "id", "userId"]
 
-    const dataToSend: {[key: string]: any} = {};
-    Object.keys(user).forEach((elm) => {
-      if(!fieldsToIgnore.includes(elm)){
-        dataToSend[elm] = (user as any)[elm];
+    const dataToSend: {[key: string]: any} = {}
+
+    Object.keys(user).forEach(elm => {
+      if (!fieldsToIgnore.includes(elm)) {
+        dataToSend[elm] = (user as any)[elm]
       }
     })
 
-    dataToSend['id'] = user.userId
+    dataToSend.id = user.userId
 
     const data: {[key: string]: any} = {
       ...dataToSend,

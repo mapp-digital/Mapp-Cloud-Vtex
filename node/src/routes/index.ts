@@ -1,13 +1,19 @@
 import type {ProductData} from "../typings/mapp-connect"
 import userSubscriberSchema from "../utils/user-subscriber.schema"
-import {getUser, getLogger, getAppSettings, updateMappUserSubscriberDoc, getUserSubscriberDocForUserId} from "../utils/utils"
+import {
+  getUser,
+  getLogger,
+  getAppSettings,
+  updateMappUserSubscriberDoc,
+  getUserSubscriberDocForUserId,
+} from "../utils/utils"
 
 export async function checkMappConnectCredentials(ctx: Context, next: () => Promise<any>) {
   ctx.set("Cache-Control", "no-cache")
   ctx.status = 200
-  ctx.body = 'ok'
+  ctx.body = "ok"
 
-  const logger = getLogger(ctx.vtex.logger);
+  const logger = getLogger(ctx.vtex.logger)
 
   const {mappConnectAPI, masterdata} = ctx.clients
   const response = await mappConnectAPI.getPing()
@@ -15,25 +21,25 @@ export async function checkMappConnectCredentials(ctx: Context, next: () => Prom
   if (!response || response.status !== 200) {
     ctx.status = 500
     ctx.body = "invalid configuration"
-    await next();
+    await next()
 
     return
   }
 
-  try{
+  try {
     await masterdata.createOrUpdateSchema(userSubscriberSchema)
-    logger.info('Schema updated', {})
-  }catch(err){
-    if(err.response.status !== 304){
+    logger.info("Schema updated", {})
+  } catch (err) {
+    if (err.response.status !== 304) {
       logger.error(`Failed to generate or update schema! ${err?.message}`, {
-        err
+        err,
       })
       ctx.status = 500
       ctx.body = "invalid configuration"
     }
   }
 
-  await next();
+  await next()
 }
 
 export async function userCreate(ctx: Context, next: () => Promise<any>) {
@@ -61,7 +67,6 @@ export async function userCreate(ctx: Context, next: () => Promise<any>) {
   const user = await getUser(ctx, userId as string)
 
   if (!user) {
-
     logger.warn("Routes[userCreate]: Failed to find user with provided userID!", {
       userId,
       url: ctx.URL,
@@ -89,11 +94,11 @@ export async function userCreate(ctx: Context, next: () => Promise<any>) {
   }
 
   // Add him to regular group in both cases
-  await mappConnectAPI.updateUser(user, await getAppSettings(ctx),false)
+  await mappConnectAPI.updateUser(user, await getAppSettings(ctx), false)
 
   // If its subscriber, add him to subscription group as well
-  if(user.isNewsletterOptIn){
-    await mappConnectAPI.updateUser(user, await getAppSettings(ctx),true)
+  if (user.isNewsletterOptIn) {
+    await mappConnectAPI.updateUser(user, await getAppSettings(ctx), true)
   }
 
   await next()
@@ -132,17 +137,18 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
       })
     }
 
-    try{
-      const userSubDoc = await getUserSubscriberDocForUserId(ctx,userId as string);
-      if(userSubDoc){
+    try {
+      const userSubDoc = await getUserSubscriberDocForUserId(ctx, userId as string)
+
+      if (userSubDoc) {
         await masterdata.deleteDocument({
-          dataEntity: 'MappUserSubscriber',
-          id: userSubDoc.id
+          dataEntity: "MappUserSubscriber",
+          id: userSubDoc.id,
         })
       }
-    }catch(err){
+    } catch (err) {
       logger.info(`Error removing MappUserSubscriber doc. ${err?.message}`, {
-        err
+        err,
       })
     }
 
@@ -152,6 +158,7 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
   }
 
   const user = await getUser(ctx, userId as string)
+
   if (!user) {
     logger.warn("Routes[userCreate]: Failed to find user with provided userID!", {
       userId,
@@ -165,15 +172,15 @@ export async function userUpdate(ctx: Context, next: () => Promise<any>) {
   }
 
   // If we need to subscribe him it will trigger update event once again
-  if(!user.isSubscriber && user.isNewsletterOptIn){
+  if (!user.isSubscriber && user.isNewsletterOptIn) {
     await updateMappUserSubscriberDoc(ctx, user.mappUserSubDocId, true)
-    user.isSubscriber = true;
+    user.isSubscriber = true
   }
 
-  await mappConnectAPI.updateUser(user, await getAppSettings(ctx),user.isSubscriber)
+  await mappConnectAPI.updateUser(user, await getAppSettings(ctx), user.isSubscriber)
 
   // If we need to unsubscribe him it will trigger update event once again
-  if(user.isSubscriber && !user.isNewsletterOptIn){
+  if (user.isSubscriber && !user.isNewsletterOptIn) {
     await updateMappUserSubscriberDoc(ctx, user.mappUserSubDocId, false)
   }
 

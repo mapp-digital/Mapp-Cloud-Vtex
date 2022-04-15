@@ -1,6 +1,6 @@
-interface MappUserSubscriberDoc{
-  id: string,
-  userId: string,
+interface MappUserSubscriberDoc {
+  id: string
+  userId: string
   isSubscriber: boolean
 }
 

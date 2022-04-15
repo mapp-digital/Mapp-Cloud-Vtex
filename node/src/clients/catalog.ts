@@ -38,14 +38,14 @@ export class CatalogClient extends ExternalClient {
       return {
         productSKU: productDetails.sku.Id.toString(),
         productName: productDetails.product.Name,
-        productPrice: productDetails.price?.basePrice || 0,
+        productPrice: productDetails.price?.basePrice ?? 0,
         stockTotal,
         productURL: `https://${ctx.vtex.host}${productDetails.sku.DetailUrl}`,
         imageURL: productDetails.sku.ImageUrl,
         zoomImageURL: productDetails.sku.ImageUrl,
         brand: productDetails.sku.BrandName,
         category: Object.values(productDetails.sku.ProductCategories).join(", "),
-        description: productDetails.product.Description || productDetails.product.DescriptionShort,
+        description: productDetails.product.Description ?? productDetails.product.DescriptionShort,
       } as ProductData
     } catch (err) {
       logger.error(`Exception while fetching product. Msg: ${err?.message}`, {

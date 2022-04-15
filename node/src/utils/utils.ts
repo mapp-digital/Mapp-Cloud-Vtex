@@ -27,7 +27,11 @@ export const getAppSettings = (ctx: Context | IOContext): Promise<AppSettings> =
   return apps.getAppSettings(app) as Promise<AppSettings>
 }
 
-export const updateMappUserSubscriberDoc = async (ctx: Context, mappUserSubDocId: string, isSubscriber: boolean): Promise<void> => {
+export const updateMappUserSubscriberDoc = async (
+  ctx: Context,
+  mappUserSubDocId: string,
+  isSubscriber: boolean,
+): Promise<void> => {
   const {
     clients: {masterdata},
   } = ctx
@@ -41,27 +45,26 @@ export const updateMappUserSubscriberDoc = async (ctx: Context, mappUserSubDocId
   })
 }
 
-export const getUserSubscriberDocForUserId = async (ctx: Context | EventChangeContext, userId: string): Promise<MappUserSubscriberDoc | undefined> => {
+export const getUserSubscriberDocForUserId = async (
+  ctx: Context | EventChangeContext,
+  userId: string,
+): Promise<MappUserSubscriberDoc | undefined> => {
   const {
     clients: {masterdata},
   } = ctx
 
   const mappUserSubDoc = await masterdata.searchDocuments({
     dataEntity: "MappUserSubscriber",
-    schema: 'mapp-user-subscriber-v1',
+    schema: "mapp-user-subscriber-v1",
     where: `userId=${userId}`,
-    fields: [
-      "id",
-      "userId",
-      "isSubscriber",
-    ],
+    fields: ["id", "userId", "isSubscriber"],
     pagination: {
       page: 1,
       pageSize: 1,
     },
   })
 
-  return mappUserSubDoc.length > 0 ? mappUserSubDoc[0] as MappUserSubscriberDoc : undefined;
+  return mappUserSubDoc.length > 0 ? (mappUserSubDoc[0] as MappUserSubscriberDoc) : undefined
 }
 
 export const getUser = async (ctx: Context | EventChangeContext, userId: string): Promise<User | undefined> => {
@@ -105,30 +108,32 @@ export const getUser = async (ctx: Context | EventChangeContext, userId: string)
     },
   })
 
-  const user =  userDoc.length > 0 ? (userDoc[0] as User) : undefined;
-  if(!user){
-    return undefined;
+  const user = userDoc.length > 0 ? (userDoc[0] as User) : undefined
+
+  if (!user) {
+    return undefined
   }
 
-  const mappUserSubDoc = await getUserSubscriberDocForUserId(ctx,user.userId);
+  const mappUserSubDoc = await getUserSubscriberDocForUserId(ctx, user.userId)
 
-  if(!mappUserSubDoc){
+  if (!mappUserSubDoc) {
     const doc = await masterdata.createDocument({
-      dataEntity: 'MappUserSubscriber',
-      schema: 'mapp-user-subscriber-v1',
+      dataEntity: "MappUserSubscriber",
+      schema: "mapp-user-subscriber-v1",
       fields: {
         userId: user.userId,
-        isSubscriber: false
-      }
+        isSubscriber: false,
+      },
     })
 
-    user.mappUserSubDocId = doc.DocumentId;
+    user.mappUserSubDocId = doc.DocumentId
     user.isSubscriber = false
-    return user;
-  }else{
-    user.isSubscriber = mappUserSubDoc.isSubscriber;
-    user.mappUserSubDocId = mappUserSubDoc.id
 
-    return user;
+    return user
   }
+
+  user.isSubscriber = mappUserSubDoc.isSubscriber
+  user.mappUserSubDocId = mappUserSubDoc.id
+
+  return user
 }

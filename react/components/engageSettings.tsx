@@ -38,11 +38,11 @@ const EngageSettings: FC = () => {
         cache: 'no-cache',
       })
 
-      const body = await res.json()
-
       if (res.status !== 200) {
         throw new Error('Response for groups not 200')
       }
+
+      const body = await res.json()
 
       const groups = Object.keys(body).map(key => {
         return {
@@ -67,11 +67,11 @@ const EngageSettings: FC = () => {
         cache: 'no-cache',
       })
 
-      const body = await res.json()
-
       if (res.status !== 200) {
         throw new Error('Response for messages not 200')
       }
+
+      const body = await res.json()
 
       if (!body || body.length <= 0) {
         return []
@@ -197,22 +197,16 @@ const EngageSettings: FC = () => {
   ]
 
   useEffect(() => {
-    if (
-      ctx.config.engageApiUrl &&
-      ctx.config.engageSecret &&
-      ctx.config.engageIntegrationId
-    ) {
-      ;(async () => {
-        const groups = await getGroups()
-        const mappMessages = await getMappMessages()
+    ;(async () => {
+      const groups = await getGroups()
+      const mappMessages = await getMappMessages()
 
-        setState(previousState => ({
-          ...previousState,
-          groups,
-          mappMessages,
-        }))
-      })()
-    }
+      setState(previousState => ({
+        ...previousState,
+        groups,
+        mappMessages,
+      }))
+    })()
   }, [])
 
   return (
