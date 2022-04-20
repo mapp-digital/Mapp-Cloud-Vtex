@@ -86,6 +86,16 @@ export default class OrdersClient extends ExternalClient {
         name: item.name,
       } as OrderItem
 
+      let discount = 0
+
+      item.priceTags.forEach(elm => {
+        if (elm.name.toLowerCase().includes("discount")) {
+          discount += Math.abs(elm.rawValue) / item.quantity
+        }
+      })
+
+      data.discountValue = discount
+
       if (item.imageUrl) {
         data.base_image = item.imageUrl
       }
@@ -119,7 +129,7 @@ export default class OrdersClient extends ExternalClient {
       currency: order.storePreferencesData.currencyCode,
       timestamp: order.creationDate,
       status: this.getOrderStatus(order),
-      discountTotal: this.getTotals("Discounts", order),
+      discountTotal: Math.abs(this.getTotals("Discounts", order)),
       taxTotal: this.getTotals("Tax", order),
       shippingTotal: this.getTotals("Shipping", order),
       shippingAddress: this.getShippingAddress(order),
@@ -232,7 +242,6 @@ export default class OrdersClient extends ExternalClient {
       headers: {
         VtexIdclientAutCookie: this.context.authToken,
       },
-      metric: "ordersClient-getOrderData",
     })
   }
 }

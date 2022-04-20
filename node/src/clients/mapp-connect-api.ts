@@ -35,8 +35,8 @@ export default class MappConnectAPI extends ExternalClient {
     return this.postEvent("transaction", order)
   }
 
-  public updateUser(user: User, appSettings: AppSettings, isSubscriber: boolean): Promise<IOResponse<any> | undefined> {
-    const fieldsToIgnore = ["isSubscriber", "isNewsletterOptIn", "id", "userId"]
+  private prepareUserData(user: User, appSettings: AppSettings, isSubscriber: boolean): {[key: string]: any} {
+    const fieldsToIgnore = ["userId", "isSubscriber", "isNewsletterOptIn", "id", "userId", "birthDate"]
 
     const dataToSend: {[key: string]: any} = {}
 
@@ -46,15 +46,18 @@ export default class MappConnectAPI extends ExternalClient {
       }
     })
 
+    dataToSend.dateOfBirth = user.birthDate
     dataToSend.id = user.userId
+
+    if (dataToSend.gender) {
+      dataToSend.gender = dataToSend.gender.toLowerCase() === "male" ? "1" : "2"
+    } else {
+      dataToSend.gender = "0"
+    }
 
     const data: {[key: string]: any} = {
       ...dataToSend,
       group: isSubscriber ? appSettings.subscribersGroupID : appSettings.customerGroupID,
-    }
-
-    if (data.group === "0" || !data.group || data.group.length === 0) {
-      throw new Error("No groups configured!")
     }
 
     if (isSubscriber) {
@@ -65,6 +68,16 @@ export default class MappConnectAPI extends ExternalClient {
 
     if (isSubscriber && !user.isNewsletterOptIn) {
       data.unsubscribe = "true"
+    }
+
+    return data
+  }
+
+  public updateUser(user: User, appSettings: AppSettings, isSubscriber: boolean): Promise<IOResponse<any> | undefined> {
+    const data = this.prepareUserData(user, appSettings, isSubscriber)
+
+    if (data.group === "0" || !data.group || data.group.length === 0) {
+      throw new Error("No groups configured!")
     }
 
     return this.postEvent("user", data)
@@ -106,7 +119,6 @@ export default class MappConnectAPI extends ExternalClient {
           "Content-Type": "application/json",
           "auth-token": token,
         },
-        metric: `post_${event}`,
       })
 
       if (toRet.status !== 200) {
@@ -158,7 +170,6 @@ export default class MappConnectAPI extends ExternalClient {
           "Content-Type": "application/json",
           "auth-token": token,
         },
-        metric: `get_${path}`,
       })
 
       if (toRet.status !== 200) {

@@ -1,24 +1,14 @@
-import type {InstanceOptions, IOContext} from "@vtex/api"
-import {ExternalClient} from "@vtex/api"
+import {JanusClient} from "@vtex/api"
 
 import type {VtexPriceData} from "../typings/vtex"
 
-export default class PricingClient extends ExternalClient {
-  constructor(context: IOContext, options?: InstanceOptions) {
-    super(`http://${context.account}.myvtex.com/api/pricing`, context, {
-      ...options,
+export default class PricingClient extends JanusClient {
+  public getPrice(skuId: string | number): Promise<VtexPriceData> {
+    return this.http.get<VtexPriceData>(`${this.context.account}/pricing/prices/${skuId}`, {
       headers: {
-        ...options?.headers,
-        "Accept": "application/vnd.vtex.pricing.v3+json",
-        "Cache-Control": "no-cache",
-        "Content-Type": "application/json",
-        "X-Vtex-Use-Https": "true",
-        "VtexIdclientAutcookie": context.adminUserAuthToken ?? "",
+        "X-Vtex-Use-Https": true,
+        "VtexIdclientAutCookie": this.context.authToken,
       },
     })
-  }
-
-  public getPrice(skuId: string | number): Promise<VtexPriceData> {
-    return this.http.get<VtexPriceData>(`/prices/${skuId}`)
   }
 }

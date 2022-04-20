@@ -9,7 +9,7 @@ import routes from "./src/routes"
 // The @vtex/api HttpClient respects Cache-Control headers and uses the provided cache.
 const memoryCache = new LRUCache<string, any>({max: 5000})
 
-metrics.trackCache("status", memoryCache)
+// metrics.trackCache("status", memoryCache)
 declare global {
   // We declare a global Context type just to avoid re-writing ServiceContext<Clients, State> in every handler and resolver
   type Context = ServiceContext<Clients, State>

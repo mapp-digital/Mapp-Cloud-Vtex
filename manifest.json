@@ -114,6 +114,9 @@
   },
   "policies": [
     {
+      "name": "read_prices"
+    },
+    {
       "name": "outbound-access",
       "attrs": {
         "host": "*",
@@ -137,6 +140,13 @@
     },
     {
       "name": "colossus-write-logs"
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "*",
+        "path": "/api/v1/integration/"
+      }
     },
     {
       "name": "outbound-access",
