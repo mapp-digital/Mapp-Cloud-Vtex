@@ -20,6 +20,8 @@ interface EngageSettingsState {
   }>
 }
 
+let ctxConfig: any
+
 const EngageSettings: FC = () => {
   const ctx = useContext(Config)
   const intl = useIntl()
@@ -30,6 +32,18 @@ const EngageSettings: FC = () => {
     groups: [],
     mappMessages: [],
   })
+
+  if (ctxConfig === undefined) {
+    ctxConfig = { ...ctx.config }
+  }
+
+  const hasInitialSettins =
+    ctxConfig.engageApiUrl &&
+    ctxConfig.engageApiUrl !== '0' &&
+    ctxConfig.engageSecret &&
+    ctxConfig.engageSecret !== '0' &&
+    ctxConfig.engageIntegrationId &&
+    ctxConfig.engageIntegrationId !== '0'
 
   const getGroups = async () => {
     try {
@@ -198,6 +212,10 @@ const EngageSettings: FC = () => {
 
   useEffect(() => {
     ;(async () => {
+      if (!hasInitialSettins) {
+        return
+      }
+
       const groups = await getGroups()
       const mappMessages = await getMappMessages()
 
@@ -208,6 +226,173 @@ const EngageSettings: FC = () => {
       }))
     })()
   }, [])
+
+  const otherConfigOptions = () => {
+    const showContent =
+      hasInitialSettins ||
+      state.groups.length > 0 ||
+      state.mappMessages.length > 0
+
+    if (!showContent) {
+      return null
+    }
+
+    return (
+      <div>
+        <Divider orientation="horizontal" />
+        <h2>Synchronization configuration</h2>
+        <div className="pv4">
+          <div className="pv4">
+            <ConfigInputWrapper>
+              <Dropdown
+                label={intl.formatMessage({
+                  id: 'admin/mapp-cloud.engage-newsletter-doubleop-label',
+                })}
+                size="large"
+                options={doubleOptInOptions}
+                value={ctx.config.newsletterDoubleOptIn}
+                onChange={(e: { persist?: any; target: any }) => {
+                  e.persist()
+                  ctx.updateConfig({ newsletterDoubleOptIn: e.target.value })
+                }}
+              />
+            </ConfigInputWrapper>
+          </div>
+        </div>
+        <Divider orientation="horizontal" />
+        <h2>Mapp Engage Group Configuration</h2>
+        <div className="pv4">
+          <div className="pv4">
+            <ConfigInputWrapper>
+              <Dropdown
+                label={intl.formatMessage({
+                  id: 'admin/mapp-cloud.engage-customers-group-label',
+                })}
+                disabled={state.groups.length === 0}
+                options={state.groups}
+                size="large"
+                value={ctx.config.customerGroupID}
+                onChange={(e: { persist?: any; target: any }) => {
+                  e.persist()
+                  ctx.updateConfig({ customerGroupID: e.target.value })
+                }}
+              />
+            </ConfigInputWrapper>
+          </div>
+          <div className="pv4">
+            <ConfigInputWrapper>
+              <Dropdown
+                label={intl.formatMessage({
+                  id: 'admin/mapp-cloud.engage-subscribers-group-label',
+                })}
+                disabled={state.groups.length === 0}
+                options={state.groups}
+                size="large"
+                value={ctx.config.subscribersGroupID}
+                onChange={(e: { persist?: any; target: any }) => {
+                  e.persist()
+                  ctx.updateConfig({ subscribersGroupID: e.target.value })
+                }}
+              />
+            </ConfigInputWrapper>
+          </div>
+        </div>
+        <Divider orientation="horizontal" />
+        <h2>Mapp Engage Messages</h2>
+        <p>
+          <FormattedHTMLMessage id="admin/mapp-cloud.engage-message-info" />
+        </p>
+        <div className="pv4">
+          <div className="pv4">
+            <ConfigInputWrapper>
+              <Dropdown
+                label={intl.formatMessage({
+                  id: 'admin/mapp-cloud.engage-message-order-created-label',
+                })}
+                disabled={state.mappMessages.length === 0}
+                options={state.mappMessages}
+                size="large"
+                value={
+                  ctx.config.messageOrderCreatedID
+                    ? ctx.config.messageOrderCreatedID
+                    : '0'
+                }
+                onChange={(e: { persist?: any; target: any }) => {
+                  e.persist()
+                  ctx.updateConfig({ messageOrderCreatedID: e.target.value })
+                }}
+              />
+            </ConfigInputWrapper>
+          </div>
+          <div className="pv4">
+            <ConfigInputWrapper>
+              <Dropdown
+                label={intl.formatMessage({
+                  id: 'admin/mapp-cloud.engage-message-order-canceled-label',
+                })}
+                disabled={state.mappMessages.length === 0}
+                options={state.mappMessages}
+                size="large"
+                value={
+                  ctx.config.messageOrderCanceledID
+                    ? ctx.config.messageOrderCanceledID
+                    : '0'
+                }
+                onChange={(e: { persist?: any; target: any }) => {
+                  e.persist()
+                  ctx.updateConfig({ messageOrderCanceledID: e.target.value })
+                }}
+              />
+            </ConfigInputWrapper>
+          </div>
+          <div className="pv4">
+            <ConfigInputWrapper>
+              <Dropdown
+                label={intl.formatMessage({
+                  id: 'admin/mapp-cloud.engage-message-order-approved-label',
+                })}
+                disabled={state.mappMessages.length === 0}
+                options={state.mappMessages}
+                size="large"
+                value={
+                  ctx.config.messageOrderPaymentApprovedID
+                    ? ctx.config.messageOrderPaymentApprovedID
+                    : '0'
+                }
+                onChange={(e: { persist?: any; target: any }) => {
+                  e.persist()
+                  ctx.updateConfig({
+                    messageOrderPaymentApprovedID: e.target.value,
+                  })
+                }}
+              />
+            </ConfigInputWrapper>
+          </div>
+          <div className="pv4">
+            <ConfigInputWrapper>
+              <Dropdown
+                label={intl.formatMessage({
+                  id: 'admin/mapp-cloud.engage-message-order-invoiced-label',
+                })}
+                disabled={state.mappMessages.length === 0}
+                options={state.mappMessages}
+                size="large"
+                value={
+                  ctx.config.messageOrderInvoicedID
+                    ? ctx.config.messageOrderInvoicedID
+                    : '0'
+                }
+                onChange={(e: { persist?: any; target: any }) => {
+                  e.persist()
+                  ctx.updateConfig({ messageOrderInvoicedID: e.target.value })
+                }}
+              />
+            </ConfigInputWrapper>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <React.Fragment>
@@ -289,157 +474,7 @@ const EngageSettings: FC = () => {
           </ConfigInputWrapper>
         </div>
       </div>
-      <Divider orientation="horizontal" />
-      <h2>Synchronization configuration</h2>
-      <div className="pv4">
-        <div className="pv4">
-          <ConfigInputWrapper>
-            <Dropdown
-              label={intl.formatMessage({
-                id: 'admin/mapp-cloud.engage-newsletter-doubleop-label',
-              })}
-              size="large"
-              options={doubleOptInOptions}
-              value={ctx.config.newsletterDoubleOptIn}
-              onChange={(e: { persist?: any; target: any }) => {
-                e.persist()
-                ctx.updateConfig({ newsletterDoubleOptIn: e.target.value })
-              }}
-            />
-          </ConfigInputWrapper>
-        </div>
-      </div>
-      <Divider orientation="horizontal" />
-      <h2>Mapp Engage Group Configuration</h2>
-      <div className="pv4">
-        <div className="pv4">
-          <ConfigInputWrapper>
-            <Dropdown
-              label={intl.formatMessage({
-                id: 'admin/mapp-cloud.engage-customers-group-label',
-              })}
-              disabled={state.groups.length === 0}
-              options={state.groups}
-              size="large"
-              value={ctx.config.customerGroupID}
-              onChange={(e: { persist?: any; target: any }) => {
-                e.persist()
-                ctx.updateConfig({ customerGroupID: e.target.value })
-              }}
-            />
-          </ConfigInputWrapper>
-        </div>
-        <div className="pv4">
-          <ConfigInputWrapper>
-            <Dropdown
-              label={intl.formatMessage({
-                id: 'admin/mapp-cloud.engage-subscribers-group-label',
-              })}
-              disabled={state.groups.length === 0}
-              options={state.groups}
-              size="large"
-              value={ctx.config.subscribersGroupID}
-              onChange={(e: { persist?: any; target: any }) => {
-                e.persist()
-                ctx.updateConfig({ subscribersGroupID: e.target.value })
-              }}
-            />
-          </ConfigInputWrapper>
-        </div>
-      </div>
-      <Divider orientation="horizontal" />
-      <h2>Mapp Engage Messages</h2>
-      <p>
-        <FormattedHTMLMessage id="admin/mapp-cloud.engage-message-info" />
-      </p>
-      <div className="pv4">
-        <div className="pv4">
-          <ConfigInputWrapper>
-            <Dropdown
-              label={intl.formatMessage({
-                id: 'admin/mapp-cloud.engage-message-order-created-label',
-              })}
-              disabled={state.mappMessages.length === 0}
-              options={state.mappMessages}
-              size="large"
-              value={
-                ctx.config.messageOrderCreatedID
-                  ? ctx.config.messageOrderCreatedID
-                  : '0'
-              }
-              onChange={(e: { persist?: any; target: any }) => {
-                e.persist()
-                ctx.updateConfig({ messageOrderCreatedID: e.target.value })
-              }}
-            />
-          </ConfigInputWrapper>
-        </div>
-        <div className="pv4">
-          <ConfigInputWrapper>
-            <Dropdown
-              label={intl.formatMessage({
-                id: 'admin/mapp-cloud.engage-message-order-canceled-label',
-              })}
-              disabled={state.mappMessages.length === 0}
-              options={state.mappMessages}
-              size="large"
-              value={
-                ctx.config.messageOrderCanceledID
-                  ? ctx.config.messageOrderCanceledID
-                  : '0'
-              }
-              onChange={(e: { persist?: any; target: any }) => {
-                e.persist()
-                ctx.updateConfig({ messageOrderCanceledID: e.target.value })
-              }}
-            />
-          </ConfigInputWrapper>
-        </div>
-        <div className="pv4">
-          <ConfigInputWrapper>
-            <Dropdown
-              label={intl.formatMessage({
-                id: 'admin/mapp-cloud.engage-message-order-approved-label',
-              })}
-              disabled={state.mappMessages.length === 0}
-              options={state.mappMessages}
-              size="large"
-              value={
-                ctx.config.messageOrderPaymentApprovedID
-                  ? ctx.config.messageOrderPaymentApprovedID
-                  : '0'
-              }
-              onChange={(e: { persist?: any; target: any }) => {
-                e.persist()
-                ctx.updateConfig({
-                  messageOrderPaymentApprovedID: e.target.value,
-                })
-              }}
-            />
-          </ConfigInputWrapper>
-        </div>
-        <div className="pv4">
-          <ConfigInputWrapper>
-            <Dropdown
-              label={intl.formatMessage({
-                id: 'admin/mapp-cloud.engage-message-order-invoiced-label',
-              })}
-              disabled={state.mappMessages.length === 0}
-              options={state.mappMessages}
-              size="large"
-              value={
-                ctx.config.messageOrderInvoicedID
-                  ? ctx.config.messageOrderInvoicedID
-                  : '0'
-              }
-              onChange={(e: { persist?: any; target: any }) => {
-                e.persist()
-                ctx.updateConfig({ messageOrderInvoicedID: e.target.value })
-              }}
-            />
-          </ConfigInputWrapper>
-        </div>
-      </div>
+      {otherConfigOptions()}
       <div style={{ justifyContent: 'space-between' }} className="flex">
         <div />
         <div>{saveButton(ctx)}</div>

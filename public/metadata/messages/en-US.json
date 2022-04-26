@@ -1,18 +1,22 @@
 {
-  "name": "Mapp - Customer Insights",
-  "headline": "Enable Mapp Intelligence Customer Insights without touching a single line of code.",
-  "overview": "Mapp Intelligence is a Customer Insights platform that allows you to harness the power of your first-party data.\\\\n\\\\nAt its core is a set of easy-to-understand dashboards that enable you to understand the customer journey to find the quickest paths to conversion. By using previous transaction data, browsing behavior, and contact history to analyze, score, and visualize insights about your customers it can provide the most accurate prediction of what your customers are going to do next.",
+  "name": "Mapp Cloud - Insight-led Customer Engagement",
+  "headline": "Enable Mapp Cloud (Engage & Intelligence) without touching a single line of code.",
+  "overview": "This extension enables a seamless integration between your Mapp Cloud instance and VTEX. You can unify all customer data in Mapp's marketing cloud, begin to send targeted omni-channel communications, and analyze deep customer insights.\\n\\nFor Mapp Intelligence, you will have access to more than 25 pre-configured dashboards to start analyzing user behaviour right away. These dashboards are easily scalable and offer an abundant possibility to customize and extend the analyses.\\n\\nFor Mapp Engage, your customer data will automatically be synchronized and your transactional messages can be designed and sent. You will also be able to configure Omni-Channel Campaigns including Abandoned Cart, New Product Launches, and Post Purchase messages. All of this will be possible across email, SMS, mobile push, web push, and more.\\n\\nMapp Cloud is an Insight-led Customer Engagement Platform. With Mapp Cloud, marketers can focus on what makes a difference for their business, instead of spending precious time and resources taming the technology behind it. They can rely on real, reliable marketing insights that enable true one-to-one personalization – and set the foundation for successful cross-channel marketing activities.",
   "features": [
-    "Integration to synchronize on-site behavior and transaction data to Mapp Intelligence",
-    "Over 30 pre-built dashboards offering Customer & Business Insights",
-    "In-depth marketing analytics",
-    "Built for marketers",
-    "Simple To deploy",
-    "Additional features include: AI predictions (lifetime value, likelihood to churn, likelihood to purchase), anomaly detection, forecasting, web personalization, & product recommendations"
+    "Integration to synchronize On-Site Behavior, Customer Profiles, and Transaction data to Mapp",
+    "Send Omni-Channel Campaigns, such as Abandoned Basket, Loyalty, Birthday & more",
+    "Transactional Messages can be designed & sent within the Mapp platform",
+    "Ability to send Email, SMS, Web Push, Mobile Push & In-App Messages",
+    "Over 30 Pre-Built Dashboards offering Customer & Business Insights",
+    "Additional features include: AI Predictions (lifetime value, likelihood to churn, likelihood to purchase), Anomaly Detection, Forecasting, Web Personalization, & Product Recommendations",
+    "Built for Marketers",
+    "Simple to deploy"
   ],
-  "additionalInformation": "To use this app you will need an active Mapp Intelligence account.\\\\n\\\\nTo sign-up for your FREE THREE-MONTH TRIAL, simply download this app and complete this form:  https://portal.mapp.com/sign-up-wizard",
+  "additionalInformation": "To use this app you will need an active Mapp account.\\n\\nTo sign-up for your Mapp Intelligence FREE 3 MONTH TRIAL, simply download this app and complete this form: https://portal.mapp.com/sign-up-wizard",
+  "video": "https://www.youtube.com/watch?v=0VW3FCyGGNY",
   "websiteURL": "https://mapp.com",
   "support": {
+    "email": "intelligence@mapp.com",
     "url": "https://mapp.com/tech-support"
   }
 }
