@@ -8,27 +8,63 @@
   "routes": {
     "hcheck": {
       "path": "/_v/app/vtex-mapp-cloud/hcheck",
-      "public": true
+      "public": true,
+      "policies": [
+        {
+          "effect": "allow",
+          "actions": ["get"]
+        }
+      ]
     },
     "groups": {
       "path": "/_v/app/vtex-mapp-cloud/groups",
-      "public": true
+      "public": true,
+      "policies": [
+        {
+          "effect": "allow",
+          "actions": ["get"]
+        }
+      ]
     },
     "userUpdate": {
       "path": "/_v/app/vtex-mapp-cloud/userUpdate",
-      "public": true
+      "public": true,
+      "policies": [
+        {
+          "effect": "allow",
+          "actions": ["get"]
+        }
+      ]
     },
     "checkMappConnectCredentials": {
       "path": "/_v/app/vtex-mapp-cloud/checkMappConnectCredentials",
-      "public": true
+      "public": true,
+      "policies": [
+        {
+          "effect": "allow",
+          "actions": ["get"]
+        }
+      ]
     },
     "mappMessages": {
       "path": "/_v/app/vtex-mapp-cloud/mappMessages",
-      "public": true
+      "public": true,
+      "policies": [
+        {
+          "effect": "allow",
+          "actions": ["get"]
+        }
+      ]
     },
     "userCreate": {
       "path": "/_v/app/vtex-mapp-cloud/userCreate",
-      "public": true
+      "public": true,
+      "policies": [
+        {
+          "effect": "allow",
+          "actions": ["get"]
+        }
+      ]
     }
   },
   "events": {

@@ -1,16 +1,19 @@
 {
-  "name": "Mapp - Customer Insights",
-  "headline": "Habilite Mapp Intelligence Customer Insights sin tocar una sola línea de código",
-  "overview": "Mapp Intelligence es una plataforma de Customer Insights que le permite aprovechar el poder de sus datos de primera mano.\\\\n\\\\nEn su núcleo hay un conjunto de cuadros de mando fáciles de entender que le permiten entender el customer journey para encontrar los caminos más rápidos hacia la conversión. Al utilizar los datos de transacciones anteriores, el comportamiento de navegación y el historial de contactos para analizar, puntuar y visualizar la información sobre sus clientes, puede proporcionar la predicción más precisa de lo que sus clientes van a hacer a continuación.",
+  "name": "Mapp Cloud - Insight-led Customer Engagement",
+  "headline": "Activa Mapp Cloud (Engage & Intelligence) sin tocar una línea de código",
+  "overview": "Esta app permite una integración sencilla de tu instancia de Mapp Cloud y VTEX. Podrás unificar todos tus datos de cliente en la nube de Mapp Cloud, empezar a enviar comunicaciones omnichannel, y analizar en detalles todas las estadísticas en un único lugar.\nCon Mapp Intelligence, tendrás acceso a más de 25 informes preconfigurados para poder analizar el comportamiento de cliente desde el minuto cero. Todos ellos fácilmente expansibles y customizables permitiendo realizar diferentes análisis.\nA través de Mapp Engage, tus datos de cliente estarán automáticamente sincronizados por lo que todos tus mensajes pueden ser diseñados y enviados. También podrás configurar campañas Omni-Channel incluyendo carritos abandonados, lanzamientos de nuevo producto, y mensajes de post-compra. Todo esto es posible a través de email, SMS, mobile push, web push, y muchos más canales.\nMapp Cloud es una Plataforma de Customer Engagement basada en los datos. Lo que implica que los profesionales del marketing se pueden enfocar en lo que realmente marca la diferencia en tu negocio, en lugar de malgastar el tiempo aprendiendo cómo usar y sacar partido a diferentes herramientas de marketing. Ya que pueden confiar en la fiabilidad de los datos que arroja la plataforma y así diseñar campañas con personalización 1 a 1, que sentarán las bases de una buena estrategia de cross-channel.",
   "features": [
-    "Integración para sincronizar los datos de comportamiento y transacciones en el sitio web con Mapp Intelligence",
-    "Más de 30 cuadros de mando pre-construidos que ofrecen información sobre el cliente y el negocio",
-    "Análisis de marketing en profundidad",
-    "Creado para los profesionales del marketing",
-    "Fácil de implementar",
-    "Las características adicionales incluyen: Predicciones de IA (lifetime value del cliente, probabilidad de abandono, probabilidad de compra), detección de anomalías, previsión, personalización web y recomendaciones de productos"
+    "Integración para sincronizar On-Site Behavior, Customer Profiles, and Transaction data con Mapp",
+    "Enviar campañas Omni-Channel, tales como carritos abandonados, programas de fidelización, cumpleaños, etc.",
+    "Todos los mensajes transaccionales pueden ser diseñados y enviados a través de la misma plataforma Mapp",
+    "Disponibilidad de envío de Email, SMS, Web Push, Mobile Push & In-App Messages",
+    "Más de 25 informes pre-configurados  para analizar datos de cliente y negocio",
+    "Otras funcionalidades extra: Predicciones de IA (valor neto de cliente, probabilidad de pérdida de cliente, probabilidad de compra), Detección de Anomalías, Previsiones, Personalización Web, & Recomendaciones de producto.",
+    "Plataforma diseñada especialmente para profesionales del marketing",
+    "Fácil de implementar"
   ],
-  "additionalInformation": "Para utilizar esta aplicación necesitas una cuenta activa de Mapp Intelligence.\\\\n\\\\nPara inscribirte en tu prueba GRATUITA de TRES MESES, sólo tienes que descargar esta aplicación y rellenar este formulario: https://portal.mapp.com/sign-up-wizard",
+  "additionalInformation": "Para poder usar esta app, necesitas una cuenta activa de Mapp Cloud.\nPara tener acceso a una PRUEBA GRATUITA DE 3 MESES, simplemente descárgate la app y rellena este formulario: https://portal.mapp.com/sign-up-wizard\nPara ACCESO INSTANTÁNEO a una cuenta de demostración que contiene datos de muestra, simplemente complete este formulario: https://portal.mapp.com/intelligence-demo",
+  "video": "https://www.youtube.com/watch?v=0VW3FCyGGNY",
   "websiteURL": "https://mapp.com",
   "support": {
     "url": "https://mapp.com/tech-support"

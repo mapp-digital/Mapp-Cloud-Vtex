@@ -147,6 +147,11 @@ interface VtexAdditionalInfo {
   categories: VtexCategory[]
 }
 
+interface VtexPricingTag {
+  name: string
+  rawValue: number
+  isPercentual: boolean
+}
 interface VtexOrderItem {
   quantity: number
   id: string
@@ -157,4 +162,5 @@ interface VtexOrderItem {
   imageUrl: string | null
   detailUrl: string
   additionalInfo: VtexAdditionalInfo | null
+  priceTags: VtexPricingTag[]
 }

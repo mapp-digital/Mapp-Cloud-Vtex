@@ -43,6 +43,7 @@ interface OrderItem {
   url_path?: string
   category?: string
   brand?: string
+  discountValue: number
 }
 
 type OrderDataStatus = "Created" | "Canceled" | "Processing"
