@@ -184,14 +184,23 @@ const EngageSettings: FC = () => {
               mappMessages = await getMappMessages()
             }
 
-            setState(previousState => ({
-              ...previousState,
-              btnLoading: false,
-              invalidSettings,
-              initalRequestSent: true,
-              mappMessages,
-              groups,
-            }))
+            if (mappMessages.length > 0 || groups.length > 0) {
+              setState(previousState => ({
+                ...previousState,
+                btnLoading: false,
+                invalidSettings,
+                initalRequestSent: true,
+                mappMessages,
+                groups,
+              }))
+            } else {
+              setState(previousState => ({
+                ...previousState,
+                btnLoading: false,
+                invalidSettings,
+                initalRequestSent: true,
+              }))
+            }
           } catch (err) {
             setState(previousState => ({
               ...previousState,
