@@ -14,6 +14,7 @@ export interface ProductData {
 interface OrderData {
   email: string
   messageId?: string
+  sequence?: string
   items: OrderItem[]
   group?: number
   messageId?: string
@@ -21,12 +22,23 @@ interface OrderData {
   timestamp: string
   currency: string
   status?: string
+  itemsTotal?: number
   discountTotal?: number
   taxTotal?: number
   shippingTotal?: number
-  shippingAddress?: string
+  shippingAddressReceiverName?: string
+  shippingAddressStreet?: string
+  shippingAddressComplement?: string
+  shippingAddressCounty?: string
+  shippingAddressNeighborhood?: string
+  shippingAddressNumber?: string
+  shippingAddressCity?: string
+  shippingAddressState?: string
+  shippingAddressZip?: string
   shippingEstimate?: string
+  deliveryCompany?: string
   orderItemsTotal?: number
+  orderProductsTotal?: number
   orderTotal?: number
   orderStatusLink?: string
   billingAddress?: string
@@ -44,6 +56,7 @@ interface OrderItem {
   category?: string
   brand?: string
   discountValue: number
+  measurementUnit?: string
 }
 
 type OrderDataStatus = "Created" | "Canceled" | "Processing"

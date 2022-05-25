@@ -107,7 +107,7 @@ interface Order {
   authorizedDate: string | null
   invoicedDate: string | null
   marketingData?: MarketingData | null
-  shippingData: ShippingData
+  shippingData: any
   checkedInPickupPointId: number
   storePreferencesData: StorePreferencesData
   paymentData: any
@@ -163,4 +163,5 @@ interface VtexOrderItem {
   detailUrl: string
   additionalInfo: VtexAdditionalInfo | null
   priceTags: VtexPricingTag[]
+  measurementUnit: string | null
 }
