@@ -59,12 +59,39 @@ export async function orderStatusOnChange(ctx: EventChangeContext, next: () => P
     }
   }
 
-  // If its canceled event, but its not fulfilment, ignore it
-  if (body.currentState === "canceled" && body.domain !== "Fulfillment") {
+  if (body.domain !== "Marketplace") {
     await next()
 
     return
   }
+
+  // ignore this
+  if (body.currentState === "payment-approved" && body.lastState !== "approve-payment") {
+    await next()
+
+    return
+  }
+
+  // // If its canceled event, but its not fulfilment, ignore it
+  // if (body.currentState === "canceled" && body.domain !== "Fulfillment") {
+  //   await next()
+
+  //   return
+  // }
+
+  // // Ignore if payment-approved happens after invoice
+  // if (body.currentState === "payment-approved" && body.lastState === "invoice") {
+  //   await next()
+
+  //   return
+  // }
+
+  // // Ignore if invoice happens and its Fulfillment domain
+  // if (body.currentState === "invoice" && body.domain === "Fulfillment") {
+  //   await next()
+
+  //   return
+  // }
 
   // Log data
   logger.info("Events[orderStatusChange]: event received", {

@@ -100,6 +100,10 @@ export default class OrdersClient extends ExternalClient {
         data.base_image = item.imageUrl
       }
 
+      if (item.measurementUnit) {
+        data.measurementUnit = item.measurementUnit
+      }
+
       if (item.detailUrl) {
         data.url_path = `https://${ctx.vtex.host}${item.detailUrl.substring(1)}`
       }
@@ -122,18 +126,32 @@ export default class OrdersClient extends ExternalClient {
       return data
     })
 
+    const addressInfo = order.shippingData?.address
+
     const orderData: OrderData = {
       email: order.clientProfileData.email,
       orderId: order.orderId,
       items,
+      sequence: order?.sequence,
       currency: order.storePreferencesData.currencyCode,
       timestamp: order.creationDate,
       status: this.getOrderStatus(order),
-      discountTotal: Math.abs(this.getTotals("Discounts", order)),
+      discountTotal: this.getTotals("Discounts", order),
       taxTotal: this.getTotals("Tax", order),
+      itemsTotal: this.getTotals("Items", order),
       shippingTotal: this.getTotals("Shipping", order),
-      shippingAddress: this.getShippingAddress(order),
+      shippingAddressReceiverName: addressInfo?.receiverName,
+      shippingAddressStreet: addressInfo?.street,
+      shippingAddressNumber: addressInfo?.number,
+      shippingAddressCity: addressInfo?.city,
+      shippingAddressState: addressInfo?.state,
+      shippingAddressZip: addressInfo?.postalCode,
+      shippingAddressCounty: addressInfo?.country,
+      shippingAddressNeighborhood: addressInfo?.neighborhood,
+      shippingAddressComplement: addressInfo?.complement,
       shippingEstimate: this.getEstimate(order),
+      deliveryCompany: this.getDeliveryCompany(order),
+      orderProductsTotal: order.items.length,
       orderItemsTotal: order.items.reduce((previous, current) => {
         return previous + current.quantity
       }, 0),
@@ -186,40 +204,23 @@ export default class OrdersClient extends ExternalClient {
       return undefined
     }
 
-    return order.shippingData.logisticsInfo[0]?.shippingEstimate
-      ? order.shippingData.logisticsInfo[0]?.shippingEstimate
-      : undefined
+    if (!order.shippingData.logisticsInfo[0]?.shippingEstimate) {
+      return undefined
+    }
+
+    const estimate = order.shippingData.logisticsInfo[0]?.shippingEstimate as string
+
+    return estimate.replace("bd", " business days")
   }
 
-  private getShippingAddress(order: Order): string {
-    const addressInfo = order.shippingData?.address
-    const infoToAdd: string[] = []
+  private getDeliveryCompany(order: Order): string | undefined {
+    const logistics = order.shippingData?.logisticsInfo
 
-    if (addressInfo?.receiverName) {
-      infoToAdd.push(addressInfo?.receiverName)
+    if (!logistics || logistics.length <= 0) {
+      return undefined
     }
 
-    if (addressInfo?.street) {
-      if (addressInfo?.number) {
-        infoToAdd.push(`${addressInfo?.street}, ${addressInfo?.number}`)
-      } else {
-        infoToAdd.push(addressInfo?.street)
-      }
-    }
-
-    if (addressInfo?.city) {
-      if (addressInfo?.state) {
-        infoToAdd.push(`${addressInfo?.city} - ${addressInfo?.state}`)
-      } else {
-        infoToAdd.push(addressInfo?.city)
-      }
-    }
-
-    if (addressInfo?.postalCode) {
-      infoToAdd.push(`ZIP code ${addressInfo?.postalCode}`)
-    }
-
-    return infoToAdd.length === 0 ? "" : infoToAdd.join("</br>")
+    return logistics[0]?.deliveryCompany ? logistics[0].deliveryCompany : undefined
   }
 
   private getTotals(totalName: string, order: Order): number {
